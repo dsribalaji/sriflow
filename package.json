@@ -1,0 +1,23 @@
+{
+  "name": "sriflow",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Fully custom AI-powered product development pipeline",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "scripts": {
+    "build": "bun run browse/build.ts",
+    "test": "bun test test/ --ignore 'skill-e2e-*.test.ts' --ignore 'skill-llm-eval.test.ts'",
+    "test:e2e": "EVALS=1 bun test test/skill-e2e-*.test.ts",
+    "test:evals": "EVALS=1 bun test test/skill-e2e-*.test.ts test/skill-llm-eval.test.ts",
+    "test:static": "bun test test/skill-parser.test.ts test/skill-validation.test.ts"
+  },
+  "dependencies": {
+    "playwright": "^1.58.0",
+    "diff": "^7.0.0"
+  },
+  "devDependencies": {
+    "@anthropic-ai/sdk": "^0.78.0"
+  }
+}

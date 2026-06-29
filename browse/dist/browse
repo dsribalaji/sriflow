@@ -1,0 +1,148 @@
+#!/usr/bin/env bash
+# sriflow browse — CLI wrapper for the browse daemon
+# Matches gstack's $B interface. Sends commands via HTTP to the daemon.
+set -uo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DAEMON_JS="$SCRIPT_DIR/server.js"
+
+# ── Find state file (project-local first, then global) ───────────
+find_state_file() {
+  local git_root
+  git_root=$(git rev-parse --show-toplevel 2>/dev/null || true)
+  if [ -n "$git_root" ] && [ -f "$git_root/.sriflow/browse.json" ]; then
+    echo "$git_root/.sriflow/browse.json"
+    return 0
+  fi
+  if [ -f ".sriflow/browse.json" ]; then
+    echo ".sriflow/browse.json"
+    return 0
+  fi
+  if [ -f "$HOME/.sriflow/browse.json" ]; then
+    echo "$HOME/.sriflow/browse.json"
+    return 0
+  fi
+  return 1
+}
+
+# ── Resolve daemon port from state file ──────────────────────────
+resolve_port() {
+  local state_file
+  state_file=$(find_state_file 2>/dev/null) || return 1
+  local port
+  port=$(python3 -c "import json; print(json.load(open('${state_file}'))['port'])" 2>/dev/null) || return 1
+  [ -z "$port" ] && return 1
+  curl -s --connect-timeout 1 "http://127.0.0.1:$port/health" >/dev/null 2>&1 || return 1
+  echo "$port"
+}
+
+# ── Start daemon if not running ──────────────────────────────────
+ensure_daemon() {
+  local port
+  if port=$(resolve_port 2>/dev/null); then
+    echo "$port"
+    return 0
+  fi
+
+  local git_root
+  git_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+  mkdir -p "$git_root/.sriflow"
+  setsid bun run "$DAEMON_JS" >/dev/null 2>&1 &
+
+  for i in $(seq 1 20); do
+    sleep 0.5
+    if port=$(resolve_port 2>/dev/null); then
+      echo "$port"
+      return 0
+    fi
+  done
+
+  echo "ERROR: Failed to start browse daemon" >&2
+  return 1
+}
+
+# ── Send command to daemon ───────────────────────────────────────
+send_command() {
+  local port="$1"
+  local command="$2"
+  shift 2
+
+  # Build JSON payload — each arg as separate array element
+  local payload
+  if [ $# -gt 0 ]; then
+    payload=$(python3 -c "
+import sys, json
+args = sys.argv[2:]
+print(json.dumps({'command': sys.argv[1], 'args': args}))
+" "$command" "$@")
+  else
+    payload=$(python3 -c "import json; print(json.dumps({'command': '${command}', 'args': []}))")
+  fi
+
+  curl -s -X POST "http://127.0.0.1:$port/command" \
+    -H "Content-Type: application/json" \
+    -d "$payload"
+}
+
+# ── Main ─────────────────────────────────────────────────────────
+main() {
+  if [ $# -eq 0 ]; then
+    echo "Usage: browse [flags] <command> [args...]"
+    echo ""
+    echo "Flags:"
+    echo "  --headed          Launch headed Chromium (visible window)"
+    echo "  --proxy <url>     Route through SOCKS5/HTTP proxy"
+    echo ""
+    echo "Commands:"
+    echo "  goto <url>                Navigate to URL"
+    echo "  text                      Cleaned page text"
+    echo "  html [selector]           innerHTML or full page HTML"
+    echo "  snapshot [flags]          Accessibility tree with @e refs"
+    echo "  click <sel>               Click element"
+    echo "  fill <sel> <val>          Fill input"
+    echo "  screenshot [path]         Save screenshot"
+    echo "  status                    Health check"
+    echo "  stop                      Shutdown daemon"
+    echo ""
+    echo "Examples:"
+    echo "  browse goto https://example.com"
+    echo "  browse snapshot -i"
+    echo "  browse click @e3"
+    echo "  browse fill @e4 'hello world'"
+    echo "  browse screenshot /tmp/page.png"
+    exit 1
+  fi
+
+  # Skip headed/proxy flags
+  while [[ "${1:-}" == --* ]]; do
+    case "$1" in
+      --headed|--proxy) shift; [[ "${1:-}" == --* ]] || shift ;;
+      *) break ;;
+    esac
+  done
+
+  [ $# -eq 0 ] && { echo "ERROR: missing command" >&2; exit 1; }
+
+  local port
+  port=$(ensure_daemon) || exit 1
+
+  local command="$1"
+  shift
+
+  case "$command" in
+    stop)
+      send_command "$port" stop
+      sleep 1
+      ;;
+    chain)
+      local input
+      input=$(cat)
+      send_command "$port" chain "$input"
+      ;;
+    *)
+      send_command "$port" "$command" "$@"
+      ;;
+  esac
+}
+
+main "$@"
