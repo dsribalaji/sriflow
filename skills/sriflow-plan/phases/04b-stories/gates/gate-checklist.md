@@ -1,6 +1,18 @@
 # Phase 4b Gate — Stories
 
-## Gate Criteria
+## Tier-Specific Criteria
+
+| Tier | Gate Criteria | Auto-Pass |
+|------|---------------|-----------|
+| **Small** | Skip (stories inline in PLAN.md) | Auto-pass (Phase 4b skipped) |
+| **Medium** | Stories in table format with GWT, traceable to use cases | Manual check |
+| **Enterprise** | Stories pass INVEST + GWT, traceable to UCs and BRD | Manual check |
+
+**If tier = Small:** This phase was skipped. Auto-pass. Proceed to Phase 5.
+
+---
+
+## Gate Criteria (Enterprise)
 
 | # | Criterion | Status | Evidence |
 |---|-----------|--------|----------|

@@ -2510,7 +2510,7 @@ Cause: in-flight tab operations have not completed.
     });
   }
 }
-var __dirname = "/home/otwos/Projects/sriflow/my-stack/browse/src";
+var __dirname = "/home/otwos/Projects/sriflow/browse/src";
 var init_browser_manager = __esm(() => {
   init_file_permissions();
   init_buffers();
@@ -8453,4 +8453,4 @@ export {
   META_COMMANDS
 };
 
-//# debugId=679D60BD9CC6F01064756E2164756E21
+//# debugId=BFDF169A2866554A64756E2164756E21

@@ -1,0 +1,42 @@
+#!/bin/sh
+# sriflow-timeline — manage event timeline
+# Usage: sriflow-timeline log <json> | tail [n] | clear
+set -e
+
+STATE_DIR="${SRIFLOW_STATE_ROOT:-$HOME/.sriflow}"
+SLUG="${SRIFLOW_SLUG:-$(basename "$(pwd)")}"
+PROJECT_DIR="$STATE_DIR/projects/$SLUG"
+LOG_FILE="$PROJECT_DIR/timeline.jsonl"
+
+ensure_project() {
+  mkdir -p "$PROJECT_DIR"
+  touch "$LOG_FILE"
+}
+
+case "${1:-}" in
+  log)
+    ensure_project
+    echo "${2:-}" >> "$LOG_FILE"
+    ;;
+  count)
+    if [ -f "$LOG_FILE" ]; then
+      wc -l < "$LOG_FILE" | tr -d ' '
+    else
+      echo "0"
+    fi
+    ;;
+  tail)
+    n="${2:-20}"
+    if [ -f "$LOG_FILE" ]; then
+      tail -n "$n" "$LOG_FILE"
+    fi
+    ;;
+  clear)
+    rm -f "$LOG_FILE"
+    echo "Timeline cleared."
+    ;;
+  *)
+    echo "Usage: sriflow-timeline {log|count|tail|clear}"
+    exit 1
+    ;;
+esac

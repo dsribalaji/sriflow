@@ -10,6 +10,7 @@ allowed-tools:
   - Edit
   - Glob
   - Grep
+  - WebSearch
   - AskUserQuestion
 triggers:
   - design this
@@ -280,6 +281,31 @@ Net: A brief product description makes every subsequent phase faster and more ac
 ```
 
 STOP. Wait for description before proceeding.
+
+---
+
+## Phase 0b — Competitive Research (optional)
+
+Before wireframing, optionally research how competitors solve the same design
+problem. This informs layout patterns, interaction models, and differentiation.
+
+```bash
+# Quick competitive scan — 3 searches max
+# WebSearch for: "[product type] UI design [current year]"
+# WebSearch for: "[competitor name] interface layout"
+# WebSearch for: "[feature type] UX best practices"
+```
+
+Use findings to:
+- **Borrow patterns:** If competitors all use a sidebar nav, consider why.
+- **Differentiate:** Where competitors converge, find a better approach.
+- **Avoid anti-patterns:** If users complain about a pattern, skip it.
+
+If WebSearch unavailable or user skips: proceed without competitive context.
+If results found: note key patterns and anti-patterns. Reference in wireframe
+rationale ("Candidate A uses sidebar nav — industry standard for dashboards").
+
+**Time box:** 3 searches max. This is design input, not a research report.
 
 ---
 

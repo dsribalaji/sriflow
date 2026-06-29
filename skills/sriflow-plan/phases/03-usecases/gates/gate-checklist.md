@@ -1,6 +1,18 @@
 # Phase 3 Gate — Use Cases
 
-## Gate Criteria
+## Tier-Specific Criteria
+
+| Tier | Gate Criteria | Auto-Pass |
+|------|---------------|-----------|
+| **Small** | Skip (features list = use cases) | Auto-pass (Phase 3 skipped) |
+| **Medium** | Top 3-5 use cases GREEN, inline summary table | Manual check |
+| **Enterprise** | All primary Use Cases are GREEN. UC Inventory up to date. | Manual check |
+
+**If tier = Small:** This phase was skipped. Auto-pass. Proceed to Phase 4.
+
+---
+
+## Gate Criteria (Enterprise)
 
 | # | Criterion | Status | Evidence |
 |---|-----------|--------|----------|

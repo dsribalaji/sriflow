@@ -1,6 +1,18 @@
 # Phase 4a Gate — BRD
 
-## Gate Criteria
+## Tier-Specific Criteria
+
+| Tier | Gate Criteria | Auto-Pass |
+|------|---------------|-----------|
+| **Small** | Skip (no BRD for small projects) | Auto-pass (Phase 4a skipped) |
+| **Medium** | FRs inline in PLAN.md, traceable to use cases | Manual check |
+| **Enterprise** | All requirements score ≥ 7/10, BRD complete, traceable to UCs | Manual check |
+
+**If tier = Small:** This phase was skipped. Auto-pass. Proceed to Phase 4b.
+
+---
+
+## Gate Criteria (Enterprise)
 
 | # | Criterion | Status | Evidence |
 |---|-----------|--------|----------|

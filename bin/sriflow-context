@@ -1,0 +1,41 @@
+#!/bin/sh
+# sriflow-context — show/save project context
+# Usage: sriflow-context show | save <json>
+set -e
+
+STATE_DIR="${SRIFLOW_STATE_ROOT:-$HOME/.sriflow}"
+SLUG="${SRIFLOW_SLUG:-$(basename "$(pwd)")}"
+PROJECT_DIR="$STATE_DIR/projects/$SLUG"
+CONTEXT_FILE="$PROJECT_DIR/context.json"
+
+ensure_project() {
+  mkdir -p "$PROJECT_DIR"
+}
+
+case "${1:-}" in
+  show)
+    if [ -f "$CONTEXT_FILE" ]; then
+      cat "$CONTEXT_FILE"
+    else
+      echo "No context saved yet."
+    fi
+    ;;
+  save)
+    ensure_project
+    INPUT="${2:-}"
+    if [ -n "$INPUT" ]; then
+      echo "$INPUT" > "$CONTEXT_FILE"
+    else
+      cat > "$CONTEXT_FILE"
+    fi
+    echo "Context saved to $CONTEXT_FILE"
+    ;;
+  clear)
+    rm -f "$CONTEXT_FILE"
+    echo "Context cleared."
+    ;;
+  *)
+    echo "Usage: sriflow-context {show|save|clear}"
+    exit 1
+    ;;
+esac

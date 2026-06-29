@@ -224,6 +224,48 @@ Store the chosen mode. Reference it throughout.
 
 ---
 
+## Step 1b — Tier Selection (AUQ D1b)
+
+After selecting mode, select depth tier:
+
+```
+D1b — Which QA tier?
+Branch: <_BRANCH>
+ELI10: Three tiers control how deep QA goes. Quick catches showstoppers in
+under 5 minutes. Standard covers the full test matrix. Exhaustive adds visual
+testing, concurrency, and exhaustive edge cases.
+Stakes if wrong: Quick before a demo catches blockers. Standard before a PR.
+Exhaustive before a major release.
+Recommendation: B because Standard covers all failure modes without the time
+cost of Exhaustive.
+Completeness: A=5/10, B=8/10, C=10/10
+A) Quick — golden path only (recommended before demos)
+  ✅ Fastest; catches blockers; under 5 minutes
+  ❌ Misses edge cases and error states entirely
+B) Standard — golden path + edge cases + error states (recommended)
+  ✅ Covers all failure modes; 15-30 minutes depending on feature size
+  ❌ Misses visual and concurrency edge cases
+C) Exhaustive — all categories + visual + concurrency + full regression
+  ✅ Maximum coverage; nothing slips through
+  ❌ Slowest; 30+ minutes; diminishing returns on well-tested features
+Net: Standard is the default for most situations.
+```
+
+Tier controls test matrix density:
+
+| Category | Quick | Standard | Exhaustive |
+|----------|-------|----------|------------|
+| Golden Path | ≥3 | ≥3 | ≥5 |
+| Edge Cases | 0 (skip) | ≥6 | ≥12 |
+| Error States | 0 (skip) | ≥4 | ≥8 |
+| Regression | 0 (skip) | ≥3 | ≥5 |
+| Visual | 0 (skip) | If UI | All UI |
+| Concurrency | 0 (skip) | 0 (skip) | If applicable |
+
+Store the chosen tier. Reference it in test derivation.
+
+---
+
 ## Step 2 — Test Case Derivation
 
 Before running anything, write out the full test matrix.
@@ -253,14 +295,20 @@ Notes:    <if FAIL: actual vs expected; if SKIP: reason>
 
 Number from TC-001. Never reuse numbers within a session.
 
-Minimum test counts per mode:
+Minimum test counts per tier:
 
-| Category | Report Only | Full QA | Regression Only |
-|----------|-------------|---------|-----------------|
-| Golden Path | ≥3 | ≥3 | 0 (skip) |
-| Edge Cases | ≥6 | ≥6 | 0 (skip) |
-| Error States | ≥4 | ≥4 | 0 (skip) |
-| Regression | ≥3 | ≥3 | ≥5 |
+| Category | Quick | Standard | Exhaustive |
+|----------|-------|----------|------------|
+| Golden Path | ≥3 | ≥3 | ≥5 |
+| Edge Cases | 0 (skip) | ≥6 | ≥12 |
+| Error States | 0 (skip) | ≥4 | ≥8 |
+| Regression | 0 (skip) | ≥3 | ≥5 |
+| Visual | 0 (skip) | If UI | All UI |
+| Concurrency | 0 (skip) | 0 (skip) | If applicable |
+
+In Quick tier: skip Categories 2, 3, and 4 entirely. Only run Golden Path.
+In Standard tier: run all four categories. Skip visual if no UI.
+In Exhaustive tier: run all categories including visual and concurrency.
 
 Write all test cases to the working section below before running any of them.
 This makes the plan reviewable before execution.
@@ -783,28 +831,27 @@ Net: Fix inline for edge/error failures. Report only for Golden Path failures
 that need design input.
 ```
 
-### If Fix Inline
+### If Fix Inline — Fix→Re-verify Loop
 
-For each FAIL:
+For each FAIL, run this exact cycle:
 
-1. **Identify root cause.** Read the relevant source file(s). Find the exact
-   line where the failure originates. Do not guess — find it.
+```
+FAIL: TC-NNN — <test name>
+  1. ROOT CAUSE: Read source. Find exact line. No guessing.
+  2. FIX: Smallest change that resolves this failure. One fix per failure.
+  3. RE-VERIFY: Re-run the exact same test case. Confirm PASS.
+     - PASS → Mark "fixed", continue to next FAIL.
+     - FAIL → Log what was tried. If first attempt: try once more with different approach.
+     - FAIL twice → Mark "FAIL (unfixed)", document both attempts, move on.
+  4. SIDE EFFECT CHECK: Re-run regression tests touching the same file.
+     - Any regressed → Flag it. Do not auto-fix regressions from a fix.
+```
 
-2. **Apply minimal fix.** The smallest change that resolves this specific
-   failure without touching adjacent code. No refactoring. No opportunistic
-   cleanup. One fix per failure.
+**Max 2 attempts per failure.** After 2 failed fix attempts: stop, mark unfixed,
+include both attempts in QA_REPORT.md. Do not loop indefinitely.
 
-3. **Re-run the test.** Confirm the test now passes. Mark it PASS with note
-   "fixed".
-
-4. **Check for side effects.** Re-run the regression tests that touch the same
-   file. If any regressed, document it and do not auto-fix it — flag it.
-
-5. **Update the test result in the report.**
-
-If a fix attempt fails twice: stop, mark the test as FAIL (unfixed), document
-what was tried, and include it in QA_REPORT.md with the failed approaches
-noted. Do not loop indefinitely.
+**Fix ordering:** Fix Golden Path failures first (they gate ship). Then Critical
+severity. Then High. Medium and Low can wait.
 
 ---
 
@@ -824,6 +871,7 @@ terminal — even if the write fails.
 **Date:** <ISO timestamp>
 **Branch:** <_BRANCH>
 **Mode:** <Full QA | Report Only | Regression Only>
+**Tier:** <Quick | Standard | Exhaustive>
 **QA Engineer:** sriflow-test v2.0.0
 
 ---
@@ -991,6 +1039,7 @@ cat >> SRIFLOW_MEMORY.md << MEMEOF
 Branch: $_BRANCH
 Session: $_SESSION_ID
 Tests: <N pass / M fail / K skip>
+Tier: <Quick | Standard | Exhaustive>
 Gate: $_GATE
 MEMEOF
 ```

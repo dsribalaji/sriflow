@@ -1,6 +1,18 @@
 # Phase 5 Gate — NFR
 
-## Gate Criteria
+## Tier-Specific Criteria
+
+| Tier | Gate Criteria | Auto-Pass |
+|------|---------------|-----------|
+| **Small** | Skip (tech stack in PLAN.md) | Auto-pass (Phase 5 skipped) |
+| **Medium** | Stack + NFR summary inline in PLAN.md | Manual check |
+| **Enterprise** | NFRs numeric, business-traced, conflicts resolved, system design complete | Manual check |
+
+**If tier = Small:** This phase was skipped. Auto-pass. Proceed to Phase 6.
+
+---
+
+## Gate Criteria (Enterprise)
 
 | # | Criterion | Status | Evidence |
 |---|-----------|--------|----------|

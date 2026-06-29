@@ -1,6 +1,18 @@
 # Phase 2 Gate — Elicitation
 
-## Gate Criteria
+## Tier-Specific Criteria
+
+| Tier | Gate Criteria | Auto-Pass |
+|------|---------------|-----------|
+| **Small** | Skip (no separate phase) | Auto-pass (Phase 2 skipped) |
+| **Medium** | All 56 questions answered, 1-paragraph summary per stakeholder | Manual check |
+| **Enterprise** | Every Tier 1 uncertainty has clarity check ≥ 8/10 | Manual check |
+
+**If tier = Small:** This phase was skipped. Auto-pass. Proceed to Phase 3.
+
+---
+
+## Gate Criteria (Enterprise)
 
 | # | Criterion | Status | Evidence |
 |---|-----------|--------|----------|

@@ -13,6 +13,7 @@ allowed-tools:
   - Edit
   - Glob
   - Grep
+  - WebSearch
   - AskUserQuestion
 triggers:
   - I have an idea
@@ -208,6 +209,81 @@ For high-stakes ambiguity (architecture, data model, destructive scope, missing 
 
 ---
 
+# Scale Detection
+
+Before any analysis, detect project scale. This determines pipeline depth.
+
+**Auto-detect from user's opening message:**
+
+| Tier | Keywords | Timeline |
+|------|----------|----------|
+| **Small** | "personal", "quick", "side project", "hobby", "small", "simple", "just me", "weekend", "internal tool", "script" | < 1 week |
+| **Medium** | "team", "startup", "client", "feature", "module", "need by", "users will", "new endpoint", "new page" | 1-4 weeks |
+| **Enterprise** | "enterprise", "compliance", "multi-team", "department", "audit", "regulatory", "migration", "multiple systems", "organization" | 1+ months |
+| **Mixed/unclear** | Default to Medium | — |
+
+**Keyword priority:** Small keywords override Medium keywords (personal/quick/script are more specific than team/feature). Enterprise keywords override all (compliance/regulatory are more specific). Example: "personal quick script for my team" → Small. "Quick compliance tool" → Enterprise.
+
+If the user can't determine the scale or says "I don't know," default to Medium and proceed.
+
+If THINK_OUTPUT.md already exists: "A previous think session exists. Update it or start fresh?"
+
+**Ask Q1 first (required for all tiers):**
+
+**Q1:** What system or product are we building? (One sentence — concrete noun: API, UI, CLI tool, data pipeline, service)
+
+**Then confirm scale:**
+
+```
+Based on your answer above, this looks like a **[S/M/E]** project ([timeline]). Correct?
+A) Yes, proceed as [S/M/E] (recommended)
+B) Upgrade to [next tier]
+C) Downgrade to [lower tier]
+D) Skip — run full pipeline regardless
+E) I don't know — default to Medium
+```
+
+**Branch by tier:**
+
+### If Small → Skip to Output (immediately after Q1)
+
+Show skip summary:
+```
+Small project — simplified think.
+Skipping: Q2-Q4 (project phase, docs, stakeholder discovery), Stakeholder Register, 
+Power/Interest Map, Uncertainty Prioritization, Disagreement Diagnostic, Interview Plan.
+You can request any on-demand: "give me the stakeholder register", "give me the 
+interview plan", "give me the disagreement log"
+```
+
+Ask 3 additional clarifying questions:
+- **S1:** Who will use this? (1 person? a team? customers?)
+- **S1.5:** What are the key features? List 3-5. (e.g., "log expense", "view monthly summary", "export CSV")
+- **S2:** What does "done" look like? (observable criterion: "I can upload a file and see it in the list")
+
+Then write THINK_OUTPUT.md (Small template) and finish. **Do NOT proceed to Step 1.**
+
+### If Medium → Condensed Steps 2-7
+
+Show skip summary:
+```
+Medium project — condensed think.
+Condensing: Full stakeholder categories → 3-5 key stakeholders only. 
+Formal interview plan → 1-paragraph summary per stakeholder. 
+Detailed disagreement diagnostic → skip unless vague phrase flagged.
+Full depth available on any step: "expand [step] to full depth"
+```
+
+Ask Q2-Q4 from Step 1, then run Steps 2-7 with compression.
+
+**Mid-pipeline expand:** After each step completes, if user says "expand [step]", re-run that step at enterprise depth before proceeding to next step.
+
+### If Enterprise → Full Pipeline (unchanged)
+
+Proceed to Step 1 (Q2-Q4) and run Steps 2-7 exactly as written.
+
+---
+
 # Core Principle: Uncertainty Is Never Reduced "In General"
 
 > "Uncertainty is never reduced 'in general.' It's reduced for a specific person who has to decide something."
@@ -218,17 +294,17 @@ For high-stakes ambiguity (architecture, data model, destructive scope, missing 
 
 ---
 
-## Step 1 — Confirm the Project Context
+## Step 1 — Confirm the Project Context (Medium / Enterprise only)
+
+Small tier already completed after Q1 + S1/S2. This step is for Medium and Enterprise only.
 
 Before mapping stakeholders, confirm:
-- What system or product are we building (in one sentence)?
+- What system or product are we building (in one sentence)? (already answered in Scale Detection)
 - What phase is this project in? (Greenfield / Existing system / Enhancement)
 - Do we have any existing documentation (BRD draft, PRD, design brief, legacy system)?
 - Has any stakeholder discovery been done before? If yes — what exists?
 
 Ask these questions precisely (one AskUserQuestion per question, wait for answer):
-
-**Q1:** What system or product are we building? (One sentence — concrete noun: API, UI, CLI tool, data pipeline, service)
 
 **Q2:** What phase is this project in?
 - A) Greenfield (no existing system)
@@ -249,7 +325,59 @@ Ask these questions precisely (one AskUserQuestion per question, wait for answer
 
 ---
 
-## Step 2 — Identify: Who Is in the System?
+## Step 1b — Market Research (Medium / Enterprise, optional)
+
+Before mapping stakeholders, optionally research the competitive landscape.
+This helps identify stakeholders you might miss (competitors, regulators,
+adjacent market players).
+
+```bash
+# Quick market context — run if user wants competitive intelligence
+# WebSearch for: "[project domain] market landscape [current year]"
+# WebSearch for: "[project domain] competitors [current year]"
+# WebSearch for: "[specific feature] alternative solutions"
+```
+
+Use WebSearch to find:
+- **Competitors:** Who else solves this problem? How?
+- **Adjacent players:** Who touches this space but doesn't compete directly?
+- **Regulatory context:** Any compliance requirements in this domain?
+- **User expectations:** What do users in this market expect from similar tools?
+
+If WebSearch is unavailable or user skips: proceed without market context.
+If results found: note key competitors and adjacents in THINK_OUTPUT.md
+under "Market Context". Use this to inform stakeholder identification in Step 2.
+
+**Time box:** 3 searches max. Do not rabbit-hole into market analysis. This is
+stakeholder discovery input, not a market research report.
+
+---
+
+## Scale Branching — After Step 1 (Medium / Enterprise only)
+
+Small tier already finished after Q1 + S1/S2. This branching is for Medium and Enterprise.
+
+### If Medium → Condensed Steps 2-7
+
+Run Steps 2-7 with these compressions:
+- **Step 2:** Identify 3-5 key stakeholders only (skip "check all that apply" categories — assign category inline)
+- **Step 3:**简化 Power/Interest to a simple list (not full table). Top 3 uncertainties only (not tiered).
+- **Step 4:** Condensed Stakeholder Register — 3-5 rows, no Red/Green classification
+- **Step 5:** Top 3 uncertainties ranked, no formal tiering
+- **Step 6:** Disagreement Diagnostic — skip unless user flagged a vague phrase in Step 1
+- **Step 7:** Interview Plan — 1-paragraph summary per stakeholder (not formal structure)
+
+Then write THINK_OUTPUT.md (Medium template) and finish.
+
+**"Expand [step] to full depth" handler:** If user requests expansion on any step, re-run that step at enterprise depth (full questions, full templates). Regenerate output and update THINK_OUTPUT.md.
+
+### If Enterprise → Full Steps 2-7
+
+Run Steps 2-7 exactly as written below. No compression.
+
+---
+
+## Step 2 — Identify: Who Is in the System? (Enterprise / Medium-depth)
 
 Cast wide before narrowing. Ask the following for every system being built:
 
@@ -421,7 +549,99 @@ For each Tier 1 and Tier 2 stakeholder, produce a focused interview plan.
 
 ## Output — Write THINK_OUTPUT.md
 
-After all steps complete, write `THINK_OUTPUT.md` to the project root:
+After all steps complete, write `THINK_OUTPUT.md` to the project root using the template matching your tier.
+
+### Small Template (~30 lines)
+
+```markdown
+# THINK_OUTPUT.md — [Idea/Project Name]
+
+**Scale:** small
+**Generated:** [ISO 8601 timestamp]
+**Branch:** [_BRANCH]
+**Session:** [_SESSION_ID]
+
+---
+
+## What We're Building
+<From Q1: 1-2 sentences describing the system>
+
+## User
+<From S1: Who uses this? (1 person? a team? customers?)>
+
+## Features
+1. <feature 1>
+2. <feature 2>
+3. <feature 3>
+
+## Done =
+<From S2: One observable criterion — "I can [action] and see [result]">
+
+## Scale Detection
+Tier: small
+Reason: [auto-detected keyword or user confirmation]
+Override: [none / user upgraded from X]
+
+## On-Demand Expansions
+You can request enterprise-depth analysis on any section:
+- "give me the stakeholder register" → runs full Step 2-4
+- "give me the interview plan" → runs full Step 7
+- "give me the disagreement log" → runs full Step 6
+- "expand to full think" → re-runs entire skill at enterprise depth
+```
+
+### Medium Template (~80 lines)
+
+```markdown
+# THINK_OUTPUT.md — [Idea/Project Name]
+
+**Scale:** medium
+**Generated:** [ISO 8601 timestamp]
+**Branch:** [_BRANCH]
+**Session:** [_SESSION_ID]
+
+---
+
+## Stakeholder Register (Top 3-5)
+
+| Name / Role | Category | Top Uncertainty |
+|-------------|----------|-----------------|
+| [Name, Title] | [Decision-Maker / SME / User / Tech Gatekeeper] | "[Specific open question]" |
+
+## Power/Interest Summary
+
+- **High Power / High Interest:** [Names — these drive the project]
+- **High Power / Low Interest:** [Names — keep satisfied]
+- **Low Power / High Interest:** [Names — keep informed]
+- **Low Power / Low Interest:** [Names — monitor]
+
+## Uncertainty Priority (Top 3)
+
+1. [Stakeholder]: "[Their uncertainty]" — blocks: [what gets wrong]
+2. [Stakeholder]: "[Their uncertainty]" — affects: [feature area]
+3. [Stakeholder]: "[Their uncertainty]" — low-risk deferral: [why it can wait]
+
+## Disagreement Log
+<Leave blank unless user flagged a vague phrase>
+
+| Phrase | Stakeholder A | A's meaning | Stakeholder B | B's meaning | Status |
+|--------|---------------|-------------|---------------|-------------|--------|
+
+## Interview Summary
+<1-paragraph summary per key stakeholder — not formal structure>
+
+## Scale Detection
+Tier: medium
+Reason: [auto-detected keyword or user confirmation]
+Override: [none / user upgraded from X]
+
+## On-Demand Expansions
+You can request enterprise-depth analysis on any step:
+- "expand [step] to full depth" → re-runs that step at enterprise depth
+- "expand to full think" → re-runs entire skill at enterprise depth
+```
+
+### Enterprise Template (current — unchanged)
 
 ```markdown
 # THINK_OUTPUT.md — [Idea/Project Name]
@@ -446,15 +666,51 @@ After all steps complete, write `THINK_OUTPUT.md` to the project root:
 
 ## Interview Plan
 [Sequenced plan: who, goal, primary uncertainty, date]
+
+## Scale Detection
+Tier: enterprise
+Reason: [auto-detected keyword or user confirmation]
+Override: [none / user downgraded from X]
 ```
 
 ---
 
 ## Phase Gate
 
-**DONE signal:** Every Tier 1 stakeholder is named, their top uncertainty is documented, a resolution plan exists, and the clarity check score ≥ 8/10.
+**Tier-specific gates:**
+
+| Tier | Gate Criteria |
+|------|---------------|
+| **Small** | Q1 answered + user identified + 1 done criterion defined |
+| **Medium** | Top 3-5 stakeholders named + top uncertainty identified + 1-paragraph interview summary |
+| **Enterprise** | Every Tier 1 stakeholder named, their top uncertainty is documented, a resolution plan exists, and the clarity check score ≥ 8/10 |
+
+**DONE signal:** Gate criteria met for your tier. See table above.
 
 **Next skill:** `/sriflow-plan` — convert discovery findings into a structured implementation plan.
+
+---
+
+## Post-DONE: Expand Handler
+
+After DONE signal, if user requests expansion:
+- "expand [step] to full depth" → re-enter skill at that step, run at enterprise depth, regenerate THINK_OUTPUT.md
+- "expand to full think" → re-enter skill from Step 1 at enterprise depth, overwrite THINK_OUTPUT.md
+- "give me the stakeholder register" → run Steps 2-4 at enterprise depth, append to THINK_OUTPUT.md
+- "give me the interview plan" → run Step 7 at enterprise depth, append to THINK_OUTPUT.md
+- "give me the disagreement log" → run Step 6 at enterprise depth, append to THINK_OUTPUT.md
+
+---
+
+## Update vs Start Fresh
+
+If THINK_OUTPUT.md exists when skill is invoked:
+- **Update** = re-run skill at same tier, overwrite THINK_OUTPUT.md. Preserve existing answers where possible.
+- **Start fresh** = delete existing THINK_OUTPUT.md, run skill from scratch at newly detected tier.
+
+Ask: "A previous think session exists. Update it or start fresh?"
+- A) Update — keep same tier, refresh answers (recommended)
+- B) Start fresh — delete and re-run from scratch
 
 ---
 
@@ -495,11 +751,12 @@ cat >> SRIFLOW_MEMORY.md << MEMEOF
 ### $_TIMESTAMP | sriflow-think | OUTCOME | ${_TEL_DUR}s
 Branch: $_BRANCH
 Session: $_SESSION_ID
+Scale: $SCALE_TIER
 Stakeholders mapped: [count]
 Tier 1 uncertainties: [count]
 MEMEOF
 
-sriflow-timeline log '{"skill":"sriflow-think","event":"completed","branch":"'"$_BRANCH"'","outcome":"OUTCOME","duration_s":"'"$_TEL_DUR"'","session":"'"$_SESSION_ID"'"}' 2>/dev/null
+sriflow-timeline log '{"skill":"sriflow-think","event":"completed","branch":"'"$_BRANCH"'","outcome":"OUTCOME","duration_s":"'"$_TEL_DUR"'","session":"'"$_SESSION_ID"'","scale":"'"$SCALE_TIER"'"}' 2>/dev/null
 ```
 
 Replace `OUTCOME` with the actual outcome (done/blocked/concerns).

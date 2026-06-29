@@ -1,0 +1,44 @@
+#!/bin/sh
+# sriflow-decisions — manage decisions log
+# Usage: sriflow-decisions count | append <json> | tail [n]
+set -e
+
+STATE_DIR="${SRIFLOW_STATE_ROOT:-$HOME/.sriflow}"
+SLUG="${SRIFLOW_SLUG:-$(basename "$(pwd)")}"
+PROJECT_DIR="$STATE_DIR/projects/$SLUG"
+LOG_FILE="$PROJECT_DIR/decisions.jsonl"
+
+ensure_project() {
+  mkdir -p "$PROJECT_DIR"
+  touch "$LOG_FILE"
+}
+
+case "${1:-}" in
+  count)
+    if [ -f "$LOG_FILE" ]; then
+      wc -l < "$LOG_FILE" | tr -d ' '
+    else
+      echo "0"
+    fi
+    ;;
+  append)
+    ensure_project
+    echo "${2:-}" >> "$LOG_FILE"
+    ;;
+  tail)
+    n="${2:-10}"
+    if [ -f "$LOG_FILE" ]; then
+      tail -n "$n" "$LOG_FILE"
+    fi
+    ;;
+  search)
+    pattern="${2:-}"
+    if [ -f "$LOG_FILE" ] && [ -n "$pattern" ]; then
+      grep -i "$pattern" "$LOG_FILE" || true
+    fi
+    ;;
+  *)
+    echo "Usage: sriflow-decisions {count|append|tail|search}"
+    exit 1
+    ;;
+esac

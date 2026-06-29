@@ -1,0 +1,79 @@
+#!/bin/sh
+# sriflow-config — read/write ~/.sriflow/config.yaml
+# Usage: sriflow-config get <key> | set <key> <value> | list
+set -e
+
+STATE_DIR="${SRIFLOW_STATE_ROOT:-$HOME/.sriflow}"
+CONFIG_FILE="$STATE_DIR/config.yaml"
+
+DEFAULTS='{"proactive":"true","telemetry":"off","explain_level":"default","checkpoint_mode":"explicit","skill_prefix":"false"}'
+
+ensure_config() {
+  mkdir -p "$STATE_DIR"
+  if [ ! -f "$CONFIG_FILE" ]; then
+    cat > "$CONFIG_FILE" <<'EOF'
+# sriflow configuration
+proactive: true
+telemetry: off
+explain_level: default
+checkpoint_mode: explicit
+skill_prefix: false
+EOF
+  fi
+}
+
+get_value() {
+  key="$1"
+  if [ -f "$CONFIG_FILE" ]; then
+    val=$(grep "^${key}:" "$CONFIG_FILE" 2>/dev/null | head -1 | sed "s/^${key}:[[:space:]]*//" | sed 's/[[:space:]]*$//')
+    if [ -n "$val" ]; then
+      echo "$val"
+      return
+    fi
+  fi
+  # fallback to defaults
+  echo "$DEFAULTS" | tr ',' '\n' | grep "^\"${key}\":" | head -1 | sed 's/.*": *"*//' | sed 's/"*$//'
+}
+
+set_value() {
+  key="$1"
+  value="$2"
+  ensure_config
+  if grep -q "^${key}:" "$CONFIG_FILE" 2>/dev/null; then
+    sed -i "s|^${key}:.*|${key}: ${value}|" "$CONFIG_FILE"
+  else
+    echo "${key}: ${value}" >> "$CONFIG_FILE"
+  fi
+}
+
+list_config() {
+  ensure_config
+  echo "=== sriflow config ($CONFIG_FILE) ==="
+  while IFS= read -r line; do
+    case "$line" in
+      \#*|"") continue ;;
+      *) echo "  $line" ;;
+    esac
+  done < "$CONFIG_FILE"
+  echo ""
+  echo "=== defaults ==="
+  echo "$DEFAULTS" | tr ',' '\n' | sed 's/"/  /g'
+}
+
+case "${1:-}" in
+  get)
+    [ -z "${2:-}" ] && { echo "Usage: sriflow-config get <key>"; exit 1; }
+    get_value "$2"
+    ;;
+  set)
+    [ -z "${2:-}" ] || [ -z "${3:-}" ] && { echo "Usage: sriflow-config set <key> <value>"; exit 1; }
+    set_value "$2" "$3"
+    ;;
+  list)
+    list_config
+    ;;
+  *)
+    echo "Usage: sriflow-config {get|set|list}"
+    exit 1
+    ;;
+esac
