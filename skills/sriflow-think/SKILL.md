@@ -3,10 +3,11 @@ name: sriflow-think
 preamble-tier: 2
 version: 1.0.0
 description: >
-  BA Pipeline Phase 1 — Stakeholder Discovery. Maps every named stakeholder by power,
-  interest, and top uncertainty. Runs Disagreement Diagnostic on vague phrases.
-  Produces: Stakeholder Register, Power/Interest Map, Uncertainty Priority, Interview Plan.
+  BA Pipeline Phase 1 — Stakeholder Discovery + YC Office Hours. Maps stakeholders by
+  power, interest, uncertainty. Six forcing questions (demand, status quo, specificity,
+  wedge, observation, future-fit). Startup mode + builder mode. Produces design doc.
   ALWAYS start here. Never begin elicitation without completed Phase 1.
+  See reference/office-hours-workflow.md for absorbed gstack/office-hours capability.
 allowed-tools:
   - Read
   - Write
@@ -24,6 +25,9 @@ triggers:
   - who are the stakeholders
   - map the stakeholders
   - /sriflow-think
+  - brainstorm this
+  - is this worth building
+  - office hours
 next-skill: /sriflow-plan
 outputs:
   - THINK_OUTPUT.md

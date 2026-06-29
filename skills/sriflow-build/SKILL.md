@@ -17,13 +17,21 @@ triggers:
   - start coding
   - write the code
   - /sriflow-build
+  - debug this
+  - fix this bug
+  - why is this broken
+  - root cause analysis
+  - investigate this error
 ---
 
 ## When to invoke this skill
 
 Use when it is time to implement: after a plan is approved, a design is locked,
 or the user says "build this", "implement this", "start coding", "write the code",
-or "/sriflow-build". Runs a pre-build safety check, loads context, scans for
+or "/sriflow-build". Also use for "debug this", "fix this bug", "why is this broken",
+"root cause analysis", "investigate this error" — runs systematic debugging workflow
+(Iron Law: no fixes without root cause first). See reference/investigate-workflow.md.
+Runs a pre-build safety check, loads context, scans for
 reusable code, implements using sriflow-trim ladder. Progress written to
 SRIFLOW_MEMORY.md after each logical unit. One smoke check at the end.
 

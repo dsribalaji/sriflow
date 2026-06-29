@@ -2,7 +2,7 @@
 name: sriflow-browser
 preamble-tier: 2
 version: 2.0.0
-description: Persistent headless Chromium — real browser, real clicks, ~100ms/command. (sriflow)
+description: Persistent headless Chromium + Cookie Import — real browser, real clicks, ~100ms/command, import logged-in sessions from real browser. (sriflow) See reference/cookie-import-workflow.md.
 allowed-tools:
   - Bash
   - Read
@@ -19,6 +19,9 @@ triggers:
   - take a screenshot
   - headless browser
   - /sriflow-browser
+  - import cookies
+  - setup browser cookies
+  - login to site
 ---
 
 ## When to invoke

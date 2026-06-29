@@ -2,7 +2,7 @@
 name: sriflow-test
 preamble-tier: 2
 version: 3.0.0
-description: Systematic QA — golden path, edge cases, error states, regression. Produces QA_REPORT.md. (sriflow)
+description: Systematic QA + Code Health Dashboard — golden path, edge cases, error states, regression, weighted 0-10 quality score, trend tracking. Produces QA_REPORT.md. (sriflow) See reference/health-check-workflow.md.
 allowed-tools:
   - Bash
   - Read
@@ -19,6 +19,9 @@ triggers:
   - qa
   - test the feature
   - /sriflow-test
+  - code health check
+  - quality dashboard
+  - how healthy is codebase
 ---
 
 ## When to invoke

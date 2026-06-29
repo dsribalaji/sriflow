@@ -2,7 +2,7 @@
 name: sriflow-code-review
 preamble-tier: 2
 version: 2.0.0
-description: Diff review — correctness, SQL safety, OWASP security, LLM trust, complexity, trim audit. CRITICAL blocks ship. (sriflow)
+description: Diff review + Security Audit — correctness, SQL safety, OWASP Top 10, STRIDE, LLM trust, complexity, trim audit. CRITICAL blocks ship. (sriflow) See reference/security-audit-workflow.md.
 allowed-tools:
   - Bash
   - Read
@@ -17,6 +17,10 @@ triggers:
   - code review
   - check my changes
   - /sriflow-code-review
+  - security audit
+  - OWASP
+  - security review
+  - check for vulnerabilities
 ---
 
 ## When to invoke

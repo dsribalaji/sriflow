@@ -2,7 +2,7 @@
 name: sriflow-ship
 preamble-tier: 2
 version: 2.0.0
-description: Deploy pipeline — gate check, auto-detect target, merge PR, wait for CI, smoke test. (sriflow)
+description: Deploy pipeline + Post-Ship Docs — gate check, auto-detect target, merge PR, wait for CI, smoke test, Diataxis coverage map, doc update. (sriflow) See reference/document-release-workflow.md.
 allowed-tools:
   - Bash
   - Read
@@ -18,6 +18,9 @@ triggers:
   - push to production
   - release
   - /sriflow-ship
+  - update docs after ship
+  - document release
+  - update changelog
 ---
 
 ## When to invoke
