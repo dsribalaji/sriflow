@@ -54,8 +54,8 @@ export function extractBrowseCommands(skillPath: string): BrowseCommand[] {
 
     if (!inBashBlock) continue;
 
-    // Match lines with $B command invocations
-    const matches = line.matchAll(/\$B\s+(\S+)(?:\s+([^\$]*))?/g);
+    // Match lines with $B command invocations — stop at shell operators
+    const matches = line.matchAll(/\$B\s+(\S+)(?:\s+([^$&|;]*))?/g);
     for (const match of matches) {
       const command = match[1];
       let argsStr = (match[2] || '').trim();
@@ -169,7 +169,8 @@ export function validateSkillStructure(skillPath: string): string[] {
   }
 
   // Check for completion status protocol
-  if (!content.includes('completion') && !content.includes('status')) {
+  const lower = content.toLowerCase();
+  if (!lower.includes('completion') && !lower.includes('status')) {
     errors.push('missing completion status protocol');
   }
 
