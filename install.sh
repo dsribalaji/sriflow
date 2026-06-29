@@ -1,33 +1,32 @@
-#!/bin/bash
+#!/bin/sh
 # SriFlow installer — detects hosts and installs skills to correct directories
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SKILLS_DIR="$SCRIPT_DIR/skills"
 
 echo "SriFlow installer"
 echo "================="
 echo ""
 
-# Detect installed hosts
-HOSTS=()
+HOSTS=""
 
-if [ -d "$HOME/.claude" ] || command -v claude &>/dev/null; then
-  HOSTS+=("claude")
+if [ -d "$HOME/.claude" ] || command -v claude >/dev/null 2>&1; then
+  HOSTS="$HOSTS claude"
   echo "Detected: Claude Code"
 fi
 
-if [ -d "$HOME/.config/opencode" ] || command -v opencode &>/dev/null; then
-  HOSTS+=("opencode")
+if [ -d "$HOME/.config/opencode" ] || command -v opencode >/dev/null 2>&1; then
+  HOSTS="$HOSTS opencode"
   echo "Detected: OpenCode"
 fi
 
-if [ -d "$HOME/.github" ] || command -v gh &>/dev/null; then
-  HOSTS+=("copilot")
+if [ -d "$HOME/.github" ] || command -v gh >/dev/null 2>&1; then
+  HOSTS="$HOSTS copilot"
   echo "Detected: GitHub Copilot"
 fi
 
-if [ ${#HOSTS[@]} -eq 0 ]; then
+if [ -z "$HOSTS" ]; then
   echo "No supported hosts detected."
   echo "Install Claude Code, OpenCode, or GitHub Copilot first."
   exit 1
@@ -35,8 +34,7 @@ fi
 
 echo ""
 
-# Install to each detected host
-for HOST in "${HOSTS[@]}"; do
+for HOST in $HOSTS; do
   case "$HOST" in
     claude)
       DEST="$HOME/.claude/skills"
@@ -60,7 +58,6 @@ for HOST in "${HOSTS[@]}"; do
     fi
   done
 
-  # Also install the router skill
   if [ -f "$SKILLS_DIR/sriflow/SKILL.md" ]; then
     ln -sfn "$SKILLS_DIR/sriflow" "$DEST/sriflow"
     echo "  ✓ sriflow (router)"
