@@ -9,18 +9,18 @@ git clone <repo> sriflow
 cd sriflow
 bun install                    # install dependencies
 
-# Skills are in my-stack/skills/
-ls my-stack/skills/
+# Skills are in skills/
+ls skills/
 ```
 
 Skills are discovered by Claude Code from `~/.claude/skills/sriflow-*/SKILL.md` (or the equivalent for other hosts). The install script (`install.sh`) copies symlinks.
 
 ## Skill anatomy
 
-Every skill is a directory under `my-stack/skills/` containing a `SKILL.md` file:
+Every skill is a directory under `skills/` containing a `SKILL.md` file:
 
 ```
-my-stack/skills/
+skills/
 └── sriflow-think/
     └── SKILL.md
 ```
@@ -109,9 +109,9 @@ triggers:
 
 ## Adding a new skill
 
-1. Create directory: `my-stack/skills/srirflow-<name>/`
+1. Create directory: `skills/sriflow-<name>/`
 2. Write `SKILL.md` with all required sections
-3. Add trigger phrases to the router skill (`my-stack/skills/sriflow/SKILL.md`)
+3. Add trigger phrases to the router skill (`skills/sriflow/SKILL.md`)
 4. Run static validation: `bun run test:static`
 5. Test manually in Claude Code
 6. Add entry to this README's pipeline table
@@ -138,14 +138,8 @@ triggers:
 # Static validation (free, fast)
 bun run test:static
 
-# Full test suite (free, excludes E2E + LLM-judge)
+# Full test suite (free)
 bun test
-
-# E2E tests (requires API key, costs ~$3.85)
-bun run test:e2e
-
-# All tests including LLM-as-judge
-bun run test:evals
 ```
 
 ### Test tiers
@@ -153,8 +147,7 @@ bun run test:evals
 | Tier | Command | Cost | What it tests |
 |------|---------|------|---------------|
 | 1 — Static | `bun run test:static` | Free | SKILL.md structure, frontmatter, required sections |
-| 2 — E2E | `bun run test:e2e` | ~$3.85 | Full skill execution via `claude -p` |
-| 3 — LLM-judge | `bun run test:evals` | ~$0.15 | Doc quality scoring (clarity/completeness/actionability) |
+| 2 — Parser | `bun test` | Free | Command extraction + cross-skill path consistency |
 
 ## Multi-host support
 
@@ -171,47 +164,45 @@ The install script (`install.sh`) detects which hosts are installed and copies t
 ## File layout
 
 ```
-sriflow/
+sriflow/                           # repo root — the stack itself
 ├── gstack/                        # reference clone — READ ONLY
 ├── ba-toolkit/                    # reference — READ ONLY
-├── my-stack/
-│   ├── README.md
-│   ├── ARCHITECTURE.md
-│   ├── ETHOS.md
-│   ├── CONTRIBUTING.md
-│   ├── DESIGN.md
-│   ├── BROWSER.md
-│   ├── CHANGELOG.md
-│   ├── VERSION
-│   ├── package.json
-│   ├── install.sh
-│   ├── browse/                    # TypeScript/Bun browser stack
-│   │   ├── src/
-│   │   ├── test/
-│   │   └── build.ts
-│   ├── lib/
-│   │   ├── sriflow-browse.py      # Playwright wrapper (legacy)
-│   │   └── sriflow-browse-daemon.py
-│   ├── skills/
-│   │   ├── sriflow/               # router
-│   │   ├── sriflow-think/         # ideation
-│   │   ├── sriflow-plan/          # planning
-│   │   ├── sriflow-plan-review/   # plan review
-│   │   ├── sriflow-design/        # design
-│   │   ├── sriflow-build/         # build
-│   │   ├── sriflow-code-review/   # code review
-│   │   ├── sriflow-test/          # QA
-│   │   ├── sriflow-browser/       # browser
-│   │   ├── sriflow-ship/          # deploy
-│   │   ├── sriflow-reflect/       # retrospective
-│   │   ├── sriflow-memory/        # memory
-│   │   └── sriflow-trim/          # speech + code optimization
-│   └── test/
-│       ├── helpers/
-│       └── skill-*.test.ts
+├── README.md
+├── ARCHITECTURE.md
+├── ETHOS.md
+├── CONTRIBUTING.md
+├── DESIGN.md
+├── BROWSER.md
+├── CHANGELOG.md
 ├── AGENTS.md
-├── IMPLEMENTATION_PLAN.md
-└── SRIFLOW_MEMORY.md
+├── VERSION
+├── package.json
+├── install.sh
+├── uninstall.sh
+├── bin/                           # helper CLIs (config, context, decisions, learnings, timeline)
+├── browse/                        # TypeScript/Bun browser stack
+│   ├── src/
+│   ├── test/
+│   ├── browse                     # $B CLI wrapper (source; copied to dist/ on build)
+│   ├── setup                      # one-shot build script
+│   └── build.ts
+├── skills/
+│   ├── sriflow/                   # router
+│   ├── sriflow-think/             # ideation
+│   ├── sriflow-plan/              # planning
+│   ├── sriflow-plan-review/       # plan review
+│   ├── sriflow-design/            # design
+│   ├── sriflow-build/             # build
+│   ├── sriflow-code-review/       # code review
+│   ├── sriflow-test/              # QA
+│   ├── sriflow-browser/           # browser
+│   ├── sriflow-ship/              # deploy
+│   ├── sriflow-reflect/           # retrospective
+│   ├── sriflow-memory/            # memory
+│   └── sriflow-trim/              # speech + code optimization
+└── test/
+    ├── helpers/
+    └── skill-*.test.ts
 ```
 
 ## Testing

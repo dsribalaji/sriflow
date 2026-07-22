@@ -1,8 +1,12 @@
 ---
 name: sriflow-code-review
 preamble-tier: 2
-version: 2.0.0
-description: Diff review + Security Audit — correctness, SQL safety, OWASP Top 10, STRIDE, LLM trust, complexity, trim audit. CRITICAL blocks ship. (sriflow) See reference/security-audit-workflow.md.
+version: 3.0.0
+category: pipeline
+related: sriflow-build, sriflow-test, sriflow-ship
+description: "Comprehensive diff review with 6 severity levels and 24 language-specific guides. Absorbs: all 24 ECC language reviewers, gstack 6-lens, ruflo security audit."
+license: Apache-2.0
+compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
   - Bash
   - Read
@@ -17,188 +21,99 @@ triggers:
   - code review
   - check my changes
   - /sriflow-code-review
-  - security audit
-  - OWASP
-  - security review
-  - check for vulnerabilities
+next-skill: /sriflow-test
 ---
+
+# /sriflow-code-review — Multi-Language Diff Review
 
 ## When to invoke
 
-Reviews current branch diff against base branch through 6 lenses: correctness, SQL safety, OWASP security, LLM trust boundaries, complexity, trim audit. Writes `CODE_REVIEW.md`. CRITICAL findings block `/sriflow-ship`. Proactively suggest after sriflow-build completes or before sriflow-ship.
+After build completes. Reviews current branch diff through 6 lenses with 6 severity levels. Auto-detects language and loads relevant language-specific guide. CRITICAL findings block ship. First-commit projects fall back to full-file review.
 
-## Preamble (run first)
+## Severity system (6 levels)
+- `[blocking]` 🔴 — Must fix before merge (Solo: overridable)
+- `[important]` 🟡 — Should fix
+- `[nit]` 🟢 — Nice to have
+- `[suggestion]` 💡 — Alternative approach
+- `[learning]` 📚 — Educational
+- `[praise]` 🎉 — Good work
 
-```bash
-_BRANCH=$(git branch --show-current 2>/dev/null || echo "unknown")
-_SESSION_ID="$$-$(date +%s)"; _TEL_START=$(date +%s)
-echo "BRANCH: $_BRANCH | SESSION_ID: $_SESSION_ID"
+## 6 review lenses
+1. CORRECTNESS — runtime bugs, logic errors, off-by-one, null handling
+2. SQL SAFETY — injection, parameterization, unbounded queries
+3. SECURITY (OWASP) — broken access control, XSS, secrets, SSRF, path traversal
+4. LLM TRUST BOUNDARIES — prompt injection, unvalidated LLM output, context poisoning
+5. COMPLEXITY — unnecessary abstraction, YAGNI, premature parameterization
+6. TRIM AUDIT — dev leftovers, wrapper-only functions, dead code
 
-[ -n "${CLAUDE_PLAN_FILE:-}${SRIFLOW_PLAN_MODE_FORCE:-}" ] && export SRIFLOW_PLAN_MODE="active" || \
-  { [ "${SRIFLOW_PLAN_MODE:-}" = "active" ] && export SRIFLOW_PLAN_MODE="active" || export SRIFLOW_PLAN_MODE="inactive"; }
-echo "SRIFLOW_PLAN_MODE: $SRIFLOW_PLAN_MODE | SESSION_KIND: ${SRIFLOW_SESSION_KIND:-interactive}"
+## Language-specific guides (absorbed from ECC's 24 agents)
 
-_BASE=$(gh pr view --json baseRefName -q .baseRefName 2>/dev/null \
-  || git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||' || echo "main")
-echo "BASE_BRANCH: $_BASE | DIFF_STAT: $(git diff "${_BASE}...HEAD" --stat 2>/dev/null | tail -1)"
+| File | Language | What it covers |
+|------|----------|----------------|
+| `reference/languages/01-react.md` | React/TSX | Hooks, state, effects, rendering, performance |
+| `reference/languages/02-python.md` | Python | Typing, async, context managers, patterns |
+| `reference/languages/03-go.md` | Go | Idioms, error handling, goroutines, interfaces |
+| `reference/languages/04-typescript.md` | TypeScript | Types, generics, async, module resolution |
+| `reference/languages/05-vue.md` | Vue | Reactivity, composition API, slots |
+| `reference/languages/06-angular.md` | Angular | DI, RxJS, modules, signals |
+| `reference/languages/07-rust.md` | Rust | Ownership, borrows, lifetimes, unsafe, macros |
+| `reference/languages/08-java.md` | Java | Streams, Optionals, DI, transactions, JPA |
+| `reference/languages/09-csharp.md` | C# | LINQ, async/await, DI, nullability |
+| `reference/languages/10-swift.md` | Swift | Optionals, ARC, async/await, SwiftUI |
+| `reference/languages/11-kotlin.md` | Kotlin | Coroutines, null safety, Compose, flows |
+| `reference/languages/12-cpp.md` | C++ | RAII, templates, smart pointers, UB patterns |
+| `reference/languages/13-fsharp.md` | F# | Computation expressions, discriminated unions |
+| `reference/languages/14-django.md` | Django | ORM, migrations, DRF, middleware |
+| `reference/languages/15-pytorch.md` | PyTorch | CUDA, training loops, gradients, data loading |
+| `reference/languages/16-mle.md` | ML Pipelines | Evals, serving, monitoring, feature stores |
+| `reference/languages/17-database.md` | SQL | PostgreSQL, queries, indexes, transactions |
+| `reference/languages/18-ruby.md` | Ruby | Blocks, metaprogramming, Rails conventions |
+| `reference/languages/19-php.md` | PHP | Type declarations, Laravel, security |
+| `reference/languages/20-scala.md` | Scala | Functional patterns, Akka, ZIO, cats |
+| `reference/languages/21-elixir.md` | Elixir | Phoenix, OTP, pattern matching, pipes |
+| `reference/languages/22-haskell.md` | Haskell | Monads, typeclasses, laziness, IO |
+| `reference/languages/23-graphql.md` | GraphQL | Schema design, resolvers, N+1, security |
+| `reference/languages/24-protobuf.md` | Protobuf/gRPC | Service design, error handling, streaming |
 
-[ -f "SRIFLOW_MEMORY.md" ] && { echo "MEMORY: found"; head -60 SRIFLOW_MEMORY.md; } || echo "MEMORY: missing"
+### Cross-cutting guides
 
-_GIT_STAGED=$(git diff --cached --name-only 2>/dev/null | wc -l | tr -d ' ')
-_GIT_UNSTAGED=$(git diff --name-only 2>/dev/null | wc -l | tr -d ' ')
-_GIT_UNTRACKED=$(git ls-files --others --exclude-standard 2>/dev/null | wc -l | tr -d ' ')
-echo "GIT: staged=$_GIT_STAGED unstaged=$_GIT_UNSTAGED untracked=$_GIT_UNTRACKED"
+| File | Topic |
+|------|-------|
+| `reference/cross-cutting/sql-injection.md` | SQL injection prevention |
+| `reference/cross-cutting/xss.md` | XSS prevention patterns |
+| `reference/cross-cutting/n-plus-one.md` | N+1 query detection |
+| `reference/cross-cutting/error-handling.md` | Error handling patterns |
+| `reference/cross-cutting/async.md` | Async/await best practices |
+| `reference/cross-cutting/validation.md` | Input validation at boundaries |
+| `reference/cross-cutting/llm-safety.md` | LLM trust boundary patterns |
 
-_CURRENT_STAGE=$(grep "^## Current Stage:" SRIFLOW_MEMORY.md 2>/dev/null | head -1 | sed 's/## Current Stage: //' || echo "unknown")
-_PROACTIVE=$(sriflow-config get proactive 2>/dev/null || echo "true")
-_EXPLAIN_LEVEL=$(sriflow-config get explain_level 2>/dev/null || echo "default")
-echo "PIPELINE: $_CURRENT_STAGE | PROACTIVE: $_PROACTIVE | EXPLAIN: $_EXPLAIN_LEVEL"
+### Absorbed patterns
 
-sriflow-timeline log '{"skill":"sriflow-code-review","event":"started","branch":"'"$_BRANCH"'","session":"'"$_SESSION_ID"'"}' 2>/dev/null &
-```
+| Source | Pattern | Integration |
+|--------|---------|-------------|
+| **ECC 24 language reviewers** | Language-specific review checklists | 24 language reference files |
+| **ECC security-reviewer** | OWASP Top 10 + STRIDE audit | Lens 3 enhanced with ECC patterns |
+| **ECC code-reviewer** | 4-phase review process (gather → high-level → line-by-line → summary) | Already present in v2 |
+| **gstack review** | 6-lens severity system | Already present |
+| **gstack cso** | Chief Security Officer audit | `reference/cross-cutting/llm-safety.md` |
+| **ruflo security** | CVE remediation, input validation | Lens 3 enhanced |
+| **ECC auto-fix** | Auto-fix gate for nitpicks | Step 4 Auto-Fix gate |
 
-## Plan Mode
-
-Allowed in plan mode: `Bash` (read-only git), `Read`, `Glob`, `Grep`, writes to `SRIFLOW_MEMORY.md` and plan file. No destructive ops or git mutations. If `SRIFLOW_PLAN_MODE` is `"active"`: run all 6 lenses, write findings, write `CODE_REVIEW.md`, but do NOT apply auto-fixes (Step 4 deferred — report only).
-
-## AskUserQuestion Format
-
-Every AskUserQuestion is a decision brief: `D<N> — <title>` with Branch, ELI10, Stakes, Recommendation, Completeness scores, options with pros/cons, Net synthesis. D-numbering starts at `D1`. Prose fallback when AskUserQuestion unavailable: same info as paragraphs, then STOP and wait.
+## Workflow
+1. **Preamble** — shell init, base branch detection
+2. **Step 0** — Base branch detection (gh → git → fallback)
+3. **Step 1** — Branch/diff check (first-commit fallback for new projects)
+4. **Step 2** — Get full diff, PR complexity score, language detection
+5. **Step 3** — Six-lens review (with language-specific guide loaded)
+6. **Step 4** — Auto-fix gate (nitpicks)
+7. **Step 5** — Write CODE_REVIEW.md
+8. **Step 6** — Verdict (BLOCKED / DONE_WITH_CONCERNS / DONE)
+9. **Solo override** — Personal projects can override blocking findings
 
 ## Voice
+Direct, builder-to-builder, compressed. Name files, functions, line numbers.
 
-Direct, builder-to-builder, compressed. Lead with the point. Be concrete (files, functions, line numbers). No filler, no AI vocabulary (delve, crucial, robust, comprehensive, nuanced, multifaceted, furthermore, additionally, pivotal, tapestry, underscore, foster, showcase, intricate, vibrant, fundamental, significant). Never narrate what code does. Only comment when WHY is non-obvious.
-
-## Completeness Principle
-
-Every category, every finding. Only out-of-scope: code not in the diff. Never skip a category with "low risk". When options differ in coverage: `Completeness: X/10`. When options differ in kind: `Note: options differ in kind, not coverage — no completeness score.`
-
-## Completion Status Protocol
-
-End every run with one of: **DONE** (no CRITICALs/WARNs or all fixed), **DONE_WITH_CONCERNS** (open WARNs listed), **BLOCKED** (CRITICALs remain, cannot ship), **NEEDS_CONTEXT** (missing info, state what's needed). Format: `STATUS`, `REASON`, `ATTEMPTED`, `RECOMMENDATION`.
-
-## Confusion Protocol
-
-For high-stakes ambiguity (architecture, data model, destructive scope, missing context): STOP. One sentence, 2-3 options with tradeoffs, ask. Not for routine analysis or obvious findings.
-
----
-
-# /sriflow-code-review — Diff Review
-
-Analyze current branch diff against base branch through 6 review lenses. Write `CODE_REVIEW.md`. Block ship if any CRITICAL finding is open.
-
----
-
-## Step 0: Base Branch Detection
-
-Run in sequence, stopping at first success: `gh pr view --json baseRefName -q .baseRefName 2>/dev/null` -> `gh repo view --json defaultBranchRef -q .defaultBranchRef.name 2>/dev/null` -> `git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||'` -> `git rev-parse --verify origin/main 2>/dev/null` (use `main` if 0) -> `git rev-parse --verify origin/master 2>/dev/null` (use `master` if 0) -> default `main`.
-
-Print: `BASE: <detected-branch>`. Use as `<base>` in every subsequent step.
-
----
-
-## Step 1: Branch and Diff Check
-
-```bash
-git branch --show-current
-```
-
-If current branch equals `<base>`: **"Nothing to review — on the base branch."** and stop. Then: `git fetch origin <base> --quiet 2>/dev/null || true`. Then `git diff <base>...HEAD --stat 2>/dev/null`. If empty: **"Nothing to review — no changes against `<base>`."** and stop. Print the stat summary.
-
----
-
-## Step 2: Get the Full Diff
-
-```bash
-git diff <base>...HEAD
-```
-
-Read the full diff carefully before emitting any findings. Do NOT emit line by line. Read entire diff, then run all 6 lenses, then output findings all at once.
-
-If very large (500+ files or 20k+ lines), read in sections using `git diff <base>...HEAD -- <path>` per directory, starting with highest-risk (auth, database, API handlers, LLM integration).
-
----
-
-## Step 3: Six-Lens Review
-
-Apply all 6 lenses. For detailed checklists, read reference files:
-
-- **Lens 1 (CORRECTNESS):** `reference/lens1-correctness.md`
-- **Lens 2 (SQL SAFETY):** `reference/lens2-sql.md`
-- **Lens 3 (SECURITY/OWASP):** `reference/lens3-security.md`
-- **Lens 4 (LLM TRUST):** `reference/lens4-llm.md`
-- **Lens 5 (COMPLEXITY):** `reference/lens5-complexity.md`
-- **Lens 6 (TRIM AUDIT):** `reference/lens6-trim.md`
-
-Severity definitions: `reference/severity.md`. False positives: `reference/false-positives.md`.
-
-Every finding format (one per line):
-```
-path/to/file.ext:LINE: 🔴 CRITICAL|⚠️ WARN|💡 NITPICK: <problem>. Fix: <specific action>.
-```
-
-**Before emitting:** verify the specific code line. If you cannot point to a specific line in the diff, suppress the finding.
-
----
-
-## Step 4: Auto-Fix Gate (NITPICKs Only)
-
-Auto-fix rules: `reference/autofix-scope.md`
-
-After all 6 lenses, count NITPICKs. If any exist, ask via AskUserQuestion (D1): auto-fix all (recommended) or report only.
-
-**If A (auto-fix):** Apply each fix using `Edit`. Reverse line order within each file (prevents drift). After all: `git diff HEAD` to verify. Revert any unexpected result.
-
-**If B (report only):** Proceed to Step 5.
-
----
-
-## Step 5: Write CODE_REVIEW.md
-
-Write `CODE_REVIEW.md` in repo root (overwrite). Sections: Header (Branch, Base, Reviewed, Diff stat), Summary table (lens x severity counts), CRITICAL findings, WARN findings, NITPICK findings (note auto-fixed), Scope (1-2 sentences), Lens Notes (lenses with no applicable code), Verdict (BLOCKED / DONE_WITH_CONCERNS / DONE). Fill every section; `(none)` if empty. Every finding: specific file:line + specific fix.
-
----
-
-## Step 6: Verdict Gate
-
-**BLOCKED** (open CRITICAL): `STATUS: BLOCKED` | `REASON: <N> CRITICAL(s) must be fixed before /sriflow-ship.` | `RECOMMENDATION: Fix each, re-run or proceed to /sriflow-ship.` List each CRITICAL inline.
-
-**DONE_WITH_CONCERNS** (WARNs, no CRITICALs): `STATUS: DONE_WITH_CONCERNS` | `REASON: <N> WARN(s). No CRITICALs.` | `RECOMMENDATION: Review WARNs. Clear to /sriflow-ship with awareness.` List each WARN inline.
-
-**DONE** (no CRITICALs, no WARNs): `STATUS: DONE` | `REASON: No CRITICAL or WARN findings.` | `RECOMMENDATION: Clear to /sriflow-ship.`
-
----
-
-## Memory Write (run last, always)
-
-```bash
-_TEL_END=$(date +%s)
-_TEL_DUR=$(( _TEL_END - _TEL_START ))
-_TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-
-cat >> SRIFLOW_MEMORY.md << 'MEMEOF'
-
-### <_TIMESTAMP> | sriflow-code-review | <OUTCOME> | <_TEL_DUR>s
-Branch: <_BRANCH>
-Session: <_SESSION_ID>
-Result: <N_CRITICAL> CRITICAL, <N_WARN> WARN, <N_NITPICK> NITPICK
-MEMEOF
-
-sriflow-timeline log '{"skill":"sriflow-code-review","event":"completed","branch":"'"$_BRANCH"'","outcome":"<OUTCOME>","duration_s":"'"$_TEL_DUR"'","session":"'"$_SESSION_ID"'","critical":<N_CRITICAL>,"warn":<N_WARN>}' 2>/dev/null || true
-```
-
-Replace `<OUTCOME>` with `blocked`, `done_with_concerns`, or `done`. Replace counts with actuals.
-
----
-
-## Context Recovery
-
-At session start or after compaction: `head -80 SRIFLOW_MEMORY.md` and `head -30 CODE_REVIEW.md`. If found: 2-sentence summary. If BLOCKED: surface CRITICALs immediately. If DONE: suggest `/sriflow-ship`.
-
----
-
-## Reference Files
-
-All in `reference/`: `severity.md` (definitions + matrix), `lens1-correctness.md`, `lens2-sql.md`, `lens3-security.md`, `lens4-llm.md`, `lens5-complexity.md`, `lens6-trim.md`, `false-positives.md`, `language-patterns.md` (JS/TS, Python, Ruby, Go, SQL), `llm-attacks.md` (attack scenarios), `complexity-antipatterns.md` (named patterns), `autofix-scope.md` (safety rules), `diff-size.md` (handling strategies), `checklists.md` (pre-finding, pre-write, post-write).
-
-Read the relevant reference file before applying each lens. Read `checklists.md` before emitting findings and before writing CODE_REVIEW.md.
+## Completion Status
+- **DONE** — no blocking findings.
+- **DONE_WITH_CONCERNS** — important findings exist.
+- **BLOCKED** — blocking findings (solo: overridable).

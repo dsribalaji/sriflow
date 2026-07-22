@@ -63,6 +63,17 @@ for HOST in $HOSTS; do
     echo "  ✓ sriflow (router)"
   fi
 
+  # Install browser stack — symlink the whole dir so dist/browse + server.js
+  # resolve from $DEST/sriflow-browse (the path the browser skill checks).
+  if [ -d "$SCRIPT_DIR/browse" ]; then
+    ln -sfn "$SCRIPT_DIR/browse" "$DEST/sriflow-browse"
+    if [ -x "$SCRIPT_DIR/browse/dist/browse" ]; then
+      echo "  ✓ browse stack"
+    else
+      echo "  ✓ browse stack (run 'cd browse && ./setup' to build the binary)"
+    fi
+  fi
+
   # Install bin/ scripts (CLIs for telemetry, config, context)
   BIN_DIR="$SCRIPT_DIR/bin"
   if [ -d "$BIN_DIR" ]; then

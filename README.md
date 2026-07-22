@@ -6,16 +6,16 @@ Fully custom AI-powered product development pipeline. From raw idea to deployed 
 think → plan → plan-review → design → build → code-review → test → ship → reflect
 ```
 
-Every stage is a `/sriflow-*` slash command. Skills live in `my-stack/skills/`. No runtime dependency on gstack.
+Every stage is a `/sriflow-*` slash command. Skills live in `skills/`. No runtime dependency on gstack.
 
 ## Quick start (3 commands)
 
 ```bash
-# 1. Install
-sh my-stack/install.sh
+# 1. Install (detects Claude Code / OpenCode / Copilot)
+sh install.sh
 
 # 2. Build browser binary
-cd my-stack && bun install && bun run build && cd ..
+bun install && bun run build
 
 # 3. Start in Claude Code
 /sriflow          # routes to the right skill
@@ -26,47 +26,50 @@ cd my-stack && bun install && bun run build && cd ..
 ### Claude Code
 
 ```bash
-sh my-stack/install.sh
+sh install.sh
 # Installs to ~/.claude/skills/sriflow-*/
 ```
 
 ### OpenCode
 
 ```bash
-sh my-stack/install.sh
+sh install.sh
 # Detects OpenCode, installs to ~/.config/opencode/skills/sriflow-*/
 ```
 
 ### GitHub Copilot
 
 ```bash
-sh my-stack/install.sh
+sh install.sh
 # Detects Copilot, installs to .github/copilot-skills/sriflow-*/
 ```
 
 ### Browser binary (optional)
 
 ```bash
-cd my-stack && bun install && bun run build
-# Produces browse/dist/sriflow-browse (~58MB compiled binary)
+bun install && bun run build
+# Produces browse/dist/browse (CLI wrapper) + browse/dist/server.js (daemon)
+# Or run the one-shot setup: cd browse && ./setup
 ```
 
 ## Pipeline
 
 | Stage | Command | What it does |
 |-------|---------|-------------|
-| **Ideation** | `/sriflow-think` | 6 BA phases + office-hours forcing questions |
-| **Planning** | `/sriflow-plan` | Structured implementation plan from ideation |
-| **Review** | `/sriflow-plan-review` | CEO, Design, Eng lenses. Iterative improvement loop |
-| **Design** | `/sriflow-design` | Candidates → pick → DESIGN.md → HTML → review |
-| **Build** | `/sriflow-build` | Implements approved design |
-| **Code Review** | `/sriflow-code-review` | 6-lens diff review. Blocks on CRITICAL |
-| **Test** | `/sriflow-test` | QA: golden path, edges, errors, regression |
-| **Browser** | `/sriflow-browser` | 58 commands, daemon, ref-based selection |
-| **Ship** | `/sriflow-ship` | Merge, deploy, CI wait, smoke test |
-| **Reflect** | `/sriflow-reflect` | End-of-cycle retrospective |
-| **Memory** | `/sriflow-memory` | Per-project memory (auto-updated) |
-| **Trim** | `/sriflow-trim` | Always-on: caveman speech + ponytail code |
+| **Ideation** | `/sriflow-init` | Scaffold new project (tech stack, CI/CD, git) |
+| | `/sriflow-think` | 6 BA phases + gstack office-hours + ECC spec-miner + ruflo governance |
+| **Planning** | `/sriflow-plan` | 6 BA phases + ADR-driven architecture (ruflo) + autoplan (gstack) |
+| **Review** | `/sriflow-plan-review` | CEO + Design + Eng + (DX) + Council. 24 domain lenses (ECC). ruflo guidance |
+| **Design** | `/sriflow-design` | CLI/TUI/Web/Mobile/Library/Service aware. gstack design-shotgun, design-consultation |
+| **Build** | `/sriflow-build` | 12 language-specific error resolvers (ECC). gstack investigate. ruflo orchestration |
+| **Code Review** | `/sriflow-code-review` | 24 language-specific guides (ECC). 6 lenses, 6 severity levels. Solo override |
+| **Test** | `/sriflow-test` | TDD workflow (ECC). 14 QA patterns (gstack). Eval framework (ruflo). 80% coverage |
+| **Browser** | `/sriflow-browser` | 70+ commands, stealth, cookie import (gstack). Headless Chromium |
+| **Ship** | `/sriflow-ship` | 10 deploy targets (npm/pip/homebrew/vercel/fly/docker...). Canary, rollback |
+| **Reflect** | `/sriflow-reflect` | 8-section retro. ECC instincts. gstack trends. Tier-based depth |
+| **Memory** | `/sriflow-memory` | 10 JSONL backends. ruflo vector search patterns. ECC instinct system |
+| **Trim** | `/sriflow-trim` | Always-on speech+code compression. ruflo token budget depth control |
+| **Validate** | `/sriflow-validate` | Full agentskills spec compliance + sriflow extended fields. Cross-skill deps |
 
 ## Docs
 
@@ -76,23 +79,17 @@ cd my-stack && bun install && bun run build
 | [ETHOS.md](ETHOS.md) | Builder philosophy |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Adding/modifying skills, testing |
 | [DESIGN.md](DESIGN.md) | Design system, output formats |
-| [BROWSER.md](BROWSER.md) | All 58 browser commands, snapshot system |
+| [BROWSER.md](BROWSER.md) | All 70 browser commands, snapshot system |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
 
 ## Testing
 
 ```bash
 # Static validation (free, fast)
-cd my-stack && bun run test:static
+bun run test:static
 
 # Full test suite (free)
-cd my-stack && bun test
-
-# E2E tests (requires API key)
-cd my-stack && bun run test:e2e
-
-# All tests including LLM-as-judge
-cd my-stack && bun run test:evals
+bun test
 ```
 
 ## Project-Aware State

@@ -1,8 +1,12 @@
 ---
 name: sriflow-plan-review
 preamble-tier: 2
-version: 2.0.0
-description: Three-lens plan review (CEO + Design + Eng). Scores 0-10. Hard block if any lens < 7. Loops until clear. (sriflow)
+version: 3.0.0
+category: pipeline
+related: sriflow-plan, sriflow-design
+description: "Multi-lens plan review. 3 mandatory lenses (CEO + Design + Eng) + optional DX + optional Council. Absorbs: gstack 4-lens, ECC 67-agent council, ruflo guidance control plane."
+license: Apache-2.0
+compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
   - Bash
   - Read
@@ -17,184 +21,79 @@ triggers:
   - check the plan
   - plan review
   - /sriflow-plan-review
-prerequisite: /sriflow-plan — All 6 BA phases must be complete
+prerequisite: /sriflow-plan — PLAN.md must exist
 next-skill: /sriflow-design
 outputs:
   - PLAN_REVIEW.md
 gate:
-  rule: All three lenses must score >= 7 before proceeding
+  rule: All mandatory lenses must score >= 7 before proceeding
   signal: DONE when all lenses pass
 ---
 
+# /sriflow-plan-review — Multi-Lens Plan Review
+
 ## When to invoke
 
-Phase 2 of the BA pipeline — plan review. Use after `/sriflow-plan` completes all 6 BA phases.
-Invoke when: user says "review the plan", "is this plan good", "check the plan", "plan review",
-or `/sriflow-plan-review`. Requires PLAN.md. Runs 3-lens review (CEO + Design + Eng),
-scores each 0-10, hard blocks if any lens < 7, loops until all pass.
+After `/sriflow-plan`. Reviews PLAN.md through multiple lenses. Each lens scores 0-10. Hard block if any mandatory lens < 7. Iterative loop until all pass or user overrides.
 
-## Preamble (run first)
+## Reference files
 
-```bash
-_BRANCH=$(git branch --show-current 2>/dev/null || echo "unknown")
-_SESSION_ID="$$-$(date +%s)"
-_TEL_START=$(date +%s)
-echo "BRANCH: $_BRANCH"
-if [ -n "${CLAUDE_PLAN_FILE:-}${SRIFLOW_PLAN_MODE_FORCE:-}" ]; then
-  export SRIFLOW_PLAN_MODE="active"
-else
-  export SRIFLOW_PLAN_MODE="${SRIFLOW_PLAN_MODE:-inactive}"
-fi
-echo "SRIFLOW_PLAN_MODE: $SRIFLOW_PLAN_MODE"
-echo "TRIM: disabled (BA pipeline active)"
-if [ -f "SRIFLOW_MEMORY.md" ]; then
-  echo "--- MEMORY CONTEXT (last 60 lines) ---"
-  tail -60 SRIFLOW_MEMORY.md
-  echo "--- END MEMORY ---"
-fi
-if [ -f "PLAN.md" ]; then
-  echo "PLAN.md: found ($(wc -l < PLAN.md | tr -d ' ') lines)"
-else
-  echo "PLAN.md: NOT FOUND — cannot review"
-  find . -maxdepth 3 -name "PLAN.md" 2>/dev/null | head -5
-fi
-if [ -f "PLAN_REVIEW.md" ]; then
-  echo "PLAN_REVIEW.md: exists — will overwrite on completion"
-fi
-```
+| File | What it covers |
+|------|---------------|
+| `reference/01-preamble.md` | Shell preamble, plan mode |
+| `reference/02-voice-completeness.md` | Voice rules + completeness scoring |
+| `reference/03-pre-flight.md` | Pre-flight audit checklist |
+| `reference/04-ceo-lens.md` | CEO lens (Q1-Q9) — gstack CEO review patterns |
+| `reference/05-design-lens.md` | Design lens (Q9-Q16) — gstack design review patterns |
+| `reference/06-eng-lens.md` | Engineering lens (Q17-Q24) — gstack eng review patterns |
+| `reference/07-score-gate.md` | Score gate + loop logic |
+| `reference/08-write-review.md` | PLAN_REVIEW.md template |
+| `reference/09-council.md` | Adversarial council (Skeptic + Pragmatist + Critic) |
 
-## Plan Mode Safe Operations
+### Absorbed patterns
 
-Reads of any file, writes to SRIFLOW_MEMORY.md, PLAN_REVIEW.md, and PLAN.md (applying user-requested changes) only. No code changes, scaffolding, or implementation. Output: reviewed PLAN.md + PLAN_REVIEW.md.
+| Source | Pattern | Integration |
+|--------|---------|-------------|
+| **gstack plan-ceo-review** | 9 CEO questions: inversion, focus, beachhead, why-now | Absorbed into CEO lens |
+| **gstack plan-eng-review** | Blast radius, boring-by-default, sequencing, build-vs-buy | Absorbed into Eng lens |
+| **gstack plan-design-review** | 10-dimension design scoring rubric | Absorbed into Design lens |
+| **gstack plan-devex-review** | TTHW (Time To Hello World), friction points, persona traces | Added as optional DX lens (Small skips) |
+| **ECC council** | Skeptic + Pragmatist + Critic adversarial voices | Expanded council with 3 distinct personas |
+| **ECC 67-agent library** | Domain-specific review checklists | `reference/council/*.md` — 24 domain lenses |
+| **ruflo guidance** | "Compile, enforce, prove, evolve" framework | Post-review: prove decisions with evidence |
 
-## AskUserQuestion Format
+### Domain lens library (absorbed from ECC's 67 agents)
 
-Read `reference/askuserquestion-format.md` for the full decision brief template, D-numbering, completeness scoring, and self-check.
-
-## Voice
-
-Principal product reviewer voice. BA mode — trim disabled for full detail. Write full sentences, complete thoughts, detailed analysis. No caveman, no ponytail.
-
-- Lead with the point. State the problem, why it matters, what the fix is.
-- Be concrete. Name the gap, the flow, the file, the dependency.
-- Direct about quality. No hedge language. "This might be a concern" = "this is a concern."
-- No em dashes. No AI vocabulary: robust, comprehensive, nuanced, pivotal, delve, showcase, fundamental, significant, multifaceted.
-- Tie every finding to user outcomes.
-- Every score is a recommendation, not a verdict. The user decides.
-- Write complete sentences — reference documents, not code comments.
-
-## Completeness Principle
-
-Review against the full version, not the demo path. Flag shortcuts, half-specified flows, deferred edge cases as gaps. Score when options differ in coverage (10 = all edge cases, 7 = happy path, 3 = shortcut).
-
-## Completion Status Protocol
-
-Report one of: **DONE** (all lenses ≥ 7), **DONE_WITH_CONCERNS** (user override), **BLOCKED** (state exact blocker), **NEEDS_CONTEXT** (state what is missing).
-
-## Context Recovery
-
-If SRIFLOW_MEMORY.md shows a recent `sriflow-plan-review` entry, greet with a 2-sentence summary of where the last session ended.
-
-## Confusion Protocol
-
-High-stakes ambiguity — STOP. Name the ambiguity in one sentence, present 2-3 options with tradeoffs, ask. Do not guess.
-
----
-
-# Three-Lens Plan Review
-
-You are a **principal product reviewer** who thinks simultaneously as a CEO/founder, a lead product designer, and a staff engineer. Find every gap in PLAN.md before a single line of implementation code is written.
-
-**Core rules:**
-1. Read PLAN.md in full before evaluating any lens.
-2. Ask ALL questions from each lens. No skipping, no combining.
-3. Show exact scores after each lens with a one-line verdict.
-4. If any lens < 7: present specific fixes, ask user, apply to PLAN.md, re-score. Loop.
-5. The user decides when to stop. You do not stop early.
-6. These questions bypass caveman/ponytail compression. Ask precisely.
-
----
-
-## Pre-Flight
-
-```bash
-git log --oneline -20 2>/dev/null || echo "no git history"
-git diff HEAD~1 --stat 2>/dev/null || true
-grep -r "TODO\|FIXME\|HACK\|XXX" --include="*.md" -l 2>/dev/null | head -10
-git stash list 2>/dev/null | head -5
-```
-
-Read SRIFLOW_MEMORY.md, TODOS.md, CLAUDE.md (if they exist). Map project state, intersecting work, known pain points, prior reviews. Report in one paragraph.
-
-### Step 0 — Locate PLAN.md
-
-```bash
-if [ -f "PLAN.md" ]; then
-  echo "PLAN_FOUND: yes ($(wc -l < PLAN.md | tr -d ' ') lines)"
-else
-  echo "PLAN_FOUND: no"
-  find . -maxdepth 4 -name "PLAN.md" 2>/dev/null
-fi
-```
-
-Not found → report NEEDS_CONTEXT, STOP. Found → Read in full. Do not evaluate from a summary.
-
----
-
-## Scoring
-
-The 0-10 scale signals **probability of a good outcome if this plan is built as written**. Score what the plan says, not what you assume the team will figure out.
-
-| Score | Meaning |
-|-------|---------|
-| 0-2   | Missing or incoherent |
-| 3-4   | Serious gaps, bad outcomes |
-| 5-6   | Core idea present, execution gaps |
-| 7-8   | Solid, minor issues manageable |
-| 9-10  | Exceptional, hard to improve |
-
-Threshold: **7** on all three lenses.
-
-Output: `<LENS> LENS: X/10 — <verdict>`
-Findings: `[BLOCKER|CONCERN|NOTE]: <finding>. Fix: <action>.`
-
----
+| File | Domain |
+|------|--------|
+| `reference/council/security-review.md` | Security lens (OWASP Top 10 + STRIDE) |
+| `reference/council/database-review.md` | PostgreSQL/Supabase schema, queries, indexes |
+| `reference/council/typescript-review.md` | TypeScript/JS type safety, async patterns |
+| `reference/council/python-review.md` | Python patterns, typing, performance |
+| `reference/council/go-review.md` | Go idioms, error handling, concurrency |
+| `reference/council/rust-review.md` | Rust ownership, borrow checker, unsafe |
+| `reference/council/java-review.md` | Java/Spring Boot patterns, DI, transactions |
+| `reference/council/kotlin-review.md` | Kotlin coroutines, null safety, Compose |
+| `reference/council/cpp-review.md` | C++ memory management, RAII, templates |
+| `reference/council/mle-review.md` | ML pipeline, serving, monitoring, rollback |
+| `reference/council/pytorch-review.md` | PyTorch CUDA, training, distributed |
 
 ## Workflow
+1. **Preamble** → shell init, git state, memory
+2. **Pre-flight** → read PLAN.md, gather git context
+3. **CEO lens** → Q1-Q9, score 0-10
+4. **Design lens** → Q9-Q16, score 0-10
+5. **Engineering lens** → Q17-Q24, score 0-10
+6. **Optional DX lens** (Medium/Enterprise) → TTHW, friction points
+7. **Council** → Enterprise always, Medium if any lens < 8, Small skips
+8. **Score gate** → all mandatory ≥ 7? If not, loop
+9. **Write PLAN_REVIEW.md** → scores, findings, loop history
+10. **Memory write** → append to SRIFLOW_MEMORY.md
 
-### Step 1 — CEO Lens
+## Voice
+Principal product reviewer. BA mode — full detail, complete sentences.
 
-Read `reference/ceo-lens.md` for cognitive frame and questions Q1-Q9. Work through every question. Score after Q9.
-
-### Step 2 — Design Lens
-
-Read `reference/design-lens.md` for cognitive frame, behavior model, 10/10 checklist, and questions Q9-Q16. Run the 10/10 checklist. Score after Q16.
-
-### Step 3 — Engineering Lens
-
-Read `reference/engineering-lens.md` for cognitive frame and questions Q17-Q24. Name top 3 blockers. Score after Q24.
-
-### Step 4 — Score Gate
-
-Read `reference/score-gate.md` for full gate logic, blocked-flow templates, re-scoring rules, and loop mechanics.
-
-Print score summary. If any lens < 7 → BLOCKED. Present issues, ask user (fix or override). Apply fixes, re-read PLAN.md, re-score relevant lens only. Loop until all ≥ 7 or user overrides.
-
-### Step 5 — Write PLAN_REVIEW.md
-
-Read `reference/plan-review-template.md` for the full template and final signal format. Write PLAN_REVIEW.md. Print completion signal.
-
----
-
-## Memory Write (run last)
-```bash
-_TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-# Replace CEO_SCORE, DESIGN_SCORE, ENG_SCORE, ITERATION_COUNT, and OUTCOME with actual values
-cat >> SRIFLOW_MEMORY.md << MEMEOF
-
-### $_TIMESTAMP | sriflow-plan-review | OUTCOME | Three-Lens Review Complete
-Final scores: CEO=CEO_SCORE/10, Design=DESIGN_SCORE/10, Eng=ENG_SCORE/10
-Iterations: ITERATION_COUNT
-Status: OUTCOME
-MEMEOF
-```
+## Completion Status
+- **DONE** — all mandatory lenses ≥ 7, PLAN_REVIEW.md written.
+- **DONE_WITH_CONCERNS** — user overrode sub-7 lens.
+- **BLOCKED** — cannot proceed.

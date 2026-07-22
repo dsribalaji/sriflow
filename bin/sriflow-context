@@ -1,41 +1,26 @@
-#!/bin/sh
-# sriflow-context — show/save project context
-# Usage: sriflow-context show | save <json>
-set -e
+#!/usr/bin/env bash
+# sriflow-context — fallback implementation
+# Stores/retrieves session context from ~/.sriflow/projects/<slug>/context.json
 
-STATE_DIR="${SRIFLOW_STATE_ROOT:-$HOME/.sriflow}"
-SLUG="${SRIFLOW_SLUG:-$(basename "$(pwd)")}"
-PROJECT_DIR="$STATE_DIR/projects/$SLUG"
-CONTEXT_FILE="$PROJECT_DIR/context.json"
+ACTION="${1:-}"
+PROJECT_DIR="${SRIFLOW_PROJECT_DIR:-$(pwd)}"
+SLUG=$(basename "$(git rev-parse --show-toplevel 2>/dev/null || echo "$PROJECT_DIR")")
+CTX_FILE="$HOME/.sriflow/projects/$SLUG/context.json"
 
-ensure_project() {
-  mkdir -p "$PROJECT_DIR"
-}
-
-case "${1:-}" in
+case "$ACTION" in
   show)
-    if [ -f "$CONTEXT_FILE" ]; then
-      cat "$CONTEXT_FILE"
+    if [ -f "$CTX_FILE" ]; then
+      cat "$CTX_FILE"
     else
-      echo "No context saved yet."
+      echo "{\"branch\":\"$(git branch --show-current 2>/dev/null || echo 'unknown')\"}"
     fi
     ;;
   save)
-    ensure_project
-    INPUT="${2:-}"
-    if [ -n "$INPUT" ]; then
-      echo "$INPUT" > "$CONTEXT_FILE"
-    else
-      cat > "$CONTEXT_FILE"
-    fi
-    echo "Context saved to $CONTEXT_FILE"
-    ;;
-  clear)
-    rm -f "$CONTEXT_FILE"
-    echo "Context cleared."
+    mkdir -p "$(dirname "$CTX_FILE")"
+    cat > "$CTX_FILE"
     ;;
   *)
-    echo "Usage: sriflow-context {show|save|clear}"
+    echo "Usage: sriflow-context show|save"
     exit 1
     ;;
 esac

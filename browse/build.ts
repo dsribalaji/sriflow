@@ -25,4 +25,8 @@ await Bun.build({
   external: ['playwright', 'playwright-core', 'diff'],
 });
 
-console.log(`Build complete: ${DIST_DIR}/server.js`);
+// Ship the CLI wrapper ($B) next to the compiled daemon.
+await $`cp ${import.meta.dir}/browse ${DIST_DIR}/browse`;
+await $`chmod +x ${DIST_DIR}/browse`;
+
+console.log(`Build complete: ${DIST_DIR}/server.js + ${DIST_DIR}/browse`);

@@ -3,3 +3,9 @@ node_modules/
 data.db
 .DS_Store
 .sriflow/
+
+# Reference clones — large repos fetched for pattern absorption
+gstack/
+reference/
+browse/test/screenshots/
+browse/dist/

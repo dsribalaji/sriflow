@@ -8,10 +8,11 @@
   },
   "scripts": {
     "build": "bun run browse/build.ts",
-    "test": "bun test test/ --ignore 'skill-e2e-*.test.ts' --ignore 'skill-llm-eval.test.ts'",
-    "test:e2e": "EVALS=1 bun test test/skill-e2e-*.test.ts",
-    "test:evals": "EVALS=1 bun test test/skill-e2e-*.test.ts test/skill-llm-eval.test.ts",
-    "test:static": "bun test test/skill-parser.test.ts test/skill-validation.test.ts"
+    "test": "bun test test/",
+    "test:static": "bun test test/skill-parser.test.ts test/skill-validation.test.ts",
+    "test:memory": "bun test test/jsonl-memory-backend.test.ts",
+    "test:hooks": "bun test test/hook-dispatcher.test.ts",
+    "test:evals": "bun test test/eval-runner.test.ts test/eval-runner.test.ts"
   },
   "dependencies": {
     "playwright": "^1.58.0",

@@ -83,6 +83,17 @@ for HOST in $HOSTS; do
     fi
   fi
 
+  # Remove browser stack symlink
+  LINK="$DEST/sriflow-browse"
+  if [ -L "$LINK" ]; then
+    if [ "$DRY_RUN" -eq 1 ]; then
+      echo "  [dry] remove $LINK"
+    else
+      rm -f "$LINK"
+      echo "  ✓ removed browse stack"
+    fi
+  fi
+
   # Remove bin/ symlinks
   BIN_DIR="$DEST/bin"
   if [ -d "$BIN_DIR" ]; then
@@ -128,13 +139,26 @@ for HOST in $HOSTS; do
   echo ""
 done
 
-# Remove state directory
+# Remove state directory (config, per-project decisions/learnings/timeline, browse state).
+# This is destructive and irreversible, so confirm first.
 if [ -d "$HOME/.sriflow" ]; then
   if [ "$DRY_RUN" -eq 1 ]; then
-    echo "[dry] remove ~/.sriflow/"
+    echo "[dry] remove ~/.sriflow/ (config + all per-project state/logs)"
   else
-    rm -rf "$HOME/.sriflow"
-    echo "✓ removed ~/.sriflow/"
+    echo ""
+    echo "About to delete ~/.sriflow/ — this removes config and ALL per-project"
+    echo "decisions, learnings, timeline, and browser state. This cannot be undone."
+    printf "Delete it? [y/N] "
+    read -r REPLY </dev/tty || REPLY=""
+    case "$REPLY" in
+      [yY]|[yY][eE][sS])
+        rm -rf "$HOME/.sriflow"
+        echo "✓ removed ~/.sriflow/"
+        ;;
+      *)
+        echo "• kept ~/.sriflow/ (state preserved)"
+        ;;
+    esac
   fi
 fi
 

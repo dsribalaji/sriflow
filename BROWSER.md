@@ -1,15 +1,15 @@
 # Browser — Complete Reference
 
-sriflow's browser surface. TypeScript/Bun daemon, 58 commands, ref-based element selection, persistent Chromium. ~100-200ms per call.
+sriflow's browser surface. TypeScript/Bun daemon, 70 commands, ref-based element selection, persistent Chromium. ~100-200ms per call.
 
 ## Quick start
 
 ```bash
 # One-time: build the binary
-cd my-stack && bun install && bun run build
+bun install && bun run build          # or: cd browse && ./setup
 
 # Set $B once
-B=./browse/dist/sriflow-browse
+B=./browse/dist/browse
 
 # Drive a page
 $B goto https://news.ycombinator.com
@@ -89,7 +89,7 @@ Random 10000-60000. Zero config, zero conflicts across workspaces.
 | `media` | All media elements |
 | `data` | Structured data: JSON-LD, Open Graph, Twitter Cards |
 
-### WRITE commands (22)
+### WRITE commands (26)
 
 | Command | Description |
 |---------|-------------|
@@ -108,7 +108,6 @@ Random 10000-60000. Zero config, zero conflicts across workspaces.
 | `wait` | Wait for element/network/page load |
 | `viewport` | Set viewport size |
 | `cookie` | Set cookie on current domain |
-| `cookie-import` | Import cookies from JSON |
 | `header` | Set custom request header |
 | `useragent` | Set user agent |
 | `upload` | Upload file(s) |
@@ -121,7 +120,7 @@ Random 10000-60000. Zero config, zero conflicts across workspaces.
 | `scrape` | Bulk download all media |
 | `archive` | Save complete page as MHTML |
 
-### META commands (17)
+### META commands (25)
 
 | Command | Description |
 |---------|-------------|
@@ -144,10 +143,11 @@ Random 10000-60000. Zero config, zero conflicts across workspaces.
 | `resume` | Re-snapshot after takeover |
 | `connect` | Launch headed Chromium |
 | `disconnect` | Disconnect headed browser |
+| `focus` | Bring headed window to foreground (macOS) |
+| `state` | Save/load browser state (cookies + URLs) |
 | `frame` | Switch to iframe context |
-| `domain-skill` | Per-site notes |
-| `skill` | Run a browser-skill |
-| `cdp` | Raw CDP method dispatch |
+| `ux-audit` | Extract page structure for UX analysis |
+| `cdp` | Raw CDP method dispatch (deny-default allowlist) |
 | `memory` | Heap + process snapshot |
 
 ## Snapshot system
@@ -209,9 +209,9 @@ Staleness detection: `resolveRef()` checks `locator.count() > 0` before using an
 
 ## Troubleshooting
 
-**Binary not found:** `cd my-stack && bun install && bun run build`
+**Binary not found:** `bun install && bun run build` (or `cd browse && ./setup`)
 
-**Port conflict:** Server auto-selects random port. Kill stale processes: `pkill -f sriflow-browse`
+**Port conflict:** Server auto-selects random port. Kill stale processes: `pkill -f browse/dist/server.js`
 
 **Stale state:** Delete `~/.sriflow/browse.json` and restart
 

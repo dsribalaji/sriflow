@@ -1,79 +1,21 @@
-#!/bin/sh
-# sriflow-config — read/write ~/.sriflow/config.yaml
-# Usage: sriflow-config get <key> | set <key> <value> | list
-set -e
+#!/usr/bin/env bash
+# sriflow-config — fallback implementation
+# Reads config from SRIFLOW_CONFIG_FILE or ~/.sriflow/config.yaml
+# Falls back to defaults when the real sriflow-config binary is not installed.
 
-STATE_DIR="${SRIFLOW_STATE_ROOT:-$HOME/.sriflow}"
-CONFIG_FILE="$STATE_DIR/config.yaml"
+CONFIG_FILE="${SRIFLOW_CONFIG_FILE:-$HOME/.sriflow/config.yaml}"
+KEY="${1:-}"
+DEFAULT="${2:-}"
 
-DEFAULTS='{"proactive":"true","telemetry":"off","explain_level":"default","checkpoint_mode":"explicit","skill_prefix":"false"}'
+if [ -f "$CONFIG_FILE" ] && command -v yq >/dev/null 2>&1; then
+  yq -r ".${KEY} // \"$DEFAULT\"" "$CONFIG_FILE" 2>/dev/null && exit 0
+fi
 
-ensure_config() {
-  mkdir -p "$STATE_DIR"
-  if [ ! -f "$CONFIG_FILE" ]; then
-    cat > "$CONFIG_FILE" <<'EOF'
-# sriflow configuration
-proactive: true
-telemetry: off
-explain_level: default
-checkpoint_mode: explicit
-skill_prefix: false
-EOF
-  fi
-}
-
-get_value() {
-  key="$1"
-  if [ -f "$CONFIG_FILE" ]; then
-    val=$(grep "^${key}:" "$CONFIG_FILE" 2>/dev/null | head -1 | sed "s/^${key}:[[:space:]]*//" | sed 's/[[:space:]]*$//')
-    if [ -n "$val" ]; then
-      echo "$val"
-      return
-    fi
-  fi
-  # fallback to defaults
-  echo "$DEFAULTS" | tr ',' '\n' | grep "^\"${key}\":" | head -1 | sed 's/.*": *"*//' | sed 's/"*$//'
-}
-
-set_value() {
-  key="$1"
-  value="$2"
-  ensure_config
-  if grep -q "^${key}:" "$CONFIG_FILE" 2>/dev/null; then
-    sed -i "s|^${key}:.*|${key}: ${value}|" "$CONFIG_FILE"
-  else
-    echo "${key}: ${value}" >> "$CONFIG_FILE"
-  fi
-}
-
-list_config() {
-  ensure_config
-  echo "=== sriflow config ($CONFIG_FILE) ==="
-  while IFS= read -r line; do
-    case "$line" in
-      \#*|"") continue ;;
-      *) echo "  $line" ;;
-    esac
-  done < "$CONFIG_FILE"
-  echo ""
-  echo "=== defaults ==="
-  echo "$DEFAULTS" | tr ',' '\n' | sed 's/"/  /g'
-}
-
-case "${1:-}" in
-  get)
-    [ -z "${2:-}" ] && { echo "Usage: sriflow-config get <key>"; exit 1; }
-    get_value "$2"
-    ;;
-  set)
-    [ -z "${2:-}" ] || [ -z "${3:-}" ] && { echo "Usage: sriflow-config set <key> <value>"; exit 1; }
-    set_value "$2" "$3"
-    ;;
-  list)
-    list_config
-    ;;
-  *)
-    echo "Usage: sriflow-config {get|set|list}"
-    exit 1
-    ;;
+# Fallback defaults
+case "$KEY" in
+  proactive) echo "true" ;;
+  telemetry) echo "off" ;;
+  explain_level) echo "default" ;;
+  *) echo "$DEFAULT" ;;
 esac
+exit 0

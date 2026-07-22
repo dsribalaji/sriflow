@@ -111,3 +111,47 @@ describe('Cross-skill path consistency', () => {
     }
   });
 });
+
+describe('Reference file integrity', () => {
+  for (const skill of SRIFLOW_SKILLS) {
+    test(`${skill} has no orphan reference files`, () => {
+      const skillDir = path.join(SKILLS_DIR, skill);
+      const refDir = path.join(skillDir, 'reference');
+      if (!fs.existsSync(refDir)) return;
+
+      const skillContent = fs.readFileSync(path.join(skillDir, 'SKILL.md'), 'utf-8');
+      const refFiles = fs.readdirSync(refDir).filter(f => f.endsWith('.md'));
+
+      for (const refFile of refFiles) {
+        expect(skillContent).toContain(refFile);
+      }
+    });
+
+    test(`${skill} SKILL.md is under 250 lines`, () => {
+      const skillPath = path.join(SKILLS_DIR, skill, 'SKILL.md');
+      if (!fs.existsSync(skillPath)) return;
+      const lines = fs.readFileSync(skillPath, 'utf-8').split('\n').length;
+      expect(lines).toBeLessThanOrEqual(250);
+    });
+
+    test(`${skill} references existing files`, () => {
+      const skillPath = path.join(SKILLS_DIR, skill, 'SKILL.md');
+      if (!fs.existsSync(skillPath)) return;
+      const content = fs.readFileSync(skillPath, 'utf-8');
+      const refs = content.matchAll(/Read reference\/([^\s`]+)/g);
+      for (const match of refs) {
+        const ref = match[1];
+        if (ref.includes('<') || ref.endsWith('.')) continue;
+        const refPath = path.join(SKILLS_DIR, skill, 'reference', ref);
+        expect(fs.existsSync(refPath)).toBe(true);
+      }
+    });
+
+    test(`${skill} has anti-trigger in description`, () => {
+      const skillPath = path.join(SKILLS_DIR, skill, 'SKILL.md');
+      if (!fs.existsSync(skillPath)) return;
+      const fm = extractFrontmatter(skillPath);
+      expect(fm.description).toContain('Not for:');
+    });
+  }
+});

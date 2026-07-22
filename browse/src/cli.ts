@@ -65,8 +65,8 @@ export function resolveServerScript(
   const serverPath = path.join(srcDir, 'server.ts');
   if (fs.existsSync(serverPath)) return serverPath;
 
-  // Final fallback: assume standard sriflow layout
-  return path.resolve(process.cwd(), 'my-stack/browse/src/server.ts');
+  // Final fallback: assume standard sriflow layout (repo root)
+  return path.resolve(process.cwd(), 'browse/src/server.ts');
 }
 
 export function readState(): ServerState | null {

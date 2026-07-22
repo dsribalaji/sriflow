@@ -1,13 +1,12 @@
 ---
 name: sriflow-think
 preamble-tier: 2
-version: 1.0.0
-description: >
-  BA Pipeline Phase 1 — Stakeholder Discovery + YC Office Hours. Maps stakeholders by
-  power, interest, uncertainty. Six forcing questions (demand, status quo, specificity,
-  wedge, observation, future-fit). Startup mode + builder mode. Produces design doc.
-  ALWAYS start here. Never begin elicitation without completed Phase 1.
-  See reference/office-hours-workflow.md for absorbed gstack/office-hours capability.
+version: 2.0.0
+category: pipeline
+related: sriflow-plan, sriflow-plan-review
+description: "Ideation & stakeholder discovery. BA Phase 1-6: from raw idea to stakeholder map, uncertainty register, interview plan. Absorbs: gstack office-hours, ECC spec-miner, ruflo governance thinking."
+license: Apache-2.0
+compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
   - Read
   - Write
@@ -23,175 +22,81 @@ triggers:
   - ideate
   - help me think
   - who are the stakeholders
-  - map the stakeholders
   - /sriflow-think
-  - brainstorm this
-  - is this worth building
-  - office hours
 next-skill: /sriflow-plan
 outputs:
   - THINK_OUTPUT.md
   - 01_discovery/stakeholder-register.md
-  - 01_discovery/power-interest-map.md
-  - 01_discovery/uncertainty-priority.md
+  - 01_discovery/uncertainty-map.md
   - 01_discovery/disagreement-log.md
   - 01_discovery/interview-plan.md
+  - 01_discovery/competitive-landscape.md
 gate:
-  rule: Every Tier 1 stakeholder named with top uncertainty before proceeding
-  signal: DONE when all Tier 1 uncertainties have resolution plan and clarity check >= 8/10
+  rule: Tier 1 stakeholders named with top uncertainty resolved
+  signal: DONE when all Tier 1 uncertainties have clarity check ≥ 8/10
 ---
 
-# /sriflow-think — Stakeholder Discovery (Phase 1)
+## Pipeline backtracking
+
+Re-run `/sriflow-think` to update THINK_OUTPUT.md. Use `update mode` to preserve existing answers. Fresh start deletes all artifacts and re-runs.
+
+# /sriflow-think — Ideation (Absorbing gstack office-hours + ECC spec-miner + ruflo governance)
 
 ## When to invoke
 
-Phase 1 of the BA pipeline. Starting any project from zero, when a requirement is attributed to a group label ("leadership," "the business," "users"), when stakeholders disagree, or when you need to plan who to interview and in what order.
+Phase 1 of the sriflow pipeline. Starting any project from zero, when a requirement is attributed to a group label ("the business," "users," "leadership"), when stakeholders disagree, or before any elicitation session. Invoke proactively before any requirements workshop.
 
-## Preamble / Plan Mode / Voice
+## Reference files
 
-Run standard sriflow preamble (branch, session, plan mode, memory, git, config, timeline). Disable caveman/ponytail trim — BA output needs full detail. Plan mode: read-only ops, no destructive mutations. Voice: full sentences, no trim, no AI vocab (delve/crucial/robust/comprehensive/nuanced/multifaceted), no em dashes.
+| Phase | File | What it covers |
+|-------|------|---------------|
+| **Preamble** | `reference/01-preamble.md` | Shell preamble, PATH setup, plan mode, memory, git state |
+| **Questions** | `reference/02-questions.md` | D-numbered decision brief format |
+| **Scale** | `reference/03-scale-detection.md` | Tier detection with effort estimation cross-check |
+| **Context** | `reference/04-step1-context.md` | Q2-Q4 project phase + docs + prior discovery |
+| **Market** | `reference/04b-market-research.md` | Competitive landscape, 3 searches max (gstack patterns) |
+| **Stakeholders** | `reference/05-step2-identify.md` | 6-category stakeholder discovery |
+| **Power/Interest** | `reference/06-step3-map.md` | Power + interest + uncertainty mapping |
+| **Register** | `reference/07-step4-register.md` | Full stakeholder register + Red/Green classification |
+| **Uncertainty** | `reference/07b-uncertainty-priority.md` | Tier 1/2/3 uncertainty prioritization |
+| **Disagreement** | `reference/08-step6-disagreement.md` | Vague phrase detection, diagnostic questions |
+| **Interview** | `reference/09-step7-interview.md` | 5-part interview structure |
+| **Output** | `reference/10-output-templates.md` | Small/Medium/Enterprise THINK_OUTPUT.md templates |
+| **Gates** | `reference/11-gates-anti-patterns.md` | Phase gate, expand handler, clarity check |
 
-## AskUserQuestion
+### Absorbed patterns
 
-Decision brief: D-number, ELI10, stakes if wrong, recommendation, completeness (X/10), A/B pros/cons (>=40 chars). One (recommended). If unavailable: prose with same triad, then STOP.
+| Source | Pattern | sriflow integration |
+|--------|---------|-------------------|
+| **gstack office-hours** | YC-style forcing questions | `reference/patterns/gstack-office-hours.md` |
+| **gstack office-hours** | 10-star thinking (what's the 10x version?) | Added to Q3 in Think workflow |
+| **gstack office-hours** | Inversion: "what would make this fail?" | Added to uncertainty mapping |
+| **ECC spec-miner** | Brownfield project extraction | `reference/patterns/ecc-spec-miner.md` |
+| **ECC spec-miner** | Existing codebase → spec extraction | Context step: detect brownfield, run extraction |
+| **ECC planner** | Work breakdown: deps → phases → risks | `reference/patterns/ecc-planner.md` |
+| **ruflo governance** | "Compile, enforce, prove, evolve" framework | `reference/patterns/ruflo-governance.md` |
+| **ruflo ADRs** | Decision documentation template | Uncertainty resolution → ADR entry |
 
-## Completion / Confusion
+## Workflow
 
-End: DONE / DONE_WITH_CONCERNS / BLOCKED / NEEDS_CONTEXT. High-stakes ambiguity: STOP, name it, 2-3 options with tradeoffs.
+1. **Preamble** → Read `reference/01-preamble.md`
+2. **Questions format** → Read `reference/02-questions.md`
+3. **Scale detection** → Read `reference/03-scale-detection.md` — effort estimation cross-check
+4. **Step 1 — Project context** → Read `reference/04-step1-context.md` (Q2-Q4)
+5. **Step 1b — Market research** → Read `reference/04b-market-research.md` (3 searches max)
+6. **Step 2 — Identify stakeholders** → Read `reference/05-step2-identify.md`
+7. **Step 3 — Map power/interest/uncertainty** → Read `reference/06-step3-map.md`
+8. **Step 4 — Stakeholder register** → Read `reference/07-step4-register.md`
+9. **Step 5 — Uncertainty priority** → Read `reference/07b-uncertainty-priority.md`
+10. **Step 6 — Disagreement diagnostic** → Read `reference/08-step6-disagreement.md`
+11. **Step 7 — Interview plan** → Read `reference/09-step7-interview.md`
+12. **Output** → Write THINK_OUTPUT.md from `reference/10-output-templates.md`
+13. **Gates** → Read `reference/11-gates-anti-patterns.md`
 
----
+## Voice
+Direct, builder-to-builder. BA mode — full detail, complete sentences. No caveman. No AI vocabulary.
 
-# Core Principle
-
-> "Uncertainty is never reduced 'in general.' It's reduced for a specific person who has to decide something."
-
-"The stakeholders" are not one voice. Multiple people, distinct problems, distinct decisions, distinct uncertainties. Treating them as one audience causes requirements that satisfy nobody.
-
-**BA's job:** Map who decides what — aim each piece of analysis at the person who needs it.
-
----
-
-# Scale Detection
-
-| Tier | Keywords | Timeline |
-|------|----------|----------|
-| **Small** | "personal", "quick", "side project", "hobby", "small", "simple", "just me", "weekend", "internal tool", "script" | < 1 week |
-| **Medium** | "team", "startup", "client", "feature", "module", "need by", "users will", "new endpoint", "new page" | 1-4 weeks |
-| **Enterprise** | "enterprise", "compliance", "multi-team", "department", "audit", "regulatory", "migration", "multiple systems", "organization" | 1+ months |
-
-Keyword priority: Small overrides Medium. Enterprise overrides all. Default: Medium.
-
-**Q1 (required):** What system or product are we building? (One sentence — concrete noun)
-
-Confirm scale, then branch:
-
-- **Small:** Ask S1 (who uses this?), S1.5 (key features 3-5), S2 (done criterion). Write THINK_OUTPUT.md (Small template from `reference/output-templates.md`). Finish. Do NOT proceed to Step 1.
-- **Medium:** Ask Q2-Q4. Run Steps 2-7 compressed (3-5 stakeholders, 1-paragraph summaries, skip disagreement unless flagged). "expand [step] to full depth" available.
-- **Enterprise:** Ask Q2-Q4. Full Steps 2-7.
-
----
-
-## Step 1 — Project Context (Medium / Enterprise)
-
-**Q2:** Phase? A) Greenfield B) Existing system C) Migration
-
-**Q3:** Existing docs? A) None B) BRD draft C) PRD D) Design brief E) Legacy docs
-
-**Q4:** Prior stakeholder discovery? A) No B) Partial list C) Full register (skip to Step 5)
-
-**Step 1b — Market Research (optional):** WebSearch for competitors, adjacents, regulatory context. 3 searches max.
-
----
-
-## Step 2 — Identify Stakeholders
-
-Read `reference/stakeholder-categories.md` for discovery questions and the 6 stakeholder categories (Decision-Maker, SME, End User, Technical Gatekeeper, Affected Party, Regulator/Auditor).
-
-Ask discovery questions, assign categories, produce list with name/title/category/notes.
-
-## Step 3 — Map Power, Interest, Uncertainty
-
-Read `reference/power-interest-mapping.md` for the full framework and CRM example.
-
-Assess each stakeholder: Power (H/M/L), Interest (H/M/L), Top Uncertainty. Fill: "This will help [name] decide [specific thing]."
-
-## Step 4 — Stakeholder Register
-
-Read `reference/stakeholder-register.md` for the register template and Red/Green rules.
-
-Produce full register. Generic group labels = automatically RED. Name individuals.
-
-## Step 5 — Uncertainty Prioritization
-
-Read `reference/uncertainty-priority.md` for tier definitions and ranked list template.
-
-- **Tier 1 (This Week):** High power + high uncertainty. Blocks scope/architecture.
-- **Tier 2 (Before Sprint):** Medium power/uncertainty shaping major features.
-- **Tier 3 (Before Build Completes):** Low power/peripheral. Important but not blocking.
-
-Resolve Tier 1 before writing requirements. Tier 2 before sprint begins.
-
-## Step 6 — Disagreement Diagnostic
-
-Read `reference/disagreement-diagnostic.md` for warning signals, diagnostic questions, and the Dashboard Disaster example.
-
-When stakeholders use the same word for different things: ask each separately. Log in disagreement table.
-
-## Step 7 — Interview Plan
-
-Read `reference/interview-plan.md` for the 5-section structure (open, pain, success, test hypotheses, clarity check).
-
-For each Tier 1/2 stakeholder. After every interview: update register, flag disagreements.
-
----
-
-## Output
-
-Write `THINK_OUTPUT.md` using the template matching your tier. Read `reference/output-templates.md` for Small/Medium/Enterprise templates.
-
-## Phase Gate
-
-| Tier | Gate |
-|------|------|
-| **Small** | Q1 answered + user identified + done criterion defined |
-| **Medium** | Top 3-5 stakeholders named + top uncertainty + 1-paragraph interview summary |
-| **Enterprise** | Every Tier 1 named, uncertainty documented, resolution plan exists, clarity >= 8/10 |
-
-**Next:** `/sriflow-plan`
-
-## Post-DONE: Expand Handler
-
-- "expand [step] to full depth" -> re-enter at that step, enterprise depth, regenerate
-- "expand to full think" -> re-enter from Step 1, enterprise depth, overwrite
-- "give me the stakeholder register" -> Steps 2-4 enterprise depth
-- "give me the interview plan" -> Step 7 enterprise depth
-- "give me the disagreement log" -> Step 6 enterprise depth
-
-## Update vs Start Fresh
-
-THINK_OUTPUT.md exists? Ask: Update (keep tier, refresh) or Start fresh (delete, re-run).
-
-## Anti-Patterns
-
-Read `reference/anti-patterns.md` for the full table and Clarity Check (0-10 scale). Key: name individuals not groups, interview quiet stakeholders, update register after interviews, silence != agreement.
-
----
-
-## Memory Write (run last)
-
-```bash
-_TEL_END=$(date +%s)
-_TEL_DUR=$(( _TEL_END - _TEL_START ))
-_TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-cat >> SRIFLOW_MEMORY.md << MEMEOF
-
-### $_TIMESTAMP | sriflow-think | OUTCOME | ${_TEL_DUR}s
-Branch: $_BRANCH
-Session: $_SESSION_ID
-Scale: $SCALE_TIER
-Stakeholders mapped: [count]
-Tier 1 uncertainties: [count]
-MEMEOF
-
-sriflow-timeline log '{"skill":"sriflow-think","event":"completed","branch":"'"$_BRANCH"'","outcome":"OUTCOME","duration_s":"'"$_TEL_DUR"'","session":"'"$_SESSION_ID"'","scale":"'"$SCALE_TIER"'"}' 2>/dev/null
-```
+## Completion Status
+- **DONE** — THINK_OUTPUT.md written, all Tier 1 uncertainties mapped.
+- **DONE_WITH_CONCERNS** — completed, concerns listed.
+- **BLOCKED** — cannot proceed; state blocker.

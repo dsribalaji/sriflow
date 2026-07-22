@@ -840,71 +840,11 @@ describe('Status', () => {
 
 // ─── CLI server script resolution ───────────────────────────────
 
-describe('CLI server script resolution', () => {
-  test('prefers adjacent browse/src/server.ts for compiled project installs', () => {
-    const root = fs.mkdtempSync('/tmp/gstack-cli-');
-    const execPath = path.join(root, '.claude/skills/gstack/browse/dist/browse');
-    const serverPath = path.join(root, '.claude/skills/gstack/browse/src/server.ts');
-
-    fs.mkdirSync(path.dirname(execPath), { recursive: true });
-    fs.mkdirSync(path.dirname(serverPath), { recursive: true });
-    fs.writeFileSync(serverPath, '// test server\n');
-
-    const resolved = resolveServerScript(
-      { HOME: path.join(root, 'empty-home') },
-      '$bunfs/root',
-      execPath
-    );
-
-    expect(resolved).toBe(serverPath);
-
-    fs.rmSync(root, { recursive: true, force: true });
-  });
-});
+// CLI server script resolution test removed: tests gstack directory layout, not applicable to sriflow
 
 // ─── CLI lifecycle ──────────────────────────────────────────────
 
-describe('CLI lifecycle', () => {
-  test('dead state file triggers a clean restart', async () => {
-    const stateFile = `/tmp/browse-test-state-${Date.now()}.json`;
-    fs.writeFileSync(stateFile, JSON.stringify({
-      port: 1,
-      token: 'fake',
-      pid: 999999,
-    }));
-
-    const cliPath = path.resolve(__dirname, '../src/cli.ts');
-    const cliEnv: Record<string, string> = {};
-    for (const [k, v] of Object.entries(process.env)) {
-      if (v !== undefined) cliEnv[k] = v;
-    }
-    cliEnv.BROWSE_STATE_FILE = stateFile;
-    const result = await new Promise<{ code: number; stdout: string; stderr: string }>((resolve) => {
-      const proc = spawn('bun', ['run', cliPath, 'status'], {
-        timeout: 15000,
-        env: cliEnv,
-      });
-      let stdout = '';
-      let stderr = '';
-      proc.stdout.on('data', (d) => stdout += d.toString());
-      proc.stderr.on('data', (d) => stderr += d.toString());
-      proc.on('close', (code) => resolve({ code: code ?? 1, stdout, stderr }));
-    });
-
-    let restartedPid: number | null = null;
-    if (fs.existsSync(stateFile)) {
-      restartedPid = JSON.parse(fs.readFileSync(stateFile, 'utf-8')).pid;
-      fs.unlinkSync(stateFile);
-    }
-    if (restartedPid) {
-      try { process.kill(restartedPid, 'SIGTERM'); } catch {}
-    }
-
-    expect(result.code).toBe(0);
-    expect(result.stdout).toContain('Status: healthy');
-    expect(result.stderr).toContain('Starting server');
-  }, 20000);
-});
+// CLI lifecycle test removed: cli.ts is a module (not executable entry point), lifecycle handled by bash wrapper
 
 // ─── Buffer bounds ──────────────────────────────────────────────
 
@@ -1695,131 +1635,7 @@ describe('Console --errors', () => {
   });
 });
 
-// ─── Cookie Import ─────────────────────────────────────────────
-
-describe('Cookie import', () => {
-  test('cookie-import loads valid JSON cookies', async () => {
-    await handleWriteCommand('goto', [baseUrl + '/basic.html'], bm);
-    const tempFile = '/tmp/browse-test-cookies.json';
-    const cookies = [
-      { name: 'test-cookie', value: 'test-value' },
-      { name: 'another', value: '123' },
-    ];
-    fs.writeFileSync(tempFile, JSON.stringify(cookies));
-
-    const result = await handleWriteCommand('cookie-import', [tempFile], bm);
-    expect(result).toBe('Loaded 2 cookies from /tmp/browse-test-cookies.json');
-
-    // Verify cookies were set
-    const cookieList = await handleReadCommand('cookies', [], bm);
-    expect(cookieList).toContain('test-cookie');
-    expect(cookieList).toContain('test-value');
-    expect(cookieList).toContain('another');
-
-    fs.unlinkSync(tempFile);
-  });
-
-  test('cookie-import auto-fills domain from page URL', async () => {
-    await handleWriteCommand('goto', [baseUrl + '/basic.html'], bm);
-    const tempFile = '/tmp/browse-test-cookies-nodomain.json';
-    // Cookies without domain — should auto-fill from page URL
-    const cookies = [{ name: 'autofill-test', value: 'works' }];
-    fs.writeFileSync(tempFile, JSON.stringify(cookies));
-
-    const result = await handleWriteCommand('cookie-import', [tempFile], bm);
-    expect(result).toContain('Loaded 1');
-
-    const cookieList = await handleReadCommand('cookies', [], bm);
-    expect(cookieList).toContain('autofill-test');
-
-    fs.unlinkSync(tempFile);
-  });
-
-  test('cookie-import preserves explicit domain', async () => {
-    await handleWriteCommand('goto', [baseUrl + '/basic.html'], bm);
-    const tempFile = '/tmp/browse-test-cookies-domain.json';
-    // Domain must match page hostname (127.0.0.1) — cross-domain cookies are now rejected
-    const cookies = [{ name: 'explicit', value: 'domain', domain: '127.0.0.1', path: '/foo' }];
-    fs.writeFileSync(tempFile, JSON.stringify(cookies));
-
-    const result = await handleWriteCommand('cookie-import', [tempFile], bm);
-    expect(result).toContain('Loaded 1');
-
-    fs.unlinkSync(tempFile);
-  });
-
-  test('cookie-import with empty array succeeds', async () => {
-    await handleWriteCommand('goto', [baseUrl + '/basic.html'], bm);
-    const tempFile = '/tmp/browse-test-cookies-empty.json';
-    fs.writeFileSync(tempFile, '[]');
-
-    const result = await handleWriteCommand('cookie-import', [tempFile], bm);
-    expect(result).toBe('Loaded 0 cookies from /tmp/browse-test-cookies-empty.json');
-
-    fs.unlinkSync(tempFile);
-  });
-
-  test('cookie-import throws on file not found', async () => {
-    try {
-      await handleWriteCommand('cookie-import', ['/tmp/nonexistent-cookies.json'], bm);
-      expect(true).toBe(false);
-    } catch (err: any) {
-      expect(err.message).toContain('File not found');
-    }
-  });
-
-  test('cookie-import throws on invalid JSON', async () => {
-    const tempFile = '/tmp/browse-test-cookies-bad.json';
-    fs.writeFileSync(tempFile, 'not json {{{');
-
-    try {
-      await handleWriteCommand('cookie-import', [tempFile], bm);
-      expect(true).toBe(false);
-    } catch (err: any) {
-      expect(err.message).toContain('Invalid JSON');
-    }
-
-    fs.unlinkSync(tempFile);
-  });
-
-  test('cookie-import throws on non-array JSON', async () => {
-    const tempFile = '/tmp/browse-test-cookies-obj.json';
-    fs.writeFileSync(tempFile, '{"name": "not-an-array"}');
-
-    try {
-      await handleWriteCommand('cookie-import', [tempFile], bm);
-      expect(true).toBe(false);
-    } catch (err: any) {
-      expect(err.message).toContain('JSON array');
-    }
-
-    fs.unlinkSync(tempFile);
-  });
-
-  test('cookie-import throws on cookie missing name', async () => {
-    await handleWriteCommand('goto', [baseUrl + '/basic.html'], bm);
-    const tempFile = '/tmp/browse-test-cookies-noname.json';
-    fs.writeFileSync(tempFile, JSON.stringify([{ value: 'no-name' }]));
-
-    try {
-      await handleWriteCommand('cookie-import', [tempFile], bm);
-      expect(true).toBe(false);
-    } catch (err: any) {
-      expect(err.message).toContain('name');
-    }
-
-    fs.unlinkSync(tempFile);
-  });
-
-  test('cookie-import no arg throws', async () => {
-    try {
-      await handleWriteCommand('cookie-import', [], bm);
-      expect(true).toBe(false);
-    } catch (err: any) {
-      expect(err.message).toContain('Usage');
-    }
-  });
-});
+// cookie-import tests removed: command stripped for solo-use sriflow (browse/src/write-commands.ts:10)
 
 // ─── Security: Redact sensitive values (PR #21) ─────────────────
 
@@ -1961,25 +1777,6 @@ describe('Path traversal prevention', () => {
     }
   });
 
-  test('cookie-import rejects path traversal', async () => {
-    try {
-      await handleWriteCommand('cookie-import', ['../../etc/shadow'], bm);
-      expect(true).toBe(false);
-    } catch (err: any) {
-      // Traversal blocked by safe-directory check (#707) or explicit .. check
-      expect(err.message).toMatch(/Path must be within|Path traversal/);
-    }
-  });
-
-  test('cookie-import rejects absolute path outside safe dirs', async () => {
-    try {
-      await handleWriteCommand('cookie-import', ['/etc/passwd'], bm);
-      expect(true).toBe(false);
-    } catch (err: any) {
-      expect(err.message).toContain('Path must be within');
-    }
-  });
-
   test('snapshot -a -o rejects path outside safe dirs', async () => {
     await handleWriteCommand('goto', [baseUrl + '/basic.html'], bm);
     // First get a snapshot so refs exist
@@ -1993,27 +1790,7 @@ describe('Path traversal prevention', () => {
   });
 });
 
-// ─── Chain command: cookie-import in chain ──────────────────────
-
-describe('Chain with cookie-import', () => {
-  test('cookie-import works inside chain', async () => {
-    await handleWriteCommand('goto', [baseUrl + '/basic.html'], bm);
-    const tmpCookies = '/tmp/test-chain-cookies.json';
-    fs.writeFileSync(tmpCookies, JSON.stringify([
-      { name: 'chain_test', value: 'chain_value', domain: '127.0.0.1', path: '/' }
-    ]));
-    try {
-      const commands = JSON.stringify([
-        ['cookie-import', tmpCookies],
-      ]);
-      const result = await handleMetaCommand('chain', [commands], bm, async () => {});
-      expect(result).toContain('[cookie-import]');
-      expect(result).toContain('Loaded 1 cookie');
-    } finally {
-      try { fs.unlinkSync(tmpCookies); } catch {}
-    }
-  });
-});
+// Chain with cookie-import test removed: cookie-import command stripped for solo-use sriflow
 
 // ─── Network Idle Detection ─────────────────────────────────────
 
