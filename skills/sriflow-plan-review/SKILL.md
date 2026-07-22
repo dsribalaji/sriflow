@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-plan, sriflow-design
-description: "Multi-lens plan review. 3 mandatory lenses (CEO + Design + Eng) + optional DX + optional Council. Absorbs: gstack 4-lens, ECC 67-agent council, ruflo guidance control plane."
+description: "Multi-lens plan review. 3 mandatory lenses (CEO + Design + Eng) + optional DX + optional Council. Absorbs: gstack 4-lens, ECC 67-agent council, ruflo guidance control plane. Not for: code review — use sriflow-code-review. Not for: implementation — use sriflow-build."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

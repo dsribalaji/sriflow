@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-build, sriflow-test, sriflow-ship
-description: "Comprehensive diff review with 6 severity levels and 24 language-specific guides. Absorbs: all 24 ECC language reviewers, gstack 6-lens, ruflo security audit."
+description: "Comprehensive diff review with 6 severity levels and 24 language-specific guides. Absorbs: all 24 ECC language reviewers, gstack 6-lens, ruflo security audit. Not for: plan review — use sriflow-plan-review. Not for: testing — use sriflow-test."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: utility
 related: sriflow-reflect, sriflow (router), all skills
-description: "Per-project memory system. JSONL backends for learnings, decisions, timeline, context. Auto-compression at 50 entries. Absorbs: ruflo AgentDB patterns, ECC instinct system, gstack gbrain sync."
+description: "Per-project memory system. JSONL backends for learnings, decisions, timeline, context. Auto-compression at 50 entries. Absorbs: ruflo AgentDB patterns, ECC instinct system, gstack gbrain sync. Not for: code review — use sriflow-code-review. Not for: planning — use sriflow-plan."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -64,6 +64,9 @@ Auto-invoked by most pipeline skills. Manually when user says "save this", "reme
 | **ECC instinct system** | Observations with confidence scores (0-100) | `instincts.jsonl` backend |
 | **ECC continuous learning** | Instinct evolution (confidence decay, promotion) | `reference/backends/instinct-evolution.md` |
 | **gstack gbrain sync** | Cross-machine session sync | `reference/backends/gbrain-sync.md` |
+
+## Voice
+Direct, builder-to-builder, compressed via sriflow-trim. No AI vocabulary. Name files and paths exactly.
 
 ## Workflow
 1. Check SRIFLOW_MEMORY.md for current state

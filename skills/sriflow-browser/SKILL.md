@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: utility
 related: sriflow-test, sriflow-ship
-description: "Full headless Chromium daemon. 70+ commands, stealth mode, cookie import, multi-tab. Absorbs: gstack full browser (stealth, sidebar, cookie import, 70 commands)."
+description: "Full headless Chromium daemon. 70+ commands, stealth mode, cookie import, multi-tab. Absorbs: gstack full browser (stealth, sidebar, cookie import, 70 commands). Not for: code review — use sriflow-code-review. Not for: QA planning — use sriflow-test."
 license: Apache-2.0
 compatibility: Requires Bun runtime and Playwright (headless Chromium daemon)
 allowed-tools:

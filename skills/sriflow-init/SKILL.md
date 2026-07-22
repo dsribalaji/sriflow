@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 1.0.0
 category: pipeline
 related: sriflow-think
-description: "Zero-to-project scaffolding. Detects tech stack, scaffolds directory structure, creates git repo, sets up CI/CD, generates README. Not for: ideation — use sriflow-think."
+description: "Scaffold new project (tech stack detection, CI/CD, git init, README). For pipelines requiring a project from scratch before ideation. Not for: ideation — use sriflow-think. Not for: planning — use sriflow-plan."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

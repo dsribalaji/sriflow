@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-plan-review, sriflow-build
-description: "Progressive design pipeline. CLI/TUI/Web/Mobile/Library aware. Absorbs: gstack design-shotgun, design-consultation, ECC UI patterns."
+description: "Progressive design pipeline. CLI/TUI/Web/Mobile/Library/Service aware. Absorbs: gstack design-shotgun, design-consultation, ECC UI patterns. Not for: code implementation — use sriflow-build. Not for: plan review — use sriflow-plan-review."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

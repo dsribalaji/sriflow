@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-ship, sriflow-memory
-description: "End-of-cycle retrospective. 8 sections, tier-based depth. Absorbs: gstack retro (per-person breakdowns, trends), ECC continuous learning (instinct system), ruflo eval framework."
+description: "End-of-cycle retrospective. 8 sections, tier-based depth. Absorbs: gstack retro (per-person breakdowns, trends), ECC continuous learning (instinct system), ruflo eval framework. Not for: planning — use sriflow-plan. Not for: testing — use sriflow-test."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

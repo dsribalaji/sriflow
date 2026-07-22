@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-design, sriflow-code-review, sriflow-test
-description: "Implements approved design. 5-step build with language-specific error resolution. Absorbs: ECC build-error-resolver (12 languages), gstack investigate (root cause debugging), ruflo orchestration."
+description: "Implements approved design. 5-step build with language-specific error resolution. Absorbs: ECC build-error-resolver (12 languages), gstack investigate (root cause debugging), ruflo orchestration. Not for: planning — use sriflow-plan. Not for: testing — use sriflow-test."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-test, sriflow-code-review, sriflow-reflect
-description: "Deploy pipeline with multi-platform support. Gates on code review and QA. Absorbs: gstack land-and-deploy + canary, all deploy targets (npm/pip/homebrew/vercel/fly/docker)."
+description: "Deploy pipeline with multi-platform support. Gates on code review and QA. Absorbs: gstack land-and-deploy + canary, all deploy targets (npm/pip/homebrew/vercel/fly/docker). Not for: testing — use sriflow-test. Not for: code review — use sriflow-code-review."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

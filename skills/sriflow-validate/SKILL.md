@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: utility
 related: sriflow (router), all skills
-description: "Validates all skills against the Agent Skills specification + sriflow extended fields. Absorbs: agentskills-main full spec compliance, ruflo Zod-like validation, gstack schema pack."
+description: "Validates all skills against the Agent Skills specification + sriflow extended fields. Absorbs: agentskills-main full spec compliance, ruflo Zod-like validation, gstack schema pack. Not for: writing skills — use a text editor. Not for: running the pipeline — use the individual sriflow-* skills."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

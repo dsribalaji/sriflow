@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-build, sriflow-code-review, sriflow-ship
-description: "Systematic QA with TDD workflow. Golden path → edges → errors → regression → visual. Absorbs: ECC TDD workflow, gstack QA methodology, ruflo eval framework."
+description: "Systematic QA with TDD workflow. Golden path → edges → errors → regression → visual. Absorbs: ECC TDD workflow, gstack QA methodology, ruflo eval framework. Not for: code review — use sriflow-code-review. Not for: deployment — use sriflow-ship."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

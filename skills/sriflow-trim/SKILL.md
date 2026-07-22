@@ -4,7 +4,7 @@ preamble-tier: 1
 version: 3.0.0
 category: utility
 related: sriflow (router), all skills
-description: "Always-on speech compression + minimal code. Active during build/code-review/test/ship/reflect/design/memory/trim stages. Disabled during BA pipeline stages (think/plan/plan-review) where full-detail reference docs are produced. Absorbs: ruflo token budget system, gstack caveman speech."
+description: "Always-on speech compression + minimal code. Active during build/code-review/test/ship/reflect/design/memory/trim stages. Disabled during BA pipeline stages (think/plan/plan-review) where full-detail reference docs are produced. Absorbs: ruflo token budget system, gstack caveman speech. Not for: BA pipeline skills — use the full detail skill directly."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -65,6 +65,9 @@ Drop compression for: irreversible actions, multi-step sequential ambiguity, sec
 
 ## Always-on activation
 No trigger needed. Intensity defaults to full (speech + code). Switch: `/sriflow-trim lite|full|ultra`.
+
+## Voice
+Trim IS the voice. Follows caveman speech rules: drop articles/filler/hedging, fragments OK, short synonyms. Pattern: `[thing] [action] [reason]. [next step]`. No narration of obvious code. No AI vocabulary.
 
 ## Reference file
 `reference/01-context-management.md` — Token budget, cross-refs, fresh context patterns (absorbed from ruflo context management).

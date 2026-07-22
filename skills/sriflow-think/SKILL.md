@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 2.0.0
 category: pipeline
 related: sriflow-plan, sriflow-plan-review
-description: "Ideation & stakeholder discovery. BA Phase 1-6: from raw idea to stakeholder map, uncertainty register, interview plan. Absorbs: gstack office-hours, ECC spec-miner, ruflo governance thinking."
+description: "Ideation & stakeholder discovery. BA Phase 1-6: from raw idea to stakeholder map, uncertainty register, interview plan. Absorbs: gstack office-hours, ECC spec-miner, ruflo governance thinking. Not for: full planning — use sriflow-plan. Not for: implementation — use sriflow-build."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:

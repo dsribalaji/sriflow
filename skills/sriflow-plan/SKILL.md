@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 5.0.0
 category: pipeline
 related: sriflow-think, sriflow-plan-review, sriflow-design
-description: "Structured implementation plan. 6 BA phases + ADR-driven architecture. Absorbs: gstack autoplan, ECC planner, ruflo ADR system."
+description: "Structured implementation plan. 6 BA phases + ADR-driven architecture. Absorbs: gstack autoplan, ECC planner, ruflo ADR system. Not for: stakeholder discovery — use sriflow-think. Not for: plan review — use sriflow-plan-review."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
