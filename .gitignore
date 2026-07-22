@@ -7,5 +7,8 @@ data.db
 # Reference clones — large repos fetched for pattern absorption
 gstack/
 reference/
+ba-toolkit/
+test-app/
+test-plan/
 browse/test/screenshots/
 browse/dist/
