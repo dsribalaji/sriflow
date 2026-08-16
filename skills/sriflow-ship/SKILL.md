@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-test, sriflow-code-review, sriflow-reflect
-description: "Deploy pipeline with multi-platform support. Gates on code review and QA. Absorbs: gstack land-and-deploy + canary, all deploy targets (npm/pip/homebrew/vercel/fly/docker). Not for: testing — use sriflow-test. Not for: code review — use sriflow-code-review."
+description: "Deploy pipeline with multi-platform support. Gates on code review and QA. Not for: testing — use sriflow-test. Not for: code review — use sriflow-code-review."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -50,13 +50,13 @@ After test passes. Gates: CRITICAL in CODE_REVIEW.md = hard block, QA_REPORT.md 
 
 | Source | Pattern | Integration |
 |--------|---------|-------------|
-| **gstack land-and-deploy** | Merge → CI → deploy → smoke → rollback | Full workflow adopted |
-| **gstack canary** | Post-deploy monitoring loop | `reference/patterns/canary-monitoring.md` |
-| **gstack deploy targets** | vercel, fly, railway, docker | Already present |
-| **ECC production audit** | Dependency audit, secrets scan, bundle size | `reference/10-production-audit.md` |
-| **ECC document-release** | Post-ship doc update workflow | Step 7: post-deploy docs |
-| **ruflo CI/CD** | CI polling format, deploy log commands | `reference/patterns/ci-polling.md` |
-| **gstack rollback** | Rollback guidance per platform | `reference/patterns/rollback-guide.md` |
+| **Land-and-deploy** | Merge → CI → deploy → smoke → rollback | Full workflow adopted |
+| **Canary** | Post-deploy monitoring loop | `reference/patterns/canary-monitoring.md` |
+| **Deploy targets** | vercel, fly, railway, docker | Already present |
+| **Production audit** | Dependency audit, secrets scan, bundle size | `reference/10-production-audit.md` |
+| **Document-release** | Post-ship doc update workflow | Step 7: post-deploy docs |
+| **CI/CD** | CI polling format, deploy log commands | `reference/patterns/ci-polling.md` |
+| **Rollback** | Rollback guidance per platform | `reference/patterns/rollback-guide.md` |
 
 ## Deploy targets (10)
 vercel > fly > railway > github-actions > docker > npm > pip > homebrew > go-install > binary-release

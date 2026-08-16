@@ -1,10 +1,10 @@
 ---
 name: sriflow-think
 preamble-tier: 2
-version: 2.0.0
+version: 3.0.0
 category: pipeline
 related: sriflow-plan, sriflow-plan-review
-description: "Ideation & stakeholder discovery. BA Phase 1-6: from raw idea to stakeholder map, uncertainty register, interview plan. Absorbs: gstack office-hours, ECC spec-miner, ruflo governance thinking. Not for: full planning — use sriflow-plan. Not for: implementation — use sriflow-build."
+description: "Ideation & stakeholder discovery. BA Phase 1-6: from raw idea to stakeholder map, uncertainty register, interview plan. Not for: full planning — use sriflow-plan. Not for: implementation — use sriflow-build."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -40,7 +40,7 @@ gate:
 
 Re-run `/sriflow-think` to update THINK_OUTPUT.md. Use `update mode` to preserve existing answers. Fresh start deletes all artifacts and re-runs.
 
-# /sriflow-think — Ideation (Absorbing gstack office-hours + ECC spec-miner + ruflo governance)
+# /sriflow-think — Ideation
 
 ## When to invoke
 
@@ -54,7 +54,7 @@ Phase 1 of the sriflow pipeline. Starting any project from zero, when a requirem
 | **Questions** | `reference/02-questions.md` | D-numbered decision brief format |
 | **Scale** | `reference/03-scale-detection.md` | Tier detection with effort estimation cross-check |
 | **Context** | `reference/04-step1-context.md` | Q2-Q4 project phase + docs + prior discovery |
-| **Market** | `reference/04b-market-research.md` | Competitive landscape, 3 searches max (gstack patterns) |
+| **Market** | `reference/04b-market-research.md` | Competitive landscape, 3 searches max |
 | **Stakeholders** | `reference/05-step2-identify.md` | 6-category stakeholder discovery |
 | **Power/Interest** | `reference/06-step3-map.md` | Power + interest + uncertainty mapping |
 | **Register** | `reference/07-step4-register.md` | Full stakeholder register + Red/Green classification |
@@ -68,14 +68,14 @@ Phase 1 of the sriflow pipeline. Starting any project from zero, when a requirem
 
 | Source | Pattern | sriflow integration |
 |--------|---------|-------------------|
-| **gstack office-hours** | YC-style forcing questions | `reference/patterns/gstack-office-hours.md` |
-| **gstack office-hours** | 10-star thinking (what's the 10x version?) | Added to Q3 in Think workflow |
-| **gstack office-hours** | Inversion: "what would make this fail?" | Added to uncertainty mapping |
-| **ECC spec-miner** | Brownfield project extraction | `reference/patterns/ecc-spec-miner.md` |
-| **ECC spec-miner** | Existing codebase → spec extraction | Context step: detect brownfield, run extraction |
-| **ECC planner** | Work breakdown: deps → phases → risks | `reference/patterns/ecc-planner.md` |
-| **ruflo governance** | "Compile, enforce, prove, evolve" framework | `reference/patterns/ruflo-governance.md` |
-| **ruflo ADRs** | Decision documentation template | Uncertainty resolution → ADR entry |
+| **Office-hours** | YC-style forcing questions | `reference/patterns/office-hours.md` |
+| **Office-hours** | 10-star thinking (what's the 10x version?) | Added to Q3 in Think workflow |
+| **Office-hours** | Inversion: "what would make this fail?" | Added to uncertainty mapping |
+| **Spec-miner** | Brownfield project extraction | `reference/patterns/spec-miner.md` |
+| **Spec-miner** | Existing codebase → spec extraction | Context step: detect brownfield, run extraction |
+| **Planner** | Work breakdown: deps → phases → risks | `reference/patterns/planner.md` |
+| **Governance** | "Compile, enforce, prove, evolve" framework | `reference/patterns/governance.md` |
+| **ADRs** | Decision documentation template | Uncertainty resolution → ADR entry |
 
 ## Workflow
 

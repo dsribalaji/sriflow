@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-plan, sriflow-design
-description: "Multi-lens plan review. 3 mandatory lenses (CEO + Design + Eng) + optional DX + optional Council. Absorbs: gstack 4-lens, ECC 67-agent council, ruflo guidance control plane. Not for: code review — use sriflow-code-review. Not for: implementation — use sriflow-build."
+description: "Multi-lens plan review. 3 mandatory lenses (CEO + Design + Eng) + optional DX + optional Council. Not for: code review — use sriflow-code-review. Not for: implementation — use sriflow-build."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -43,9 +43,9 @@ After `/sriflow-plan`. Reviews PLAN.md through multiple lenses. Each lens scores
 | `reference/01-preamble.md` | Shell preamble, plan mode |
 | `reference/02-voice-completeness.md` | Voice rules + completeness scoring |
 | `reference/03-pre-flight.md` | Pre-flight audit checklist |
-| `reference/04-ceo-lens.md` | CEO lens (Q1-Q9) — gstack CEO review patterns |
-| `reference/05-design-lens.md` | Design lens (Q9-Q16) — gstack design review patterns |
-| `reference/06-eng-lens.md` | Engineering lens (Q17-Q24) — gstack eng review patterns |
+| `reference/04-ceo-lens.md` | CEO lens (Q1-Q9) — CEO review patterns |
+| `reference/05-design-lens.md` | Design lens (Q9-Q16) — design review patterns |
+| `reference/06-eng-lens.md` | Engineering lens (Q17-Q24) — eng review patterns |
 | `reference/07-score-gate.md` | Score gate + loop logic |
 | `reference/08-write-review.md` | PLAN_REVIEW.md template |
 | `reference/09-council.md` | Adversarial council (Skeptic + Pragmatist + Critic) |
@@ -54,15 +54,15 @@ After `/sriflow-plan`. Reviews PLAN.md through multiple lenses. Each lens scores
 
 | Source | Pattern | Integration |
 |--------|---------|-------------|
-| **gstack plan-ceo-review** | 9 CEO questions: inversion, focus, beachhead, why-now | Absorbed into CEO lens |
-| **gstack plan-eng-review** | Blast radius, boring-by-default, sequencing, build-vs-buy | Absorbed into Eng lens |
-| **gstack plan-design-review** | 10-dimension design scoring rubric | Absorbed into Design lens |
-| **gstack plan-devex-review** | TTHW (Time To Hello World), friction points, persona traces | Added as optional DX lens (Small skips) |
-| **ECC council** | Skeptic + Pragmatist + Critic adversarial voices | Expanded council with 3 distinct personas |
-| **ECC 67-agent library** | Domain-specific review checklists | `reference/council/*.md` — 24 domain lenses |
-| **ruflo guidance** | "Compile, enforce, prove, evolve" framework | Post-review: prove decisions with evidence |
+| **Plan-CEO review** | 9 CEO questions: inversion, focus, beachhead, why-now | Absorbed into CEO lens |
+| **Plan-Eng review** | Blast radius, boring-by-default, sequencing, build-vs-buy | Absorbed into Eng lens |
+| **Plan-Design review** | 10-dimension design scoring rubric | Absorbed into Design lens |
+| **Plan-Devex review** | TTHW (Time To Hello World), friction points, persona traces | Added as optional DX lens (Small skips) |
+| **Council** | Skeptic + Pragmatist + Critic adversarial voices | Expanded council with 3 distinct personas |
+| **Domain lens library** | Domain-specific review checklists | 11 council lenses: `reference/council/python-review.md`, `reference/council/go-review.md`, `reference/council/java-review.md`, `reference/council/kotlin-review.md`, `reference/council/rust-review.md`, `reference/council/typescript-review.md`, `reference/council/cpp-review.md`, `reference/council/database-review.md`, `reference/council/mle-review.md`, `reference/council/pytorch-review.md`, `reference/council/security-review.md` |
+| **Guidance** | "Compile, enforce, prove, evolve" framework | Post-review: prove decisions with evidence |
 
-### Domain lens library (absorbed from ECC's 67 agents)
+### Domain lens library
 
 | File | Domain |
 |------|--------|

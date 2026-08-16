@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-plan-review, sriflow-build
-description: "Progressive design pipeline. CLI/TUI/Web/Mobile/Library/Service aware. Absorbs: gstack design-shotgun, design-consultation, ECC UI patterns. Not for: code implementation — use sriflow-build. Not for: plan review — use sriflow-plan-review."
+description: "Progressive design pipeline. CLI/TUI/Web/Mobile/Library/Service aware. Not for: code implementation — use sriflow-build. Not for: plan review — use sriflow-plan-review."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -48,12 +48,12 @@ After plan-review. Detects project medium (CLI/TUI/Web/Mobile/Library/Service) a
 
 | Source | Pattern | Integration |
 |--------|---------|-------------|
-| **gstack design-consultation** | Full design system from scratch | `reference/patterns/design-consultation.md` |
-| **gstack design-shotgun** | Multi-variant generation + comparison board | `reference/patterns/design-shotgun.md` |
-| **gstack design-html** | Production-quality Pretext HTML/CSS | `reference/patterns/design-html.md` |
-| **gstack design-review** | Visual audit + fix loop with atomic commits | `reference/05-review.md` enhanced |
-| **ECC e2e-runner** | Playwright-based design verification | `reference/patterns/e2e-design-check.md` |
-| **Apple HIG** | iOS design patterns (via gstack ios-design-review) | `reference/patterns/apple-hig.md` |
+| **Design consultation** | Full design system from scratch | `reference/patterns/design-consultation.md` |
+| **Design shotgun** | Multi-variant generation + comparison board | `reference/patterns/design-shotgun.md` |
+| **Design HTML** | Production-quality Pretext HTML/CSS | `reference/patterns/design-html.md` |
+| **Design review** | Visual audit + fix loop with atomic commits | `reference/05-review.md` enhanced |
+| **E2E runner** | Playwright-based design verification | `reference/patterns/e2e-design-check.md` |
+| **Apple HIG** | iOS design patterns | `reference/patterns/apple-hig.md` |
 
 ### CLI/TUI design path
 Already implemented in v2.0. No changes needed — command tree, flag reference, output contract, terminal tokens, prototype phase all present.

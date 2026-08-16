@@ -1,7 +1,7 @@
 ---
 name: sriflow-init
 preamble-tier: 2
-version: 1.0.0
+version: 3.0.0
 category: pipeline
 related: sriflow-think
 description: "Scaffold new project (tech stack detection, CI/CD, git init, README). For pipelines requiring a project from scratch before ideation. Not for: ideation — use sriflow-think. Not for: planning — use sriflow-plan."
@@ -120,9 +120,9 @@ Next: /sriflow-think — define what we're building
 | `reference/templates/gitignore.md` | Per-stack .gitignore templates |
 | `reference/templates/license.md` | License file templates |
 | `reference/templates/readme.md` | README.md template per project type |
-| `reference/gstack-patterns.md` | gstack project structure conventions absorbed |
-| `reference/ecc-patterns.md` | ECC project scaffolding patterns absorbed |
-| `reference/ruflo-patterns.md` | ruflo monorepo structure patterns absorbed |
+| `reference/project-structure.md` | Project structure conventions |
+| `reference/capability-layout.md` | Project scaffolding patterns |
+| `reference/monorepo-structure.md` | Monorepo structure patterns |
 
 ## Voice
 Direct, builder-to-builder, compressed. No AI vocabulary. Name files and paths exactly.

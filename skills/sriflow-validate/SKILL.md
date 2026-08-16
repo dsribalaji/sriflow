@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: utility
 related: sriflow (router), all skills
-description: "Validates all skills against the Agent Skills specification + sriflow extended fields. Absorbs: agentskills-main full spec compliance, ruflo Zod-like validation, gstack schema pack. Not for: writing skills — use a text editor. Not for: running the pipeline — use the individual sriflow-* skills."
+description: "Validates all skills against the Agent Skills specification + sriflow extended fields. Not for: writing skills — use a text editor. Not for: running the pipeline — use the individual sriflow-* skills."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -30,14 +30,14 @@ After creating or modifying any skill. Validates all SKILL.md files against the 
 
 ## Validation categories
 
-### 1. Frontmatter spec compliance (agentskills-main absorbed)
+### 1. Frontmatter spec compliance
 | Check | Rule | Source |
 |-------|------|--------|
-| `name` | lowercase, hyphens, matches directory name | agentskills spec |
-| `description` | required, max 150 chars | agentskills spec |
-| `allowed-tools` | valid tool names only | agentskills spec |
-| `compatibility` | environment requirements | agentskills spec |
-| `triggers` | required for invocation | agentskills spec |
+| `name` | lowercase, hyphens, matches directory name | spec |
+| `description` | required, max 150 chars | spec |
+| `allowed-tools` | valid tool names only | spec |
+| `compatibility` | environment requirements | spec |
+| `triggers` | required for invocation | spec |
 | `version` | semver format | sriflow extended |
 | `category` | one of: pipeline, utility | sriflow extended |
 | `related` | valid skill names only | sriflow extended |
@@ -58,7 +58,7 @@ After creating or modifying any skill. Validates all SKILL.md files against the 
 - All `related` skill names exist
 - Pipeline ordering is consistent (no circular deps)
 
-### 4. Format compliance details (full agentskills spec)
+### 4. Format compliance details (full spec)
 
 | Rule | Description |
 |------|-------------|
@@ -74,7 +74,7 @@ After creating or modifying any skill. Validates all SKILL.md files against the 
 
 | File | Content |
 |------|---------|
-| `reference/spec/agentskills-schema.md` | Full agentskills YAML frontmatter schema (all fields, types, constraints) |
+| `reference/spec/agentskills-schema.md` | Full YAML frontmatter schema (all fields, types, constraints) |
 | `reference/spec/sriflow-extensions.md` | sriflow extended fields (preamble-tier, gate, outputs, etc.) |
 | `reference/spec/validation-rules.md` | Complete validation rule set |
 | `reference/spec/example-valid.md` | Example of a valid SKILL.md |

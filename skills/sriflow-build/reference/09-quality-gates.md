@@ -1,7 +1,7 @@
 # Quality Gates
 
 Three enforced gates: pre-commit, post-build, final.
-Inspired by ECC hooks pattern — automated checks at every stage boundary.
+Automated checks at every stage boundary.
 
 ---
 

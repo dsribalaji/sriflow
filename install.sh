@@ -1,116 +1,68 @@
 #!/bin/sh
-# SriFlow installer — detects hosts and installs skills to correct directories
+# SriFlow installer — symlinks all sriflow skills into the agent skill dirs it detects.
+# Usage: sh install.sh   (or: sh install.sh --dry-run)
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SKILLS_DIR="$SCRIPT_DIR/skills"
+
+DRY_RUN=0
+if [ "${1:-}" = "--dry-run" ]; then
+  DRY_RUN=1
+  echo "(dry run — no changes will be made)"
+fi
 
 echo "SriFlow installer"
 echo "================="
 echo ""
 
 HOSTS=""
-
 if [ -d "$HOME/.claude" ] || command -v claude >/dev/null 2>&1; then
-  HOSTS="$HOSTS claude"
-  echo "Detected: Claude Code"
+  HOSTS="$HOSTS claude"; echo "Detected: Claude Code"
 fi
-
 if [ -d "$HOME/.config/opencode" ] || command -v opencode >/dev/null 2>&1; then
-  HOSTS="$HOSTS opencode"
-  echo "Detected: OpenCode"
+  HOSTS="$HOSTS opencode"; echo "Detected: OpenCode"
 fi
-
 if [ -d "$HOME/.github" ] || command -v gh >/dev/null 2>&1; then
-  HOSTS="$HOSTS copilot"
-  echo "Detected: GitHub Copilot"
+  HOSTS="$HOSTS copilot"; echo "Detected: GitHub Copilot"
 fi
-
 if [ -z "$HOSTS" ]; then
-  echo "No supported hosts detected."
-  echo "Install Claude Code, OpenCode, or GitHub Copilot first."
+  echo "No supported agents detected. Install Claude Code, OpenCode, or GitHub Copilot first."
   exit 1
 fi
 
-echo ""
-
 for HOST in $HOSTS; do
   case "$HOST" in
-    claude)
-      DEST="$HOME/.claude/skills"
-      ;;
-    opencode)
-      DEST="$HOME/.config/opencode/skills"
-      ;;
-    copilot)
-      DEST=".github/copilot-skills"
-      ;;
+    claude)   DEST="$HOME/.claude/skills" ;;
+    opencode) DEST="$HOME/.config/opencode/skills" ;;
+    copilot)  DEST=".github/copilot-skills" ;;
   esac
 
+  echo ""
   echo "Installing to $HOST ($DEST)..."
-  mkdir -p "$DEST"
+  [ "$DRY_RUN" = 0 ] && mkdir -p "$DEST"
 
-  for skill_dir in "$SKILLS_DIR"/sriflow-*/; do
+  for skill_dir in "$SKILLS_DIR"/sriflow*; do
+    [ -f "$skill_dir/SKILL.md" ] || continue
     skill_name=$(basename "$skill_dir")
-    if [ -f "$skill_dir/SKILL.md" ]; then
+    if [ "$DRY_RUN" = 0 ]; then
       ln -sfn "$skill_dir" "$DEST/$skill_name"
-      echo "  ✓ $skill_name"
     fi
+    echo "  ✓ $skill_name"
   done
 
-  if [ -f "$SKILLS_DIR/sriflow/SKILL.md" ]; then
-    ln -sfn "$SKILLS_DIR/sriflow" "$DEST/sriflow"
-    echo "  ✓ sriflow (router)"
-  fi
-
-  # Install browser stack — symlink the whole dir so dist/browse + server.js
-  # resolve from $DEST/sriflow-browse (the path the browser skill checks).
-  if [ -d "$SCRIPT_DIR/browse" ]; then
-    ln -sfn "$SCRIPT_DIR/browse" "$DEST/sriflow-browse"
-    if [ -x "$SCRIPT_DIR/browse/dist/browse" ]; then
-      echo "  ✓ browse stack"
-    else
-      echo "  ✓ browse stack (run 'cd browse && ./setup' to build the binary)"
-    fi
-  fi
-
-  # Install bin/ scripts (CLIs for telemetry, config, context)
-  BIN_DIR="$SCRIPT_DIR/bin"
-  if [ -d "$BIN_DIR" ]; then
-    mkdir -p "$DEST/bin"
-    for script in "$BIN_DIR"/sriflow-*; do
-      script_name=$(basename "$script")
-      ln -sfn "$script" "$DEST/bin/$script_name"
+  # CLI helpers for the memory skill
+  BIN_DEST="$DEST/bin"
+  if [ -d "$SCRIPT_DIR/bin" ]; then
+    [ "$DRY_RUN" = 0 ] && mkdir -p "$BIN_DEST"
+    for script in "$SCRIPT_DIR"/bin/sriflow-*; do
+      [ -f "$script" ] || continue
+      [ "$DRY_RUN" = 0 ] && ln -sfn "$script" "$BIN_DEST/$(basename "$script")"
     done
-    echo "  ✓ bin/ scripts"
-
-    # Ensure bin/ is on PATH for this host
-    case "$HOST" in
-      claude)
-        PROFILE="$HOME/.bashrc"
-        ;;
-      opencode)
-        PROFILE="$HOME/.bashrc"
-        ;;
-      copilot)
-        PROFILE="$HOME/.bashrc"
-        ;;
-    esac
-    PATH_LINE="export PATH=\"$DEST/bin:\$PATH\""
-    if [ -f "$PROFILE" ] && grep -qF "$DEST/bin" "$PROFILE" 2>/dev/null; then
-      : # already added
-    else
-      echo "" >> "$PROFILE"
-      echo "# SriFlow CLI tools" >> "$PROFILE"
-      echo "$PATH_LINE" >> "$PROFILE"
-      echo "  ✓ Added $DEST/bin to PATH in $PROFILE"
-    fi
+    echo "  ✓ bin/ CLI helpers"
   fi
-
-  echo ""
 done
 
 echo ""
 echo "Installation complete."
 echo "Restart your AI assistant to pick up the new skills."
-echo "Run 'source $PROFILE' or start a new terminal to load CLI tools."

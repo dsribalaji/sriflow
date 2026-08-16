@@ -12,7 +12,7 @@ CORE_FIELDS = {"name", "description", "license", "allowed-tools", "metadata", "c
 # Sriflow extended fields (beyond spec, sriflow-internal)
 SRIFLOW_EXTENDED = {
     "preamble-tier", "version", "category", "related",
-    "triggers", "next-skill", "outputs", "gate", "prerequisite",
+    "triggers", "next-skill", "outputs", "gate", "prerequisite", "rule", "signal",
 }
 ALLOWED_FIELDS = CORE_FIELDS | SRIFLOW_EXTENDED
 

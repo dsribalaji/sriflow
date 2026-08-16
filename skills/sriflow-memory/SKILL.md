@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: utility
 related: sriflow-reflect, sriflow (router), all skills
-description: "Per-project memory system. JSONL backends for learnings, decisions, timeline, context. Auto-compression at 50 entries. Absorbs: ruflo AgentDB patterns, ECC instinct system, gstack gbrain sync. Not for: code review — use sriflow-code-review. Not for: planning — use sriflow-plan."
+description: "Per-project memory system. JSONL backends for learnings, decisions, timeline, context. Auto-compression at 50 entries. Not for: code review — use sriflow-code-review. Not for: planning — use sriflow-plan."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -43,7 +43,7 @@ Auto-invoked by most pipeline skills. Manually when user says "save this", "reme
 | `analytics.jsonl` | JSONL | Skill usage analytics (opt-in) |
 | `eureka.jsonl` | JSONL | Eureka moments (breakthrough insights) |
 | `reviews.jsonl` | JSONL | Code review records |
-| `instincts.jsonl` | JSONL | ECC-style instinct log (observations with confidence scores) |
+| `instincts.jsonl` | JSONL | Instinct log (observations with confidence scores) |
 
 ## Reference files
 
@@ -58,12 +58,12 @@ Auto-invoked by most pipeline skills. Manually when user says "save this", "reme
 
 | Source | Pattern | Integration |
 |--------|---------|-------------|
-| **ruflo AgentDB** | HNSW vector search concept | `reference/backends/vector-search.md` — tag-based search over JSONL embeddings |
-| **ruflo HybridBackend** | SQLite + AgentDB hybrid | Documented as future upgrade path |
-| **ruflo memory consolidation** | Cross-session memory compaction | `reference/backends/consolidation.md` |
-| **ECC instinct system** | Observations with confidence scores (0-100) | `instincts.jsonl` backend |
-| **ECC continuous learning** | Instinct evolution (confidence decay, promotion) | `reference/backends/instinct-evolution.md` |
-| **gstack gbrain sync** | Cross-machine session sync | `reference/backends/gbrain-sync.md` |
+| **AgentDB** | HNSW vector search concept | `reference/backends/vector-search.md` — tag-based search over JSONL embeddings |
+| **HybridBackend** | SQLite + AgentDB hybrid | Documented as future upgrade path |
+| **Memory consolidation** | Cross-session memory compaction | `reference/backends/consolidation.md` |
+| **Instinct system** | Observations with confidence scores (0-100) | `instincts.jsonl` backend |
+| **Continuous learning** | Instinct evolution (confidence decay, promotion) | `reference/backends/instinct-evolution.md` |
+| **gbrain sync** | Cross-machine session sync | `reference/backends/gbrain-sync.md` |
 
 ## Voice
 Direct, builder-to-builder, compressed via sriflow-trim. No AI vocabulary. Name files and paths exactly.

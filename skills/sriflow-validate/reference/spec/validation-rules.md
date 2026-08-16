@@ -1,6 +1,6 @@
 # Complete Validation Rules
 
-Consolidated from agentskills spec + sriflow extensions + sriflow conventions.
+Consolidated from the spec + sriflow extensions + sriflow conventions.
 
 ## Spec compliance checks
 

@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-design, sriflow-code-review, sriflow-test
-description: "Implements approved design. 5-step build with language-specific error resolution. Absorbs: ECC build-error-resolver (12 languages), gstack investigate (root cause debugging), ruflo orchestration. Not for: planning — use sriflow-plan. Not for: testing — use sriflow-test."
+description: "Implements approved design. 5-step build with language-specific error resolution. Not for: planning — use sriflow-plan. Not for: testing — use sriflow-test."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -44,7 +44,7 @@ After design is locked. Implements from PLAN.md + DESIGN.md. Runs pre-build safe
 | Dev rules | `reference/12-development-rules.md` | YAGNI/KISS/DRY, file size cap |
 | Scaffold | `reference/13-module-scaffolding.md` | Stubs pattern |
 
-### Language-specific error resolvers (absorbed from ECC)
+### Language-specific error resolvers
 
 | File | Language |
 |------|----------|
@@ -56,7 +56,6 @@ After design is locked. Implements from PLAN.md + DESIGN.md. Runs pre-build safe
 | `reference/languages/kotlin.md` | Kotlin/Gradle, Compose, KMP |
 | `reference/languages/cpp.md` | C++ CMake, Make, compiler errors |
 | `reference/languages/django.md` | Django migrations, collectstatic, middleware |
-| `reference/languages/pytorch.md` | PyTorch CUDA, training errors |
 | `reference/languages/swift.md` | Swift/Xcode build errors |
 | `reference/languages/csharp.md` | C#/.NET build errors |
 | `reference/languages/angular.md` | Angular CLI, zone.js, module resolution |
@@ -65,11 +64,11 @@ After design is locked. Implements from PLAN.md + DESIGN.md. Runs pre-build safe
 
 | Source | Pattern | Integration |
 |--------|---------|-------------|
-| **ECC build-error-resolver** | Language-specific error resolution | 12 language reference files |
-| **ECC refactor-cleaner** | Dead code cleanup patterns | `reference/patterns/ecc-refactor-cleaner.md` |
-| **gstack investigate** | Root-cause debugging workflow | `reference/patterns/investigate-workflow.md` |
-| **ruflo orchestration** | Sequential + parallel subagent chaining | `reference/patterns/orchestration-protocol.md` |
-| **shadcn-lar stubs** | Module scaffolding (stubs pattern) | `reference/13-module-scaffolding.md` |
+| **Build error resolver** | Language-specific error resolution | 12 language reference files |
+| **Refactor-cleaner** | Dead code cleanup patterns | `reference/patterns/refactor-cleaner.md` |
+| **Investigate** | Root-cause debugging workflow | `reference/patterns/investigate-workflow.md` |
+| **Orchestration** | Sequential + parallel subagent chaining | `reference/patterns/orchestration-protocol.md` |
+| **Module scaffolding** | Stubs pattern | `reference/13-module-scaffolding.md` |
 
 ## Workflow
 1. **Step 0** — Pre-build safety check (destructive op scan)

@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-build, sriflow-test, sriflow-ship
-description: "Comprehensive diff review with 6 severity levels and 24 language-specific guides. Absorbs: all 24 ECC language reviewers, gstack 6-lens, ruflo security audit. Not for: plan review — use sriflow-plan-review. Not for: testing — use sriflow-test."
+description: "Comprehensive diff review with 6 severity levels and 24 language-specific guides. Not for: plan review — use sriflow-plan-review. Not for: testing — use sriflow-test."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -46,7 +46,7 @@ After build completes. Reviews current branch diff through 6 lenses with 6 sever
 5. COMPLEXITY — unnecessary abstraction, YAGNI, premature parameterization
 6. TRIM AUDIT — dev leftovers, wrapper-only functions, dead code
 
-## Language-specific guides (absorbed from ECC's 24 agents)
+## Language-specific guides
 
 | File | Language | What it covers |
 |------|----------|----------------|
@@ -64,9 +64,6 @@ After build completes. Reviews current branch diff through 6 lenses with 6 sever
 | `reference/languages/12-cpp.md` | C++ | RAII, templates, smart pointers, UB patterns |
 | `reference/languages/13-fsharp.md` | F# | Computation expressions, discriminated unions |
 | `reference/languages/14-django.md` | Django | ORM, migrations, DRF, middleware |
-| `reference/languages/15-pytorch.md` | PyTorch | CUDA, training loops, gradients, data loading |
-| `reference/languages/16-mle.md` | ML Pipelines | Evals, serving, monitoring, feature stores |
-| `reference/languages/17-database.md` | SQL | PostgreSQL, queries, indexes, transactions |
 | `reference/languages/18-ruby.md` | Ruby | Blocks, metaprogramming, Rails conventions |
 | `reference/languages/19-php.md` | PHP | Type declarations, Laravel, security |
 | `reference/languages/20-scala.md` | Scala | Functional patterns, Akka, ZIO, cats |
@@ -79,11 +76,11 @@ After build completes. Reviews current branch diff through 6 lenses with 6 sever
 
 | File | Topic |
 |------|-------|
-| `reference/cross-cutting/sql-injection.md` | SQL injection prevention |
-| `reference/cross-cutting/xss.md` | XSS prevention patterns |
-| `reference/cross-cutting/n-plus-one.md` | N+1 query detection |
-| `reference/cross-cutting/error-handling.md` | Error handling patterns |
-| `reference/cross-cutting/async.md` | Async/await best practices |
+| `reference/cross-cutting/01-sql-injection.md` | SQL injection prevention |
+| `reference/cross-cutting/02-xss-prevention.md` | XSS prevention patterns |
+| `reference/cross-cutting/03-n-plus-one-queries.md` | N+1 query detection |
+| `reference/cross-cutting/04-error-handling.md` | Error handling patterns |
+| `reference/cross-cutting/05-async-concurrency.md` | Async/await best practices |
 | `reference/cross-cutting/validation.md` | Input validation at boundaries |
 | `reference/cross-cutting/llm-safety.md` | LLM trust boundary patterns |
 
@@ -91,13 +88,13 @@ After build completes. Reviews current branch diff through 6 lenses with 6 sever
 
 | Source | Pattern | Integration |
 |--------|---------|-------------|
-| **ECC 24 language reviewers** | Language-specific review checklists | 24 language reference files |
-| **ECC security-reviewer** | OWASP Top 10 + STRIDE audit | Lens 3 enhanced with ECC patterns |
-| **ECC code-reviewer** | 4-phase review process (gather → high-level → line-by-line → summary) | Already present in v2 |
-| **gstack review** | 6-lens severity system | Already present |
-| **gstack cso** | Chief Security Officer audit | `reference/cross-cutting/llm-safety.md` |
-| **ruflo security** | CVE remediation, input validation | Lens 3 enhanced |
-| **ECC auto-fix** | Auto-fix gate for nitpicks | Step 4 Auto-Fix gate |
+| **24 language reviewers** | Language-specific review checklists | 24 language reference files |
+| **Security reviewer** | OWASP Top 10 + STRIDE audit | Lens 3 enhanced |
+| **Code reviewer** | 4-phase review process (gather → high-level → line-by-line → summary) | Already present in v2 |
+| **Review lens** | 6-lens severity system | Already present |
+| **CSO audit** | Chief Security Officer audit | `reference/cross-cutting/llm-safety.md` |
+| **Security** | CVE remediation, input validation | Lens 3 enhanced |
+| **Auto-fix** | Auto-fix gate for nitpicks | Step 4 Auto-Fix gate |
 
 ## Workflow
 1. **Preamble** — shell init, base branch detection

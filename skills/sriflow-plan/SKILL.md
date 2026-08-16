@@ -1,10 +1,10 @@
 ---
 name: sriflow-plan
 preamble-tier: 2
-version: 5.0.0
+version: 3.0.0
 category: pipeline
 related: sriflow-think, sriflow-plan-review, sriflow-design
-description: "Structured implementation plan. 6 BA phases + ADR-driven architecture. Absorbs: gstack autoplan, ECC planner, ruflo ADR system. Not for: stakeholder discovery — use sriflow-think. Not for: plan review — use sriflow-plan-review."
+description: "Structured implementation plan. 6 BA phases + ADR-driven architecture. Not for: stakeholder discovery — use sriflow-think. Not for: plan review — use sriflow-plan-review."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -63,15 +63,15 @@ Phase 2-6 of the pipeline. Use after `/sriflow-think`. Requires THINK_OUTPUT.md.
 
 | Source | Pattern | Integration |
 |--------|---------|-------------|
-| **gstack autoplan** | CEO→Eng→Design→DX pipeline | Plan phases: auto-run all lenses |
-| **gstack /spec** | Issue filing + worktree agents | Plan can file GH issue + spawn worktree |
-| **ECC planner agent** | Dependency graph, risk matrix, phased delivery | `reference/patterns/ecc-dependency-graph.md` |
-| **ECC architect agent** | System design, scalability assessment | Added to Phase 6 checklist |
-| **ruflo ADR system** | 90 ADR templates, Context→Decision→Consequences | `reference/adrs/*.md` — ADR template library |
-| **ruflo guidance** | Compile→Enforce→Prove→Evolve | `reference/patterns/ruflo-guidance.md` |
-| **shadcn-lar orchestration** | Sequential + parallel subagent chaining | `reference/patterns/orchestration-protocol.md` |
+| **Autoplan** | CEO→Eng→Design→DX pipeline | Plan phases: auto-run all lenses |
+| **/spec** | Issue filing + worktree agents | Plan can file GH issue + spawn worktree |
+| **Planner agent** | Dependency graph, risk matrix, phased delivery | `reference/patterns/dependency-graph.md` |
+| **Architect agent** | System design, scalability assessment | Added to Phase 6 checklist |
+| **ADR system** | 90 ADR templates, Context→Decision→Consequences | 6 ADR templates: `reference/adrs/ADR-template.md`, `reference/adrs/ADR-architecture.md`, `reference/adrs/ADR-security.md`, `reference/adrs/ADR-data-model.md`, `reference/adrs/ADR-api-design.md`, `reference/adrs/ADR-tooling.md` |
+| **Guidance** | Compile→Enforce→Prove→Evolve | `reference/patterns/guidance-framework.md` |
+| **Orchestration** | Sequential + parallel subagent chaining | `reference/patterns/orchestration-protocol.md` |
 
-### ADR templates (ruflo-absorbed)
+### ADR templates
 
 | File | Template type |
 |------|-------------|

@@ -1,121 +1,90 @@
 # SriFlow
 
-Fully custom AI-powered product development pipeline. From raw idea to deployed product.
+A complete AI-agent workflow to ship products fast — from raw idea to deployed product, as 14 installable agent skills.
 
 ```
 think → plan → plan-review → design → build → code-review → test → ship → reflect
 ```
 
-Every stage is a `/sriflow-*` slash command. Skills live in `skills/`. No runtime dependency on gstack.
+Every stage is a `/sriflow-*` skill. Each skill is a self-contained `SKILL.md` with frontmatter, so any agent that supports the [Agent Skills format](https://agentskills.io/specification) can load them — Claude Code, OpenCode, GitHub Copilot, and others.
 
-## Quick start (3 commands)
-
-```bash
-# 1. Install (detects Claude Code / OpenCode / Copilot)
-sh install.sh
-
-# 2. Build browser binary
-bun install && bun run build
-
-# 3. Start in Claude Code
-/sriflow          # routes to the right skill
-```
+No runtime, no daemon, no dependencies. Just markdown instructions an agent can follow.
 
 ## Install
 
-### Claude Code
+### Option A — one-line installer (Claude Code, OpenCode, Copilot)
 
 ```bash
 sh install.sh
-# Installs to ~/.claude/skills/sriflow-*/
 ```
 
-### OpenCode
+Detects installed agents and symlinks every skill into the right directory:
+
+| Agent | Installs to |
+|-------|-------------|
+| Claude Code | `~/.claude/skills/` |
+| OpenCode | `~/.config/opencode/skills/` |
+| GitHub Copilot | `.github/copilot-skills/` |
+
+Restart your agent, then invoke with `/sriflow` (router) or any stage skill.
+
+### Option B — skills CLI
 
 ```bash
-sh install.sh
-# Detects OpenCode, installs to ~/.config/opencode/skills/sriflow-*/
+# from any repo that uses the skills CLI
+npx skills add <owner>/sriflow --skill sriflow-plan
 ```
 
-### GitHub Copilot
+### Option C — manual
 
 ```bash
-sh install.sh
-# Detects Copilot, installs to .github/copilot-skills/sriflow-*/
+# copy the router + every skill you want into your agent's skills dir
+cp -r skills/sriflow* ~/.claude/skills/
 ```
 
-### Browser binary (optional)
+## The pipeline
+
+| Stage | Skill | What it does |
+|-------|-------|-------------|
+| Router | `/sriflow` | Routes intent to the correct pipeline skill |
+| Init | `/sriflow-init` | Scaffold new project (tech stack, CI/CD, git) |
+| Think | `/sriflow-think` | Ideation: stakeholder map, uncertainty register, interview plan |
+| Plan | `/sriflow-plan` | Implementation plan: 6 BA phases + ADR-driven architecture |
+| Plan review | `/sriflow-plan-review` | CEO + Design + Eng lenses + council. Iterative improvement |
+| Design | `/sriflow-design` | Candidates → pick → DESIGN.md → HTML → review |
+| Build | `/sriflow-build` | Implements the approved design, language-aware |
+| Code review | `/sriflow-code-review` | Diff review, 6 severity levels, 24 language guides |
+| Test | `/sriflow-test` | TDD workflow: golden path → edges → errors → regression → visual |
+| Ship | `/sriflow-ship` | Deploy to 10 targets (npm/pip/homebrew/vercel/fly/docker...). Canary, rollback |
+| Reflect | `/sriflow-reflect` | End-of-cycle retrospective, tier-based depth |
+| Memory | `/sriflow-memory` | Per-project JSONL memory: learnings, decisions, timeline, context |
+| Trim | `/sriflow-trim` | Always-on speech + code compression |
+| Validate | `/sriflow-validate` | Validates all skills against the Agent Skills spec |
+
+## Usage
+
+Start with the router — it tells you which skill to run next:
+
+```
+/sriflow        → routes to the right stage
+/sriflow-plan   → "I have an idea, make a plan"
+/sriflow-build  → "build the interface"
+```
+
+Each skill carries its own triggers, gates, and outputs in its frontmatter.
+
+## Validate
 
 ```bash
-bun install && bun run build
-# Produces browse/dist/browse (CLI wrapper) + browse/dist/server.js (daemon)
-# Or run the one-shot setup: cd browse && ./setup
+scripts/validate-skills
 ```
 
-## Pipeline
+Checks all 14 skills against the Agent Skills spec (name rules, required fields, allowed extended fields).
 
-| Stage | Command | What it does |
-|-------|---------|-------------|
-| **Ideation** | `/sriflow-init` | Scaffold new project (tech stack, CI/CD, git) |
-| | `/sriflow-think` | 6 BA phases + gstack office-hours + ECC spec-miner + ruflo governance |
-| **Planning** | `/sriflow-plan` | 6 BA phases + ADR-driven architecture (ruflo) + autoplan (gstack) |
-| **Review** | `/sriflow-plan-review` | CEO + Design + Eng + (DX) + Council. 24 domain lenses (ECC). ruflo guidance |
-| **Design** | `/sriflow-design` | CLI/TUI/Web/Mobile/Library/Service aware. gstack design-shotgun, design-consultation |
-| **Build** | `/sriflow-build` | 12 language-specific error resolvers (ECC). gstack investigate. ruflo orchestration |
-| **Code Review** | `/sriflow-code-review` | 24 language-specific guides (ECC). 6 lenses, 6 severity levels. Solo override |
-| **Test** | `/sriflow-test` | TDD workflow (ECC). 14 QA patterns (gstack). Eval framework (ruflo). 80% coverage |
-| **Browser** | `/sriflow-browser` | 70+ commands, stealth, cookie import (gstack). Headless Chromium |
-| **Ship** | `/sriflow-ship` | 10 deploy targets (npm/pip/homebrew/vercel/fly/docker...). Canary, rollback |
-| **Reflect** | `/sriflow-reflect` | 8-section retro. ECC instincts. gstack trends. Tier-based depth |
-| **Memory** | `/sriflow-memory` | 10 JSONL backends. ruflo vector search patterns. ECC instinct system |
-| **Trim** | `/sriflow-trim` | Always-on speech+code compression. ruflo token budget depth control |
-| **Validate** | `/sriflow-validate` | Full agentskills spec compliance + sriflow extended fields. Cross-skill deps |
+## Project state
 
-## Docs
-
-| Doc | What it covers |
-|-----|---------------|
-| [ARCHITECTURE.md](ARCHITECTURE.md) | System design, pipeline, browser daemon, security |
-| [ETHOS.md](ETHOS.md) | Builder philosophy |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Adding/modifying skills, testing |
-| [DESIGN.md](DESIGN.md) | Design system, output formats |
-| [BROWSER.md](BROWSER.md) | All 70 browser commands, snapshot system |
-| [CHANGELOG.md](CHANGELOG.md) | Release history |
-
-## Testing
-
-```bash
-# Static validation (free, fast)
-bun run test:static
-
-# Full test suite (free)
-bun test
-```
-
-## Project-Aware State
-
-All project state is isolated by project slug:
-```
-~/.sriflow/
-├── config.yaml
-└── projects/
-    ├── sriflow/
-    │   ├── context.json
-    │   ├── learnings.jsonl
-    │   ├── decisions.jsonl
-    │   ├── timeline.jsonl
-    │   └── analytics.jsonl
-    └── other-project/
-```
-
-## Platform support
-
-| Platform | Status |
-|----------|--------|
-| macOS | Full support |
-| Linux | Full support |
-| Windows | Git Bash or WSL |
+Skills keep per-project state isolated by project slug under `~/.sriflow/projects/<slug>/` (JSONL learnings, decisions, timeline, context).
 
 ## License
 
-Personal project. Not published.
+Apache-2.0

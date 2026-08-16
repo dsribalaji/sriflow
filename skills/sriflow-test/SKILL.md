@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-build, sriflow-code-review, sriflow-ship
-description: "Systematic QA with TDD workflow. Golden path → edges → errors → regression → visual. Absorbs: ECC TDD workflow, gstack QA methodology, ruflo eval framework. Not for: code review — use sriflow-code-review. Not for: deployment — use sriflow-ship."
+description: "Systematic QA with TDD workflow. Golden path → edges → errors → regression → visual. Not for: code review — use sriflow-code-review. Not for: deployment — use sriflow-ship."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -54,13 +54,13 @@ After code review. Runs golden path, edge cases, error states, and regression. D
 
 | Source | Pattern | Integration |
 |--------|---------|-------------|
-| **ECC TDD workflow** | RED → GREEN → IMPROVE cycle | `reference/patterns/ecc-tdd-workflow.md` |
-| **ECC e2e-runner** | Playwright E2E patterns | `reference/patterns/e2e-test-patterns.md` |
-| **ECC 80% coverage** | Minimum coverage requirement | Added to gate logic |
-| **gstack QA** | 14 QA patterns (verify page, test flow, visual diff, etc.) | Already present in browser refs |
-| **gstack qa-only** | Report-only mode (for audit) | Mode tier: Report Only option |
-| **ruflo eval framework** | 75 integration tests, performance benchmarks | `reference/patterns/eval-framework.md` |
-| **ruflo test infrastructure** | Vitest, fixtures, mock data | `reference/patterns/test-infrastructure.md` |
+| **TDD workflow** | RED → GREEN → IMPROVE cycle | `reference/patterns/tdd-workflow.md` |
+| **E2E runner** | Playwright E2E patterns | `reference/patterns/e2e-test-patterns.md` |
+| **80% coverage** | Minimum coverage requirement | Added to gate logic |
+| **QA patterns** | 14 QA patterns (verify page, test flow, visual diff, etc.) | Already present in browser refs |
+| **QA-only mode** | Report-only mode (for audit) | Mode tier: Report Only option |
+| **Eval framework** | 75 integration tests, performance benchmarks | `reference/patterns/eval-framework.md` |
+| **Test infrastructure** | Vitest, fixtures, mock data | `reference/patterns/test-infrastructure.md` |
 | **qa-skills bug repro** | Repro loop with bisect | `reference/14-bug-reproduction.md` |
 | **qa-skills flake quarantine** | Flake classification and quarantine | `reference/13-test-reliability.md` |
 
@@ -85,7 +85,7 @@ After code review. Runs golden path, edge cases, error states, and regression. D
 2. Derive expected from spec, not code
 3. Exact inputs, exact outputs
 4. Document before fixing
-5. 80%+ coverage required (ECC standard)
+5. 80%+ coverage required
 6. Regressions are Critical by default
 7. CLEAR TO /sriflow-ship only on SHIP-READY
 

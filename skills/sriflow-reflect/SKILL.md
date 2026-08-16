@@ -4,7 +4,7 @@ preamble-tier: 2
 version: 3.0.0
 category: pipeline
 related: sriflow-ship, sriflow-memory
-description: "End-of-cycle retrospective. 8 sections, tier-based depth. Absorbs: gstack retro (per-person breakdowns, trends), ECC continuous learning (instinct system), ruflo eval framework. Not for: planning — use sriflow-plan. Not for: testing — use sriflow-test."
+description: "End-of-cycle retrospective. 8 sections, tier-based depth. Not for: planning — use sriflow-plan. Not for: testing — use sriflow-test."
 license: Apache-2.0
 compatibility: Claude Code, OpenCode, or compatible AI agent
 allowed-tools:
@@ -50,13 +50,13 @@ After ship completes. Reads SRIFLOW_MEMORY.md, PLAN.md, QA_REPORT.md, CODE_REVIE
 
 | Source | Pattern | Integration |
 |--------|---------|-------------|
-| **gstack retro** | Per-person breakdowns, shipping streaks, trend lines | `reference/patterns/gstack-retro.md` |
-| **gstack retro** | Commit histogram, session cadence | Step 2 enhanced |
-| **ECC continuous learning** | Instinct creation, observation extraction | `reference/insights/ecc-continuous-learning.md` |
-| **ECC continuous learning** | Confidence scoring (0-100), evolution rules | Instinct system: observe → score → evolve |
-| **ruflo eval framework** | Metrics-driven improvement, quality checks | `reference/patterns/eval-framework.md` |
+| **Retro** | Per-person breakdowns, shipping streaks, trend lines | `reference/patterns/retro-patterns.md` |
+| **Retro** | Commit histogram, session cadence | Step 2 enhanced |
+| **Continuous learning** | Instinct creation, observation extraction | `reference/insights/continuous-learning.md` |
+| **Continuous learning** | Confidence scoring (0-100), evolution rules | Instinct system: observe → score → evolve |
+| **Eval framework** | Metrics-driven improvement, quality checks | `reference/patterns/eval-framework.md` |
 
-### Insight system (absorbed from ECC)
+### Insight system
 
 | File | Content |
 |------|---------|
