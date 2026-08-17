@@ -2,8 +2,8 @@
 
 **Goal:** Discover Non-Functional Requirements and produce system design.
 
-Read: `phases/06-officehours/README.md`
-Questions: `phases/06-officehours/questions/phase-questions.md`
+Read: `phases/06-stakeholder-validation/README.md`
+Questions: `phases/06-stakeholder-validation/questions/phase-questions.md`
 
 **Phase 6 Gate:**
 - **Small:** Skip (tech stack in plan)

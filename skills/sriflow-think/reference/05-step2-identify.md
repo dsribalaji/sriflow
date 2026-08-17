@@ -1,6 +1,6 @@
 # Step 2 — Identify: Who Is in the System? (Enterprise / Medium-depth)
 
-Cast wide before narrowing. Ask the following for every system being built:
+Go broad before you go narrow. Ask the following for every system you build:
 
 **Discovery questions:**
 - Who commissioned this work? Who is paying for it?
@@ -22,4 +22,4 @@ Cast wide before narrowing. Ask the following for every system being built:
 | **Affected Party** | Impacted by the change but not a user | Adjacent team, Downstream process owner |
 | **Regulator / Auditor** | External compliance or governance requirement | Legal, External Auditor, Regulatory Body |
 
-**Output:** Produce a stakeholder list with name, title, category, and initial notes before moving to Step 3.
+**Output:** build a stakeholder list carrying name, title, category, and early notes before you enter Step 3.

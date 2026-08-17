@@ -38,13 +38,13 @@ gate:
 
 ## Pipeline backtracking
 
-Re-run `/sriflow-think` to update THINK_OUTPUT.md. Use `update mode` to preserve existing answers. Fresh start deletes all artifacts and re-runs.
+Call `/sriflow-think` again to refresh THINK_OUTPUT.md. Choose `update mode` to keep answers already recorded. A fresh start wipes every artifact and runs the whole pass from the top.
 
 # /sriflow-think — Ideation
 
 ## When to invoke
 
-Phase 1 of the sriflow pipeline. Starting any project from zero, when a requirement is attributed to a group label ("the business," "users," "leadership"), when stakeholders disagree, or before any elicitation session. Invoke proactively before any requirements workshop.
+Runs as Phase 1 of the sriflow pipeline. Start it when a project is greenfield with nothing built yet, when a requirement is pinned to a group label ("the business," "users," "leadership"), when stakeholders are in conflict, or ahead of any elicitation session. Launch it proactively before a requirements workshop begins.
 
 ## Reference files
 
@@ -64,39 +64,39 @@ Phase 1 of the sriflow pipeline. Starting any project from zero, when a requirem
 | **Output** | `reference/10-output-templates.md` | Small/Medium/Enterprise THINK_OUTPUT.md templates |
 | **Gates** | `reference/11-gates-anti-patterns.md` | Phase gate, expand handler, clarity check |
 
-### Absorbed patterns
+### Pattern integration
 
-| Source | Pattern | sriflow integration |
-|--------|---------|-------------------|
-| **Office-hours** | YC-style forcing questions | `reference/patterns/office-hours.md` |
-| **Office-hours** | 10-star thinking (what's the 10x version?) | Added to Q3 in Think workflow |
-| **Office-hours** | Inversion: "what would make this fail?" | Added to uncertainty mapping |
-| **Spec-miner** | Brownfield project extraction | `reference/patterns/spec-miner.md` |
-| **Spec-miner** | Existing codebase → spec extraction | Context step: detect brownfield, run extraction |
-| **Planner** | Work breakdown: deps → phases → risks | `reference/patterns/planner.md` |
-| **Governance** | "Compile, enforce, prove, evolve" framework | `reference/patterns/governance.md` |
-| **ADRs** | Decision documentation template | Uncertainty resolution → ADR entry |
+| Pattern | sriflow integration |
+|---------|---------------------|
+| Forcing questions (startup diagnostic) | `reference/patterns/forcing-questions.md` |
+| 10-star thinking (what's the 10x version?) | Added to Q3 in Think workflow |
+| Inversion: "what would make this fail?" | Added to uncertainty mapping |
+| Brownfield project extraction | `reference/patterns/brownfield-extraction.md` |
+| Existing codebase → spec extraction | Context step: detect brownfield, run extraction |
+| Work breakdown: deps → phases → risks | `reference/patterns/planner.md` |
+| "Compile, enforce, prove, evolve" framework | `reference/patterns/governance.md` |
+| Decision documentation template | Uncertainty resolution → ADR entry |
 
 ## Workflow
 
-1. **Preamble** → Read `reference/01-preamble.md`
-2. **Questions format** → Read `reference/02-questions.md`
-3. **Scale detection** → Read `reference/03-scale-detection.md` — effort estimation cross-check
-4. **Step 1 — Project context** → Read `reference/04-step1-context.md` (Q2-Q4)
-5. **Step 1b — Market research** → Read `reference/04b-market-research.md` (3 searches max)
-6. **Step 2 — Identify stakeholders** → Read `reference/05-step2-identify.md`
-7. **Step 3 — Map power/interest/uncertainty** → Read `reference/06-step3-map.md`
-8. **Step 4 — Stakeholder register** → Read `reference/07-step4-register.md`
-9. **Step 5 — Uncertainty priority** → Read `reference/07b-uncertainty-priority.md`
-10. **Step 6 — Disagreement diagnostic** → Read `reference/08-step6-disagreement.md`
-11. **Step 7 — Interview plan** → Read `reference/09-step7-interview.md`
-12. **Output** → Write THINK_OUTPUT.md from `reference/10-output-templates.md`
-13. **Gates** → Read `reference/11-gates-anti-patterns.md`
+1. **Preamble** — read `reference/01-preamble.md`
+2. **Questions format** — read `reference/02-questions.md`
+3. **Scale detection** — read `reference/03-scale-detection.md`; effort estimation cross-check
+4. **Step 1 — Project context** — read `reference/04-step1-context.md` (Q2-Q4)
+5. **Step 1b — Market research** — read `reference/04b-market-research.md` (3 searches max)
+6. **Step 2 — Identify stakeholders** — read `reference/05-step2-identify.md`
+7. **Step 3 — Map power/interest/uncertainty** — read `reference/06-step3-map.md`
+8. **Step 4 — Stakeholder register** — read `reference/07-step4-register.md`
+9. **Step 5 — Uncertainty priority** — read `reference/07b-uncertainty-priority.md`
+10. **Step 6 — Disagreement diagnostic** — read `reference/08-step6-disagreement.md`
+11. **Step 7 — Interview plan** — read `reference/09-step7-interview.md`
+12. **Output** — write THINK_OUTPUT.md from `reference/10-output-templates.md`
+13. **Gates** — read `reference/11-gates-anti-patterns.md`
 
 ## Voice
-Direct, builder-to-builder. BA mode — full detail, complete sentences. No caveman. No AI vocabulary.
+Speak directly, builder to builder. BA mode — full detail, complete sentences. No caveman. No AI vocabulary.
 
 ## Completion Status
-- **DONE** — THINK_OUTPUT.md written, all Tier 1 uncertainties mapped.
-- **DONE_WITH_CONCERNS** — completed, concerns listed.
-- **BLOCKED** — cannot proceed; state blocker.
+- **DONE** — THINK_OUTPUT.md written and every Tier 1 uncertainty mapped.
+- **DONE_WITH_CONCERNS** — finished, with concerns logged.
+- **BLOCKED** — cannot continue; name the blocker.

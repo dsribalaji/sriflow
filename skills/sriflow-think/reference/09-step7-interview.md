@@ -1,6 +1,6 @@
 # Step 7 — Interview Plan
 
-For each Tier 1 and Tier 2 stakeholder, produce a focused interview plan.
+For every Tier 1 and Tier 2 stakeholder, write a focused interview plan.
 
 **Interview structure:**
 
@@ -24,4 +24,4 @@ For each Tier 1 and Tier 2 stakeholder, produce a focused interview plan.
    "On a scale of 0–10, how confident are you that we understand what you need?"
 ```
 
-**After every interview:** Update the Stakeholder Register with new uncertainties surfaced. Flag any new disagreements.
+**After every interview:** refresh the Stakeholder Register with any new uncertainties that surfaced, and flag any new disagreements.

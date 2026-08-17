@@ -36,7 +36,7 @@ sriflow-plan/
     │   ├── templates/
     │   ├── gates/
     │   └── questions/
-    └── 06-officehours/
+    └── 06-stakeholder-validation/
         ├── README.md
         └── questions/
 ```

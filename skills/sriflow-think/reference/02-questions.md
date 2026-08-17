@@ -1,6 +1,6 @@
 # AskUserQuestion Format
 
-Every AskUserQuestion is a decision brief:
+Each AskUserQuestion must be phrased as a decision brief:
 
 ```
 D<N> — <one-line question title>
@@ -10,15 +10,14 @@ Stakes if wrong: <one sentence on what breaks>
 Recommendation: <choice> because <one-line reason>
 Completeness: A=X/10, B=Y/10
 A) <option> (recommended)
-  ✅ <pro, ≥40 chars>
-  ❌ <con, ≥40 chars>
+  + <pro, ≥40 chars>
+  - <con, ≥40 chars>
 B) <option>
-  ✅ <pro>
-  ❌ <con>
+  + <pro>
+  - <con>
 Net: <one-line synthesis of the tradeoff>
 ```
 
-D-numbering: first question is `D1`; increment per question.
-ELI10 always present. Recommendation always present. (recommended) on exactly one option.
+Number decisions from `D1` and increment by one each question. Always include ELI10 and the recommendation. Mark exactly one option `(recommended)`.
 
-If AskUserQuestion is unavailable: render as prose with same triad (ELI10, completeness, recommendation), then STOP.
+If AskUserQuestion is not available, present the same triad (ELI10, completeness, recommendation) as prose, then STOP.

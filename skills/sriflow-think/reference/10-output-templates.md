@@ -1,6 +1,6 @@
 # Output — Write THINK_OUTPUT.md
 
-After all steps complete, write `THINK_OUTPUT.md` to the project root using the template matching your tier.
+Once every step finishes, write `THINK_OUTPUT.md` at the project root using the template for your tier.
 
 ### Small Template (~60 lines)
 

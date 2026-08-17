@@ -30,7 +30,7 @@ only parse arguments and delegate.
 
 ## 2. Spec-first brownfield bootstrap
 
-When scaffolding onto an existing codebase, the spec-miner extracts a flat
+When scaffolding onto an existing codebase, the brownfield extraction pass pulls a flat
 list of behavioral assertions (Requirements + Invariants) into
 `openspec/specs/<capability>/spec.md`. sriflow-init creates the target
 directory when the project is a brownfield extraction:

@@ -50,7 +50,7 @@ gate:
 
 # /sriflow-plan — BA Pipeline (Single Orchestrator)
 
-You are a **principal business analyst who turns ideas into executable plans**. Your job is to follow the ba-toolkit methodology exactly — 6 phases, each with gates, each producing specific artifacts. Run all phases interactively, asking every question and waiting for answers.
+You operate as a **principal business analyst whose job is turning ideas into executable plans**. Follow the BA methodology exactly — six phases, each gated, each producing defined artifacts. Drive all phases interactively, posing every question and waiting for each answer before continuing.
 
 **CRITICAL RULES:**
 1. Ask ALL questions from each phase — no skipping, no assuming
@@ -69,7 +69,7 @@ _TEL_START=$(date +%s)
 echo "BRANCH: $_BRANCH"
 echo "SESSION_ID: $_SESSION_ID"
 
-# Plan-mode detection
+# Detect whether plan mode is active
 if [ -n "${CLAUDE_PLAN_FILE:-}${SRIFLOW_PLAN_MODE_FORCE:-}" ]; then
   export SRIFLOW_PLAN_MODE="active"
 elif [ "${SRIFLOW_PLAN_MODE:-}" = "active" ]; then
@@ -79,14 +79,14 @@ else
 fi
 echo "SRIFLOW_PLAN_MODE: $SRIFLOW_PLAN_MODE"
 
-# Session kind
+# Classify the session type
 _SESSION_KIND="${SRIFLOW_SESSION_KIND:-interactive}"
 echo "SESSION_KIND: $_SESSION_KIND"
 
-# BA Pipeline: disable caveman/ponytail trim — BA output needs full detail
+# BA output needs full detail — leave text compression off
 echo "TRIM: disabled (BA pipeline active)"
 
-# Project memory
+# Load project memory if present
 if [ -f "SRIFLOW_MEMORY.md" ]; then
   echo "MEMORY: found"
   head -80 SRIFLOW_MEMORY.md
@@ -94,17 +94,17 @@ else
   echo "MEMORY: missing — will create on first write"
 fi
 
-# Git state
+# Snapshot git working-tree state
 _GIT_STAGED=$(git diff --cached --name-only 2>/dev/null | wc -l | tr -d ' ')
 _GIT_UNSTAGED=$(git diff --name-only 2>/dev/null | wc -l | tr -d ' ')
 _GIT_UNTRACKED=$(git ls-files --others --exclude-standard 2>/dev/null | wc -l | tr -d ' ')
 echo "GIT_STAGED: $_GIT_STAGED | UNSTAGED: $_GIT_UNSTAGED | UNTRACKED: $_GIT_UNTRACKED"
 
-# Pipeline stage tracking
+# Read the recorded pipeline stage
 _CURRENT_STAGE=$(grep "^## Current Stage:" SRIFLOW_MEMORY.md 2>/dev/null | head -1 | sed 's/## Current Stage: //' || echo "unknown")
 echo "PIPELINE_STAGE: $_CURRENT_STAGE"
 
-# Config
+# Pull configuration values
 _PROACTIVE=$(sriflow-config get proactive 2>/dev/null || echo "true")
 _TELEMETRY=$(sriflow-config get telemetry 2>/dev/null || echo "off")
 _EXPLAIN_LEVEL=$(sriflow-config get explain_level 2>/dev/null || echo "default")
@@ -112,7 +112,7 @@ echo "PROACTIVE: $_PROACTIVE"
 echo "TELEMETRY: $_TELEMETRY"
 echo "EXPLAIN_LEVEL: $_EXPLAIN_LEVEL"
 
-# Context restore
+# Restore prior session context if available
 if sriflow-context show 2>/dev/null | grep -q "branch"; then
   echo "CONTEXT: restored"
   sriflow-context show 2>/dev/null
@@ -120,15 +120,15 @@ else
   echo "CONTEXT: fresh session"
 fi
 
-# Learnings
+# Count stored learnings
 _LEARN_COUNT=$(sriflow-learnings count 2>/dev/null || echo "0")
 echo "LEARNINGS: $_LEARN_COUNT entries"
 
-# Decisions
+# Count stored decisions
 _DECISION_COUNT=$(sriflow-decisions count 2>/dev/null || echo "0")
 echo "DECISIONS: $_DECISION_COUNT entries"
 
-# Timeline
+# Record the session start on the timeline
 sriflow-timeline log '{"skill":"sriflow-plan","event":"started","branch":"'"$_BRANCH"'","session":"'"$_SESSION_ID"'"}' 2>/dev/null &
 ```
 

@@ -41,7 +41,7 @@ gate:
 
 ## When to invoke
 
-Phase 2-6 of the pipeline. Use after `/sriflow-think`. Requires THINK_OUTPUT.md. Runs: Discovery → Elicitation → Use Cases → Requirements → UI & Data → Architecture. Produces PLAN.md + all phase artifacts.
+Run phases 2–6 of the pipeline. Invoke after `/sriflow-think`; THINK_OUTPUT.md must already exist. Execute the sequence Discovery → Elicitation → Use Cases → Requirements → UI & Data → Architecture. Deliver PLAN.md plus every phase artifact.
 
 ## Reference files
 
@@ -59,17 +59,16 @@ Phase 2-6 of the pipeline. Use after `/sriflow-think`. Requires THINK_OUTPUT.md.
 | Post-plan | `reference/12-post-plan.md` | Expand handler, memory write |
 | Nested structure | `reference/04-nested-structure.md` | Phases subdirectory layout |
 
-### Absorbed patterns
+### Pattern libraries
 
-| Source | Pattern | Integration |
-|--------|---------|-------------|
-| **Autoplan** | CEO→Eng→Design→DX pipeline | Plan phases: auto-run all lenses |
-| **/spec** | Issue filing + worktree agents | Plan can file GH issue + spawn worktree |
-| **Planner agent** | Dependency graph, risk matrix, phased delivery | `reference/patterns/dependency-graph.md` |
-| **Architect agent** | System design, scalability assessment | Added to Phase 6 checklist |
-| **ADR system** | 90 ADR templates, Context→Decision→Consequences | 6 ADR templates: `reference/adrs/ADR-template.md`, `reference/adrs/ADR-architecture.md`, `reference/adrs/ADR-security.md`, `reference/adrs/ADR-data-model.md`, `reference/adrs/ADR-api-design.md`, `reference/adrs/ADR-tooling.md` |
-| **Guidance** | Compile→Enforce→Prove→Evolve | `reference/patterns/guidance-framework.md` |
-| **Orchestration** | Sequential + parallel subagent chaining | `reference/patterns/orchestration-protocol.md` |
+The pipeline composes several reusable technique sets, documented in the pattern library and the ADR template set below.
+
+| Pattern set | Role in the pipeline |
+|-------------|---------------------|
+| Orchestration protocol | Runs the six phases as sequential subagents, fanning out to parallel workers where phases stay independent | `reference/patterns/orchestration-protocol.md` |
+| Dependency graph | Builds the task dependency graph, risk matrix, and phased delivery sequence | `reference/patterns/dependency-graph.md` |
+| Guidance framework | Compiles planning guidance into enforceable rules, then proves and evolves them per phase | `reference/patterns/guidance-framework.md` |
+| ADR system | Records each architecture decision as Context → Decision → Consequences across six template types |
 
 ### ADR templates
 

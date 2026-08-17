@@ -2,7 +2,7 @@
 
 ## Memory Write (run last)
 
-After workflow completion, append to `SRIFLOW_MEMORY.md`:
+After the workflow finishes, append to `SRIFLOW_MEMORY.md`:
 
 ```bash
 _TEL_END=$(date +%s)
@@ -17,13 +17,13 @@ Routed to: DESTINATION
 MEMEOF
 ```
 
-Replace `OUTCOME` with actual outcome (done/blocked/concerns). Replace `DESTINATION` with the skill routed to, or `status`/`help` if that's what was shown.
+Swap `OUTCOME` for the real result (done/blocked/concerns) and `DESTINATION` for the routed skill, or `status`/`help` when that's what you displayed.
 
-Only write memory if something happened worth recording (routing decision, status shown for mid-pipeline project). Do not write memory for a simple `/sriflow help` on a fresh project.
+Write memory only when something worth keeping occurred, such as a routing decision or a status render on an in-flight project. Skip memory for a plain `/sriflow help` on a fresh project.
 
 ## Context Recovery
 
-At session start or after context compaction:
+At session start, or after context compaction:
 
 ```bash
 if [ -f "SRIFLOW_MEMORY.md" ]; then
@@ -33,10 +33,10 @@ if [ -f "SRIFLOW_MEMORY.md" ]; then
 fi
 ```
 
-If memory found: give a 2-sentence summary of current state. If a next skill is implied by the current stage, suggest it once.
+When memory exists: summarize the current state in two sentences. If the current stage implies a next skill, mention it once.
 
-If no memory found: say "No SRIFLOW_MEMORY.md found. Run /sriflow-plan to start a new project."
+When no memory exists: say "No SRIFLOW_MEMORY.md found. Run /sriflow-plan to start a new project."
 
 ## Confusion Protocol
 
-For high-stakes ambiguity (architecture decisions, destructive scope, missing context that changes the routing): STOP. Name it in one sentence, present 2-3 options with tradeoffs, ask. Do not use for routine routing or obvious intent matches.
+Reserve this for high-stakes ambiguity: architecture calls, destructive scope, or missing context that would change the route. STOP, name the issue in one sentence, lay out 2-3 options with their tradeoffs, then ask. Don't use it for routine routing or clear intent.

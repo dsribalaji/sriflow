@@ -1,18 +1,18 @@
 # Governance Patterns
 
-The "Compile, enforce, prove, evolve"
-governance control plane for agent rules. sriflow-think adopts the four-stage
-model for **stakeholder governance**: turning raw stakeholder claims into
-rules that are compiled, enforced, proven, and evolved.
+A "compile, enforce, prove, evolve" control plane for governing agent
+rules. sriflow-think applies the four-stage model to **stakeholder governance**:
+converting raw stakeholder claims into rules that get compiled, enforced,
+proven, and evolved.
 
 ## The four-stage framework
 
 ### 1. Compile
 
-The framework compiles `CLAUDE.md` into a **constitution** (invariant top rules) +
-**rule shards** (tagged, machine-readable rules). sriflow-think compiles the
-output of Steps 1-7 into the uncertainty register: every stakeholder claim
-becomes a concrete, testable statement, not prose.
+The framework compiles `CLAUDE.md` into a **constitution** — invariant top
+rules — plus **rule shards** (tagged, machine-readable rules). sriflow-think
+compiles the output of Steps 1-7 into the uncertainty register: every
+stakeholder claim becomes a concrete, testable statement rather than prose.
 
 ```markdown
 # Compiled claim: "Users need real-time sync"
@@ -20,13 +20,13 @@ becomes a concrete, testable statement, not prose.
 # Testable statement: "Two devices syncing the same record converge in <5s"
 ```
 
-Rule: claims that can't be compiled into a testable statement stay RED in the
-register until the interview resolves them.
+Rule: any claim that cannot be compiled into a testable statement stays RED in
+the register until an interview resolves it.
 
 ### 2. Enforce
 
 The enforcement gates (destructive-ops, allowlist, diff-size, secrets)
-map to sriflow gates:
+map onto sriflow gates:
 
 | Gate | sriflow-think equivalent |
 |------------|--------------------------|
@@ -37,29 +37,29 @@ map to sriflow gates:
 
 ### 3. Prove
 
-The framework attaches proofs (SHA-256 witness, test anchors) to every rule.
-sriflow-think attaches evidence to every stakeholder answer: which named
-individual said it, from what source (interview, document, code enforcement).
-Unattributed claims are unproven claims.
+The framework pins a proof to every rule — a SHA-256 witness, test anchors.
+sriflow-think pins evidence to every stakeholder answer: which named
+individual said it and from what source (interview, document, code
+enforcement). An unattributed claim is an unproven claim.
 
 ### 4. Evolve
 
-The framework promotes winning rules and A/B tests governance configs. sriflow-think
+The framework promotes winning rules and A/B tests governance configurations. sriflow-think
 evolves the register on every re-run (update mode): resolved uncertainties
-become decisions (ADR entries), and new evidence demotes or promotes tiers.
+turn into decisions (ADR entries), and fresh evidence demotes or promotes tiers.
 
 ## ADR entry on resolution
 
-When a Tier 1 uncertainty resolves, record it as a lightweight ADR entry in
-the project's decision log (sriflow-memory `decisions.jsonl`):
+When a Tier 1 uncertainty resolves, log it as a lightweight ADR entry in the
+project decision log (sriflow-memory `decisions.jsonl`):
 
 ```json
 {"id":"D-012","decision":"adopt real-time sync via CRDT","rationale":"...",
  "evidence":"interview: [name], 2026-08-16","status":"resolved","date":"2026-08-16"}
 ```
 
-This is the "ADR → decision documentation template" integration named
-in the SKILL.md absorbed-patterns table.
+This is the "decision documentation template" integration wired into the
+SKILL.md pattern table.
 
 ## Where each stage lands
 
@@ -72,6 +72,6 @@ in the SKILL.md absorbed-patterns table.
 
 ## Rules
 
-1. Every stakeholder claim is compiled or flagged RED. No middle state.
-2. Every resolved uncertainty produces a decision record with evidence.
+1. Every stakeholder claim is compiled or flagged RED. No middle ground.
+2. Every resolved uncertainty produces a decision record backed by evidence.
 3. Unattributed claims never gate the pipeline.

@@ -2,9 +2,9 @@
 
 ## Step 4 — Unclear intent (AUQ D1)
 
-If the user's request does not match the routing table and is not a status or help request, use AskUserQuestion before doing anything else.
+When the user's request matches neither the routing table nor a status/help pattern, call AskUserQuestion before any other action.
 
-Show current pipeline status first (same format as Step 3), then:
+Render the current pipeline status first (the Step 3 format), then:
 
 ```
 D1 — Where do you want to go?
@@ -25,11 +25,11 @@ C) Show help — list all skills so I can pick
 Net: If you're mid-pipeline, A. If you backtracked or made a correction, B. If you're new here, C.
 ```
 
-Fill `<current_stage>` from `_CURRENT_STAGE`. If `_CURRENT_STAGE` is `not-started`, recommend option B with `/sriflow-plan`.
+Populate `<current_stage>` from `_CURRENT_STAGE`. When `_CURRENT_STAGE` is `not-started`, recommend option B and point at `/sriflow-plan`.
 
 ## AskUserQuestion Format
 
-Every AskUserQuestion is a decision brief:
+Treat every AskUserQuestion as a decision brief:
 
 ```
 D<N> — <one-line question title>
@@ -47,7 +47,6 @@ B) <option>
 Net: <one-line synthesis of the tradeoff>
 ```
 
-D-numbering: first question is `D1`; increment per question in session.
-ELI10 always present. Recommendation always present. `(recommended)` on exactly one option.
+Numbering: the first question is `D1`; bump it per question within the session. Always include ELI10. Always include a recommendation. Put `(recommended)` on exactly one option.
 
-If AskUserQuestion is unavailable: render as prose with same fields (ELI10, completeness, recommendation), then STOP.
+If AskUserQuestion isn't available: fall back to prose with the same fields (ELI10, completeness, recommendation), then STOP.

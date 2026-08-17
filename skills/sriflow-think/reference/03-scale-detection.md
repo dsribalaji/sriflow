@@ -1,6 +1,6 @@
 # Scale Detection
 
-Before any analysis, detect project scale. This determines pipeline depth.
+Detect project scale before any analysis. The result decides how deep the pipeline runs.
 
 **Auto-detect from user's opening message:**
 
@@ -11,8 +11,8 @@ Before any analysis, detect project scale. This determines pipeline depth.
 | **Enterprise** | "enterprise", "compliance", "multi-team", "department", "audit", "regulatory", "migration", "multiple systems", "organization", "hundreds of users" | 1+ months |
 | **Mixed/unclear** | Default to Medium | — |
 
-**WARNING: "personal", "for myself", "my own" are NOT Small-tier qualifiers alone.**
-Personal projects can be Enterprise-scale (e.g., "a personal LLM inference server with multi-GPU support"). Keywords like "script", "one-off", "quick" indicate Small scope. When the user says "for myself" but describes something complex (multiple components, CLI with subcommands, server, database), default to **Medium** or ask.
+**WARNING: saying "personal", "for myself", or "my own" does NOT by itself qualify a project as Small.**
+A personal build can still be Enterprise-scale (for instance, "a personal LLM inference server with multi-GPU support"). Terms like "script", "one-off", and "quick" point to Small scope. When the user says "for myself" but then describes something involved — several components, a CLI with subcommands, a server, a database — default to **Medium** or ask.
 
 **Effort estimation check (required after Q1):**
 Before confirming scale, ask:
@@ -23,13 +23,13 @@ B) A few days
 C) 1-4 weeks (recommended for Medium)
 D) A month or more (recommended for Enterprise)
 ```
-Use the answer to cross-validate keyword-based tier detection. If keywords say Small but user says 1-4 weeks, upgrade to Medium. If keywords say Enterprise but user says hours, downgrade to Small. User's effort estimate prevails.
+Cross-check keyword-based detection against the effort answer. Keywords say Small but the user reports 1-4 weeks — promote to Medium. Keywords say Enterprise but the user says hours — demote to Small. The user's effort estimate wins.
 
-**Keyword priority:** No tier overrides another automatically. Use keyword match as INITIAL HINT only, then validate with effort question above.
+**Keyword priority:** No tier overrides another on its own. Treat keyword matches as a starting hint only, then confirm with the effort question above.
 
-If the user can't determine the scale or says "I don't know," default to Medium and proceed.
+If the user cannot judge scale or answers "I don't know", default to Medium and continue.
 
-If THINK_OUTPUT.md already exists: "A previous think session exists. Update it or start fresh?"
+When THINK_OUTPUT.md already exists, ask: "A previous think session exists. Update it or start fresh?"
 
 **Ask Q1 first (required for all tiers):**
 
@@ -64,7 +64,7 @@ Ask 3 additional clarifying questions:
 - **S1.5:** What are the key features? List 3-5. (e.g., "log expense", "view monthly summary", "export CSV")
 - **S2:** What does "done" look like? (observable criterion: "I can upload a file and see it in the list")
 
-Then write THINK_OUTPUT.md (Small template) and finish. **Do NOT proceed to Step 1.**
+Then write THINK_OUTPUT.md with the Small template and stop. **Do NOT continue into Step 1.**
 
 ### If Medium → Condensed Steps 2-7
 
@@ -77,10 +77,10 @@ Detailed disagreement diagnostic → skip unless vague phrase flagged.
 Full depth available on any step: "expand [step] to full depth"
 ```
 
-Ask Q2-Q4 from Step 1, then run Steps 2-7 with compression.
+Ask Q2-Q4 from Step 1, then execute Steps 2-7 in condensed form.
 
-**Mid-pipeline expand:** After each step completes, if user says "expand [step]", re-run that step at enterprise depth before proceeding to next step.
+**Mid-pipeline expand:** once any step finishes, if the user says "expand [step]", re-run that step at enterprise depth before moving on.
 
 ### If Enterprise → Full Pipeline (unchanged)
 
-Proceed to Step 1 (Q2-Q4) and run Steps 2-7 exactly as written.
+Move into Step 1 (Q2-Q4) and execute Steps 2-7 exactly as written.

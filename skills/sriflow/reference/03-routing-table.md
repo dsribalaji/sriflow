@@ -2,9 +2,9 @@
 
 ## Step 1 — Identify intent
 
-Read the user's message. Match against the routing table. If matched, proceed to Step 2. If not matched, proceed to Step 4 (AUQ).
+Read the user message and compare it against the routing table. A match moves you to Step 2; otherwise go to Step 4 (AUQ).
 
-Recognized intent patterns:
+Intent patterns the router recognizes:
 
 | Intent | Route |
 |--------|-------|
@@ -37,33 +37,33 @@ Recognized intent patterns:
 
 ## Step 2 — Route
 
-When intent is matched, output exactly this format:
+Once intent matches, print exactly this format:
 
 ```
 → /sriflow-<skill>
 <One sentence: what that skill will do for you right now.>
 ```
 
-Do not execute the destination skill. Do not plan ahead. One routing message, then stop.
+Don't run the destination skill. Don't plan beyond the route. Emit one routing message, then stop.
 
 Examples:
 
 - Intent "I have an idea for a new feature":
   ```
   → /sriflow-plan
-  Runs the BA pipeline (6 phases) to turn your idea into a structured PLAN.md.
+  Runs the 6-phase BA pipeline to shape your idea into a structured PLAN.md.
   ```
 
 - Intent "review the plan":
   ```
   → /sriflow-plan-review
-  Three-lens review (CEO, Design, Eng) — scores 0-10 per lens, blocks if any < 7.
+  Three-lens review (CEO, Design, Eng) — each lens scored 0-10, blocks when any lens lands below 7.
   ```
 
 - Intent "build it":
   ```
   → /sriflow-build
-  Implements the approved DESIGN.md — pre-build safety check, then writes code.
+  Implements the approved DESIGN.md — runs a pre-build safety check, then writes code.
   ```
 
-If `/sriflow-think` is invoked explicitly, route to `/sriflow-plan` and note once: "sriflow-think is now merged into sriflow-plan."
+When `/sriflow-think` is called by name, route to `/sriflow-plan` and say once: "sriflow-think is now merged into sriflow-plan."

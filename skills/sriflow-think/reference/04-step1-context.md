@@ -1,16 +1,16 @@
 # Core Principle: Uncertainty Is Never Reduced "In General"
 
-> "Uncertainty is never reduced 'in general.' It's reduced for a specific person who has to decide something."
+> "Uncertainty drops only for a named person facing a specific decision — never for some audience in the abstract."
 
-"The stakeholders" are not one voice. They are multiple people with distinct problems, distinct decisions to make, and distinct uncertainties to resolve. Treating them as one audience is the single most common cause of requirements that satisfy nobody.
+"The stakeholders" is not one voice. It is many people, each with their own problems, their own decisions to make, and their own open questions. Treating them as a single audience is the most common route to requirements that satisfy no one.
 
-**The BA's job:** Map who decides what — then aim each piece of analysis at the person who actually needs it.
+**The BA's job:** find out who decides what, then aim every piece of analysis at the person who truly needs it.
 
 ---
 
 # Step 1 — Confirm the Project Context (Medium / Enterprise only)
 
-Small tier already completed after Q1 + S1/S2. This step is for Medium and Enterprise only.
+The Small tier wraps up after Q1 + S1/S2. This step applies to Medium and Enterprise only.
 
 Before mapping stakeholders, confirm:
 - What system or product are we building (in one sentence)? (already answered in Scale Detection)
@@ -18,7 +18,7 @@ Before mapping stakeholders, confirm:
 - Do we have any existing documentation (BRD draft, PRD, design brief, legacy system)?
 - Has any stakeholder discovery been done before? If yes — what exists?
 
-Ask these questions precisely (one AskUserQuestion per question, wait for answer):
+Ask each one as its own AskUserQuestion and wait for the answer:
 
 **Q2:** What phase is this project in?
 - A) Greenfield (no existing system)
@@ -41,12 +41,12 @@ Ask these questions precisely (one AskUserQuestion per question, wait for answer
 
 # Step 1b — Market Research (Medium / Enterprise, optional)
 
-Before mapping stakeholders, optionally research the competitive landscape.
-This helps identify stakeholders you might miss (competitors, regulators,
-adjacent market players).
+Before stakeholder mapping, optionally scan the competitive landscape.
+That surfaces stakeholders you could otherwise overlook — competitors,
+regulators, adjacent players in the market.
 
 ```bash
-# Quick market context — run if user wants competitive intelligence
+# Light market scan — run only if the user wants competitive intel
 # WebSearch for: "[project domain] market landscape [current year]"
 # WebSearch for: "[project domain] competitors [current year]"
 # WebSearch for: "[specific feature] alternative solutions"
@@ -58,18 +58,18 @@ Use WebSearch to find:
 - **Regulatory context:** Any compliance requirements in this domain?
 - **User expectations:** What do users in this market expect from similar tools?
 
-If WebSearch is unavailable or user skips: proceed without market context.
-If results found: note key competitors and adjacents in THINK_OUTPUT.md
-under "Market Context". Use this to inform stakeholder identification in Step 2.
+If WebSearch is unavailable or the user declines, move on without market context.
+When results come back, record key competitors and adjacent players in THINK_OUTPUT.md
+under "Market Context". Let this inform stakeholder identification in Step 2.
 
-**Time box:** 3 searches max. Do not rabbit-hole into market analysis. This is
-stakeholder discovery input, not a market research report.
+**Time box:** at most 3 searches. Do not spiral into market analysis. This is
+input for stakeholder discovery, not a market research report.
 
 ---
 
 # Scale Branching — After Step 1 (Medium / Enterprise only)
 
-Small tier already finished after Q1 + S1/S2. This branching is for Medium and Enterprise.
+The Small tier is already done after Q1 + S1/S2. This branch logic covers Medium and Enterprise.
 
 ### If Medium → Condensed Steps 2-7
 
@@ -81,10 +81,10 @@ Run Steps 2-7 with these compressions:
 - **Step 6:** Disagreement Diagnostic — skip unless user flagged a vague phrase in Step 1
 - **Step 7:** Interview Plan — 1-paragraph summary per stakeholder (not formal structure)
 
-Then write THINK_OUTPUT.md (Medium template) and finish.
+Then write THINK_OUTPUT.md with the Medium template and stop.
 
-**"Expand [step] to full depth" handler:** If user requests expansion on any step, re-run that step at enterprise depth (full questions, full templates). Regenerate output and update THINK_OUTPUT.md.
+**"Expand [step] to full depth" handler:** when the user asks to expand a step, re-run it at enterprise depth (full questions, full templates). Regenerate the output and update THINK_OUTPUT.md.
 
 ### If Enterprise → Full Steps 2-7
 
-Run Steps 2-7 exactly as written. No compression.
+Execute Steps 2-7 exactly as written, with no compression.

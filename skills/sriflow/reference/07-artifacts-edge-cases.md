@@ -13,25 +13,25 @@
 | /sriflow-ship | no artifact — check CI/deployment logs | Shipped = in prod |
 | /sriflow-reflect | `RETRO.md` | Retrospective output |
 
-Build and Ship leave no markdown artifact. For these stages, rely on `Current Stage:` in `SRIFLOW_MEMORY.md` for the ⏳ marker. If SRIFLOW_MEMORY.md shows `Current Stage: build` but no `CODE_REVIEW.md` exists, mark build as ⏳.
+Build and Ship produce no markdown artifact. For those stages, base the ⏳ marker on `Current Stage:` in `SRIFLOW_MEMORY.md`. If the memory file says `Current Stage: build` while no `CODE_REVIEW.md` exists, mark build ⏳.
 
 ## Routing Edge Cases
 
-**User invokes `/sriflow-think`:** Route to `/sriflow-plan`. Output:
+**User invokes `/sriflow-think`:** Route it to `/sriflow-plan` and output:
 ```
 → /sriflow-plan
 sriflow-think is now merged into sriflow-plan — same pipeline, one fewer step.
 ```
 
-**User says "next":** Check pipeline status. Route to the first ⏳ stage, or the first ⬜ stage after the last ✅ stage.
+**User says "next":** Read pipeline status. Route to the first ⏳ stage, or the first ⬜ stage following the last ✅ stage.
 
-**User says "start over":** Do not wipe artifacts. Ask D1 with options: A) archive existing artifacts and restart `/sriflow-plan`, B) keep artifacts and restart from a specific stage.
+**User says "start over":** Don't delete artifacts. Ask D1 with two options: A) archive the existing artifacts and restart `/sriflow-plan`, B) keep artifacts and restart from a chosen stage.
 
-**User mentions a specific file (e.g. "look at PLAN.md"):** Read the file, summarize it in 2-3 sentences, then ask if they want to continue from that stage or route somewhere else.
+**User names a specific file (e.g. "look at PLAN.md"):** Read it, summarize in 2-3 sentences, then ask whether to continue from that stage or route elsewhere.
 
-**User asks about sriflow itself:** Answer from this SKILL.md. Do not invent features not listed here.
+**User asks about sriflow itself:** Answer from this SKILL.md. Don't invent capabilities that aren't listed.
 
-**Multiple intents in one message (e.g. "review the plan and start building"):** Route to the earlier stage first. Output:
+**Several intents in one message (e.g. "review the plan and start building"):** Route to the earlier stage first, then output:
 ```
 → /sriflow-plan-review (first)
 After that passes: /sriflow-build

@@ -4,11 +4,11 @@
 
 ### Pipeline status (triggered by: "status", "where am I", "what stage", "pipeline status")
 
-Read artifact detection output from Step 0. Read `_CURRENT_STAGE` from preamble. Compute markers:
+Pull the artifact detection output from Step 0 and `_CURRENT_STAGE` from the preamble, then compute the markers:
 
-- ✅ = artifact file for this stage exists on disk
-- ⏳ = this is the current stage per `SRIFLOW_MEMORY.md` (or first stage without artifact if memory absent)
-- ⬜ = not yet started
+- ✅ = this stage's artifact file exists on disk
+- ⏳ = current stage according to `SRIFLOW_MEMORY.md` (or the first stage with no artifact when memory is missing)
+- ⬜ = not started yet
 
 Render:
 
@@ -29,12 +29,12 @@ Next: /sriflow-design
 ```
 
 Rules:
-- Show date next to ✅ stages in `(YYYY-MM-DD)` format.
-- Show `IN PROGRESS` next to ⏳ stage.
-- If no artifacts and no memory: all ⬜ except `/sriflow-plan` which is ⏳.
-- If all artifacts exist: all ✅, `Next: /sriflow-reflect` (or "Pipeline complete" if RETRO.md exists).
-- `/sriflow-browser` and `/sriflow-memory` are not pipeline stages — omit from status. They are utilities available at any stage.
-- `/sriflow-trim` is always-on — omit from status.
+- Put the date next to ✅ stages as `(YYYY-MM-DD)`.
+- Put `IN PROGRESS` next to the ⏳ stage.
+- With no artifacts and no memory: everything ⬜ except `/sriflow-plan`, which is ⏳.
+- With every artifact present: all ✅, then `Next: /sriflow-reflect` (or "Pipeline complete" when RETRO.md exists).
+- `/sriflow-browser` and `/sriflow-memory` are not pipeline stages; leave them out of the status. They are utilities you can use at any stage.
+- `/sriflow-trim` runs always; omit it from the status.
 
 ### Help listing (triggered by: "help", "what skills", "what can sriflow do", "/sriflow help")
 
@@ -69,7 +69,7 @@ _SRIFLOW_VERSION=$(cat VERSION 2>/dev/null || echo "0.0.0")
 _REMOTE_VERSION=$(timeout 2 git ls-remote --tags origin 2>/dev/null | grep -oP 'refs/tags/v\K[0-9.]+$' | tail -1 || echo "")
 ```
 
-Compare `_SRIFLOW_VERSION` (installed) against `_REMOTE_VERSION` (latest tag on origin).
+Compare `_SRIFLOW_VERSION`, the installed version, with `_REMOTE_VERSION`, the newest tag on origin.
 
 ```
 SRIFLOW VERSION CHECK
@@ -89,7 +89,6 @@ Could not reach remote. Installed v<_SRIFLOW_VERSION>. Run 'git fetch --tags' wh
 ```
 
 Rules:
-- Version check runs in preamble (non-blocking, 2s timeout). If it succeeds,
-  show result. If it fails silently, skip upgrade section.
-- Do not auto-upgrade. Always show the command for the user to run.
-- If VERSION file is missing: show "VERSION: unknown" and skip check.
+- The preamble runs the version check (non-blocking, 2s timeout). On success, show the result. On silent failure, drop the upgrade section.
+- Never upgrade automatically. Always print the command for the user to run.
+- When the VERSION file is missing: print "VERSION: unknown" and skip the check.

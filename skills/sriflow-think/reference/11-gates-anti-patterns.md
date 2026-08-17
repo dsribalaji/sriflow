@@ -8,15 +8,15 @@
 | **Medium** | Top 3-5 stakeholders named + top uncertainty identified + 1-paragraph interview summary |
 | **Enterprise** | Every Tier 1 stakeholder named, their top uncertainty is documented, a resolution plan exists, and the clarity check score ≥ 8/10 |
 
-**DONE signal:** Gate criteria met for your tier. See table above.
+**DONE signal:** the gate criteria for your tier are met (see table above).
 
-**Next skill:** `/sriflow-plan` — convert discovery findings into a structured implementation plan.
+**Next skill:** `/sriflow-plan` — turn discovery findings into a structured implementation plan.
 
 ---
 
 # Post-DONE: Expand Handler
 
-After DONE signal, if user requests expansion:
+After the DONE signal, handle expansion requests like this:
 - "expand [step] to full depth" → re-enter skill at that step, run at enterprise depth, regenerate THINK_OUTPUT.md
 - "expand to full think" → re-enter skill from Step 1 at enterprise depth, overwrite THINK_OUTPUT.md
 - "give me the stakeholder register" → run Steps 2-4 at enterprise depth, append to THINK_OUTPUT.md
@@ -27,9 +27,9 @@ After DONE signal, if user requests expansion:
 
 # Update vs Start Fresh
 
-If THINK_OUTPUT.md exists when skill is invoked:
-- **Update** = re-run skill at same tier, overwrite THINK_OUTPUT.md. Preserve existing answers where possible.
-- **Start fresh** = delete existing THINK_OUTPUT.md, run skill from scratch at newly detected tier.
+When the skill is invoked and THINK_OUTPUT.md already exists:
+- **Update** — re-run the skill at the same tier and overwrite THINK_OUTPUT.md, keeping existing answers where possible.
+- **Start fresh** — delete the current THINK_OUTPUT.md and run the skill from scratch at the newly detected tier.
 
 Ask: "A previous think session exists. Update it or start fresh?"
 - A) Update — keep same tier, refresh answers (recommended)
@@ -53,8 +53,8 @@ Ask: "A previous think session exists. Update it or start fresh?"
 
 > "On a scale of 0 to 10, how confident are you that we understand what you need?"
 
-- **0–5:** Stop. More work required before proceeding.
-- **6–7:** Identify the specific gaps keeping them from an 8 and close those gaps.
-- **8–10:** Document the confidence level, who gave it, and the date. Proceed.
+- **0–5:** Stop. More work is required before you proceed.
+- **6–7:** Name the specific gaps keeping them from an 8 and close those gaps.
+- **8–10:** Record the confidence level, who gave it, and the date. Proceed.
 
-**If the number didn't move after your analysis — your work didn't land.**
+**If the number does not move after your analysis, your work did not land.**

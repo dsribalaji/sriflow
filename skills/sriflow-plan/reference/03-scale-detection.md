@@ -1,6 +1,6 @@
 # Scale Detection
 
-Before any analysis, detect project scale. This determines pipeline depth.
+Settle the scale question before any analysis. The tier you land on sets how deep the pipeline goes.
 
 **Auto-detect from user's opening message:**
 

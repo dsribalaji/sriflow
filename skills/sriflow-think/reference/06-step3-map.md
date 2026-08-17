@@ -1,24 +1,24 @@
 # Step 3 — Map: Power, Interest, Uncertainty
 
-For each identified stakeholder, assess three dimensions:
+Score every identified stakeholder on three dimensions:
 
 ### 3a — Power / Influence (High / Medium / Low)
-Can this person stop the project, change its scope, or veto a decision?
+Can this person halt the project, reshape its scope, or block a decision?
 - **High:** Project cannot proceed without their buy-in
 - **Medium:** Can significantly delay or redirect if dissatisfied
 - **Low:** Affected but not blocking
 
 ### 3b — Interest / Stakes (High / Medium / Low)
-How much does the outcome of this project affect their daily work or goals?
+How strongly does this project's outcome touch their daily work or objectives?
 - **High:** Their job changes significantly because of this project
 - **Medium:** Noticeable but not daily impact
 - **Low:** Peripheral impact
 
 ### 3c — Top Uncertainty (the most important dimension)
-What is the single biggest open question this stakeholder carries about this project?
+What is the single biggest open question this stakeholder holds about the project?
 
 > "This will help ______ decide ______."
-> If you can't fill both blanks with a specific name and a specific decision — you haven't found the uncertainty yet.
+> If you cannot fill both blanks with a concrete name and a concrete decision — you have not found the uncertainty yet.
 
 **Example — CRM System project:**
 

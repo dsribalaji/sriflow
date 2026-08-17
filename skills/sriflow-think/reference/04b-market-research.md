@@ -1,21 +1,21 @@
 # Step 1b — Market Research (Medium / Enterprise, optional)
 
-Competitive landscape discovery. This is **stakeholder discovery input, not a
-market research report.** Its purpose is to surface stakeholders you would
-otherwise miss — competitors, adjacent players, regulators — and to catch
-assumptions the idea already makes about "how this space works."
+Competitive landscape discovery. Treat it as **input for stakeholder
+discovery, not a market research report.** It exists to surface stakeholders
+you would otherwise overlook — competitors, adjacent players, regulators —
+and to expose assumptions the idea already carries about "how this space works."
 
 ## Time box: 3 searches max
 
-The whole step must fit in three WebSearch calls. Budget:
+Fit the entire step inside three WebSearch calls. Budget them as:
 
 1. `[domain] market landscape [current year]`
 2. `[domain] competitors [current year]`
 3. `[specific feature] alternative solutions`
 
-If a search returns nothing useful, do not re-roll the query more than once.
-Proceed without that dimension. Rabbit-holing here is the failure mode this
-step exists to prevent.
+If a search returns nothing useful, retry the query at most once, then proceed
+without that dimension. Going down the rabbit hole here is exactly the failure
+this step is designed to stop.
 
 ## What each search feeds
 
@@ -27,12 +27,12 @@ step exists to prevent.
 
 ## The status quo is the real competitor
 
-In the alternatives search, the most important finding is often "nothing — or
-a manual process." People currently solve the problem with spreadsheets,
-Slack, email threads, or a hired human. That workaround is not a competitor
-to dismiss; it is the baseline the product must beat. If the search shows
-*nobody is doing anything* about this problem, that is usually a signal the
-problem is not painful enough — flag it as an uncertainty, don't celebrate it.
+In the alternatives search, the most valuable finding is usually "nothing — or
+a manual process." Today people handle the problem with spreadsheets, Slack,
+email chains, or a hired person. That workaround is not a competitor you can
+shrug off; it is the baseline the product has to beat. When the search shows
+*nobody is doing anything* about the problem, that is usually a sign the problem
+is not painful enough — record it as an uncertainty, do not celebrate it.
 
 ## Recording results
 
@@ -47,19 +47,19 @@ Write under THINK_OUTPUT.md `## Market Context`:
 - Open gap: [one sentence — what none of them do]
 ```
 
-Keep it to 3-6 bullets. This section is read by Step 2 to inform stakeholder
-identification, then forgotten.
+Hold it to 3-6 bullets. Step 2 reads this section to guide stakeholder
+identification, then it is dropped.
 
 ## When to skip
 
-- User says skip (always honored).
-- WebSearch unavailable in the runtime.
-- Small tier — already complete after Q1 + S1/S2; never run market research
+- The user says skip (always honored).
+- WebSearch is unavailable in this runtime.
+- Small tier — already complete after Q1 + S1/S2; market research never runs
   for Small projects.
 
 ## Rules
 
-1. Max 3 searches. Hard cap.
-2. Output goes only into `## Market Context`. No separate research document.
-3. Never recommend a pivot from this step. It informs stakeholder discovery,
-   not product strategy — strategic challenge is sriflow-plan-review's job.
+1. At most 3 searches. Hard cap.
+2. Output lands only under `## Market Context`. No separate research document.
+3. Never propose a pivot from this step. It feeds stakeholder discovery, not
+   product strategy — sriflow-plan-review owns strategic challenge.

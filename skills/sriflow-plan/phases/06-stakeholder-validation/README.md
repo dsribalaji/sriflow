@@ -1,6 +1,6 @@
-# Phase 6 — Office Hours (Validation)
+# Phase 6 — Stakeholder Validation
 
-**Goal:** Validate the plan through structured office hours with stakeholders.
+**Goal:** Validate the plan with stakeholders in a structured review session.
 
 ---
 
@@ -10,19 +10,19 @@
 
 ---
 
-## Step 6.2 — Office Hours Preparation
+## Step 6.2 — Validation Preparation
 
-**Q54:** Who should attend the office hours session? (List names and roles)
+**Q54:** Who should attend the validation session? (List names and roles)
 
 **Q55:** What are the top 3 risks to validate with stakeholders?
 
-**Q56:** What decisions need to be made during office hours?
+**Q56:** What decisions need to be made during the session?
 
 ---
 
-## Step 6.3 — Office Hours Execution
+## Step 6.3 — Validation Execution
 
-Conduct structured office hours:
+Conduct the structured validation session:
 1. Present the plan summary (5 min)
 2. Walk through key use cases (10 min)
 3. Validate NFRs and constraints (10 min)
@@ -33,6 +33,6 @@ Conduct structured office hours:
 
 ## Output
 
-- `office-hours-notes.md` — session notes and decisions
+- `validation-notes.md` — session notes and decisions
 - `action-items.md` — follow-up tasks
 - `risks-validated.md` — confirmed risks and mitigations

@@ -34,7 +34,7 @@
 
 ## Gate Decision
 
-**PASS:** All criteria met → Proceed to Phase 6 (Office Hours)
+**PASS:** All criteria met → Proceed to Phase 6 (Stakeholder Validation)
 
 **FAIL:** Resolve conflicts and specify missing NFRs until criteria met
 

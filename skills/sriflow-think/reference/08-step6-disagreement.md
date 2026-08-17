@@ -1,6 +1,6 @@
 # Step 6 — The Disagreement Diagnostic
 
-When stakeholders appear to agree but are using the same word for different things:
+Run this when stakeholders seem to agree but are actually loading the same word with different meanings:
 
 **Warning signals:**
 - Multiple stakeholders nod at a vague phrase ("better visibility," "smarter reporting," "more efficient")
@@ -11,12 +11,12 @@ When stakeholders appear to agree but are using the same word for different thin
 > "When you say [the agreed phrase], are you trying to [Option A] or [Option B]?"
 
 **Classic example — The Dashboard Disaster:**
-> "When you say 'better visibility into operations,' are you trying to **react to a problem today** — within the hour — or **review what happened last month** for the board?"
+> "When you say 'better visibility into operations,' do you mean **reacting to a problem today** — within the hour — or **reviewing last month** for the board?"
 >
-> COO: *"React today. If a shipment's slipping, I want to know within the hour."*
-> CFO: *"Last month. It has to reconcile to the ledger for the board; I don't want live numbers."*
+> COO: *"React today. If a shipment slips, I need to know within the hour."*
+> CFO: *"Last month. It must reconcile with the ledger for the board; I don't want live numbers."*
 
-One phrase. Two completely different products. Found in ten minutes of separate conversations.
+A single phrase. Two entirely different products. Uncovered in ten minutes of one-on-one conversations.
 
 **Output — Disagreement Log entry:**
 
