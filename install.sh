@@ -35,7 +35,7 @@ for HOST in $HOSTS; do
   case "$HOST" in
     claude)   DEST="$HOME/.claude/skills" ;;
     opencode) DEST="$HOME/.config/opencode/skills" ;;
-    copilot)  DEST=".github/copilot-skills" ;;
+    copilot)  DEST="$PWD/.github/copilot-skills" ;;  # project-local: intentionally relative to where you run it
   esac
 
   echo ""
